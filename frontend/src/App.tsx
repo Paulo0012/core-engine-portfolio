@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { 
   Terminal, Cpu, Database, LayoutDashboard, 
-  Settings, User, Code2, Microscope, Radio
+  User, Code2, Microscope, Radio, Plus, LogOut, ShieldAlert
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -10,15 +10,14 @@ import api from './services/api';
 import TelemetryHeader from './components/TelemetryHeader';
 import ProjectCard from './components/ProjectCard';
 import SystemLogs from './components/SystemLogs';
+import LoginModal from './components/LoginModal';
 
-// Tipagem para consistência de Engenharia
 interface Project {
   id: number;
   title: string;
   category: string;
   technologies: string[];
   problem_statement: string;
-  solution_architecture: string;
   impact_metrics: string;
   github_link?: string;
 }
@@ -26,41 +25,32 @@ interface Project {
 function App() {
   const [projects, setProjects] = useState<Project[]>([]);
   const [filter, setFilter] = useState('ALL');
-  const [loading, setLoading] = useState(true);
+  const [isLoginOpen, setIsLoginOpen] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(!!localStorage.getItem('token'));
 
-  // Hook de Carregamento de Dados (Efeito de Boot do Sistema)
+  // Carregamento de Dados do Motor
+  const loadProjects = async () => {
+    try {
+      const response = await api.get('/cases/');
+      setProjects(response.data);
+    } catch (error) {
+      console.error("[CRITICAL] Engine link failed");
+    }
+  };
+
   useEffect(() => {
-    const loadSystemData = async () => {
-      try {
-        setLoading(true);
-        const response = await api.get('/cases/');
-        setProjects(response.data);
-      } catch (error) {
-        console.error("[CRITICAL] Failed to link with Backend Engine");
-      } finally {
-        setTimeout(() => setLoading(false), 800); // Simula delay de boot
-      }
-    };
-    loadSystemData();
+    loadProjects();
   }, []);
 
-  // Lógica de Filtragem de Ativos
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    setIsAuthenticated(false);
+    window.location.reload(); // Hard reset para limpar estados sensíveis
+  };
+
   const filteredProjects = filter === 'ALL' 
     ? projects 
     : projects.filter(p => p.category === filter);
-
-  if (loading) {
-    return (
-      <div className="h-screen w-full bg-eng-black flex items-center justify-center font-mono">
-        <div className="flex flex-col items-center gap-4">
-          <div className="w-12 h-12 border-2 border-eng-cyan border-t-transparent animate-spin rounded-full" />
-          <span className="text-eng-cyan animate-pulse uppercase tracking-[0.3em] text-xs">
-            Initializing_Soares_Gomes_OS...
-          </span>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div className="flex h-screen w-full overflow-hidden bg-eng-black select-none text-slate-300">
@@ -76,40 +66,52 @@ function App() {
           </p>
         </div>
 
-        <nav className="flex-1 p-4 space-y-1">
+        <nav className="flex-1 p-4 space-y-1 overflow-y-auto custom-scrollbar">
           <NavItem 
             icon={<LayoutDashboard size={18}/>} 
             label="All_Systems" 
             active={filter === 'ALL'} 
             onClick={() => setFilter('ALL')} 
           />
-          <NavItem 
-            icon={<Cpu size={18}/>} 
-            label="Hardware_IoT" 
-            active={filter === 'IOT'} 
-            onClick={() => setFilter('IOT')} 
-          />
-          <NavItem 
-            icon={<Code2 size={18}/>} 
-            label="Backend_SaaS" 
-            active={filter === 'BE'} 
-            onClick={() => setFilter('BE')} 
-          />
-          <NavItem 
-            icon={<Microscope size={18}/>} 
-            label="AI_Computer_Vision" 
-            active={filter === 'CV'} 
-            onClick={() => setFilter('CV')} 
-          />
-          <div className="pt-4 pb-2 px-4 text-[10px] text-slate-600 font-mono uppercase">External_Links</div>
-          <NavItem icon={<User size={18}/>} label="Engineering_Bio" />
-          <NavItem icon={<Radio size={18}/>} label="Live_Telemetry" />
+          <NavItem icon={<Cpu size={18}/>} label="Hardware_IoT" active={filter === 'IOT'} onClick={() => setFilter('IOT')} />
+          <NavItem icon={<Code2 size={18}/>} label="Backend_SaaS" active={filter === 'BE'} onClick={() => setFilter('BE')} />
+          <NavItem icon={<Microscope size={18}/>} label="AI_Vision" active={filter === 'CV'} onClick={() => setFilter('CV')} />
+          
+          <div className="pt-6 pb-2 px-4 text-[9px] text-slate-600 font-mono uppercase tracking-[0.2em]">External_Links</div>
+          <NavItem icon={<User size={18}/>} label="Eng_Bio" />
+          <NavItem icon={<Radio size={18}/>} label="Live_Feed" />
         </nav>
 
-        <div className="p-4 border-t border-eng-border bg-black/40">
-          <div className="flex items-center gap-3">
-            <div className="w-2 h-2 rounded-full bg-eng-green animate-pulse shadow-[0_0_8px_#10b981]" />
-            <span className="text-[9px] font-mono text-slate-500 uppercase">Secure_Shell_Active</span>
+        {/* ADMIN FOOTER AREA */}
+        <div className="p-4 border-t border-eng-border bg-black/40 space-y-3">
+          {isAuthenticated ? (
+            <>
+              <button 
+                className="w-full flex items-center gap-2 text-[10px] font-mono text-eng-green hover:text-white transition-colors"
+                onClick={() => console.log("Abrir Form de Novo Projeto")}
+              >
+                <Plus size={14} /> NEW_ENTRY_CMD
+              </button>
+              <button 
+                className="w-full flex items-center gap-2 text-[10px] font-mono text-red-500 hover:text-white transition-colors"
+                onClick={handleLogout}
+              >
+                <LogOut size={14} /> TERMINATE_SESSION
+              </button>
+            </>
+          ) : (
+            <button 
+              className="w-full flex items-center gap-2 text-[10px] font-mono text-slate-500 hover:text-eng-cyan transition-colors"
+              onClick={() => setIsLoginOpen(true)}
+            >
+              <ShieldAlert size={14} /> ADMIN_ACCESS
+            </button>
+          )}
+          <div className="flex items-center gap-3 pt-2">
+            <div className={`w-2 h-2 rounded-full ${isAuthenticated ? 'bg-eng-cyan shadow-[0_0_8px_#06b6d4]' : 'bg-eng-green'} animate-pulse`} />
+            <span className="text-[9px] font-mono text-slate-600 uppercase">
+              {isAuthenticated ? 'ROOT_ACCESS_GRANTED' : 'SECURE_SHELL_ACTIVE'}
+            </span>
           </div>
         </div>
       </aside>
@@ -122,21 +124,17 @@ function App() {
           <header className="mb-10 flex justify-between items-end">
             <div>
               <h2 className="text-3xl font-bold text-white tracking-tight uppercase font-mono">
-                {filter}_Modules
+                {filter}_NODES
               </h2>
               <div className="h-1 w-20 bg-eng-cyan mt-2" />
             </div>
-            <div className="text-[10px] font-mono text-slate-500 text-right">
-              TOTAL_NODES: {filteredProjects.length}<br/>
-              LOCATION: SÃO LUÍS, MA
+            <div className="text-[10px] font-mono text-slate-500 text-right uppercase">
+              Uptime: 99.9%<br/>
+              Nodes_Loaded: {filteredProjects.length}
             </div>
           </header>
 
-          {/* GRID DE CASES COM ANIMAÇÃO */}
-          <motion.div 
-            layout
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 pb-20"
-          >
+          <motion.div layout className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 pb-20">
             <AnimatePresence mode='popLayout'>
               {filteredProjects.map((project) => (
                 <ProjectCard key={project.id} project={project} />
@@ -145,14 +143,19 @@ function App() {
           </motion.div>
         </div>
 
-        {/* TERMINAL DE RODAPÉ */}
         <SystemLogs />
       </main>
+
+      {/* MODALS */}
+      <LoginModal 
+        isOpen={isLoginOpen} 
+        onClose={() => setIsLoginOpen(false)} 
+        onLoginSuccess={() => setIsAuthenticated(true)} 
+      />
     </div>
   );
 }
 
-// Sub-componente de Navegação para manter o App.tsx limpo
 function NavItem({ icon, label, active = false, onClick }: any) {
   return (
     <button 
