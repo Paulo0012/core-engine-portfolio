@@ -1,20 +1,9 @@
-from ninja import NinjaAPI, Schema
-from engine.models import Project
-from typing import List
+from ninja import NinjaAPI
+from engine.api import router as engine_router
+from telemetry.api import router as telemetry_router # Se já criou o arquivo lá
 
-api = NinjaAPI(title="Soares Gomes OS API", version="1.0.0")
+api = NinjaAPI(title="Soares Gomes OS API")
 
-class ProjectSchema(Schema):
-    title: str
-    category: str
-    technologies: List[str]
-    problem_statement: str
-    impact_metrics: str
-
-@api.get("/projects", response=List[ProjectSchema])
-def list_projects(request):
-    return Project.objects.all()
-
-@api.get("/system/health")
-def health_check(request):
-    return {"status": "operational", "engine": "Python 3.11", "uptime": "stable"}
+# Aqui você "monta" as peças do sistema
+api.add_router("/projects", engine_router)
+api.add_router("/telemetry", telemetry_router)
