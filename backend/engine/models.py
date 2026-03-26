@@ -1,11 +1,23 @@
 from django.db import models
 
 class Project(models.Model):
+    CATEGORIES = [
+        ('IOT', 'Internet of Things'),
+        ('BE', 'Backend & Scalability'),
+        ('CV', 'Computer Vision'),
+        ('AT', 'Automation & Data'),
+    ]
+
     title = models.CharField(max_length=200)
-    category = models.CharField(max_length=100) # IoT, Backend, Vision, Automation
-    stack = models.JSONField() # Ex: ["Django", "OpenCV", "Raspberry Pi"]
-    challenge = models.TextField() # O problema real
-    solution = models.TextField() # Sua decisão técnica
-    architecture_diagram = models.URLField(blank=True) # Link para o C4 Model
-    impact_metric = models.CharField(max_length=100) # Ex: "Redução de 40% no tempo de resposta"
-    github_url = models.URLField()
+    slug = models.SlugField(unique=True)
+    category = models.CharField(max_length=3, choices=CATEGORIES)
+    technologies = models.JSONField(default=list) # Armazena ["Python", "C++", "MQTT"]
+    problem_statement = models.TextField()
+    solution_architecture = models.TextField()
+    impact_metrics = models.CharField(max_length=255) # Ex: "98% de precisão no ColorViz"
+    github_link = models.URLField(blank=True)
+    live_demo = models.URLField(blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.title
