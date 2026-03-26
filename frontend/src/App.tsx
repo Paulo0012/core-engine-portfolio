@@ -1,64 +1,168 @@
-import { Terminal, Cpu, Database, LayoutDashboard, Settings, User } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { 
+  Terminal, Cpu, Database, LayoutDashboard, 
+  Settings, User, Code2, Microscope, Radio
+} from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+
+// Componentes Internos
+import api from './api';
 import TelemetryHeader from './components/TelemetryHeader';
+import ProjectCard from './components/ProjectCard';
+import SystemLogs from './components/SystemLogs';
+
+// Tipagem para consistência de Engenharia
+interface Project {
+  id: number;
+  title: string;
+  category: string;
+  technologies: string[];
+  problem_statement: string;
+  solution_architecture: string;
+  impact_metrics: string;
+  github_link?: string;
+}
 
 function App() {
+  const [projects, setProjects] = useState<Project[]>([]);
+  const [filter, setFilter] = useState('ALL');
+  const [loading, setLoading] = useState(true);
+
+  // Hook de Carregamento de Dados (Efeito de Boot do Sistema)
+  useEffect(() => {
+    const loadSystemData = async () => {
+      try {
+        setLoading(true);
+        const response = await api.get('/cases/');
+        setProjects(response.data);
+      } catch (error) {
+        console.error("[CRITICAL] Failed to link with Backend Engine");
+      } finally {
+        setTimeout(() => setLoading(false), 800); // Simula delay de boot
+      }
+    };
+    loadSystemData();
+  }, []);
+
+  // Lógica de Filtragem de Ativos
+  const filteredProjects = filter === 'ALL' 
+    ? projects 
+    : projects.filter(p => p.category === filter);
+
+  if (loading) {
+    return (
+      <div className="h-screen w-full bg-eng-black flex items-center justify-center font-mono">
+        <div className="flex flex-col items-center gap-4">
+          <div className="w-12 h-12 border-2 border-eng-cyan border-t-transparent animate-spin rounded-full" />
+          <span className="text-eng-cyan animate-pulse uppercase tracking-[0.3em] text-xs">
+            Initializing_Soares_Gomes_OS...
+          </span>
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div className="flex h-screen w-full overflow-hidden bg-eng-black select-none">
-      {/* SIDEBAR INDUSTRIAL */}
-      <aside className="w-64 border-r border-eng-border bg-slate-900/20 flex flex-col">
+    <div className="flex h-screen w-full overflow-hidden bg-eng-black select-none text-slate-300">
+      
+      {/* SIDEBAR: CONTROL UNIT */}
+      <aside className="w-64 border-r border-eng-border bg-slate-900/20 flex flex-col z-20">
         <div className="p-6 border-b border-eng-border">
           <h1 className="font-mono font-bold text-eng-cyan tracking-tighter flex items-center gap-2">
-            <Terminal size={20} /> SOARES-GOMES_OS
+            <Terminal size={20} /> SG_ENGINE.CORE
           </h1>
-          <p className="text-[10px] text-slate-500 mt-1 uppercase tracking-widest">System Architect v1.0</p>
+          <p className="text-[9px] text-slate-500 mt-1 uppercase tracking-widest font-mono">
+            Build: 2026.03.26-STABLE
+          </p>
         </div>
 
-        <nav className="flex-1 p-4 space-y-2">
-          <NavItem icon={<LayoutDashboard size={18}/>} label="Dashboard" active />
-          <NavItem icon={<Cpu size={18}/>} label="Hardware Cases" />
-          <NavItem icon={<Database size={18}/>} label="SaaS & Backend" />
-          <NavItem icon={<User size={18}/>} label="Profile_Bio" />
+        <nav className="flex-1 p-4 space-y-1">
+          <NavItem 
+            icon={<LayoutDashboard size={18}/>} 
+            label="All_Systems" 
+            active={filter === 'ALL'} 
+            onClick={() => setFilter('ALL')} 
+          />
+          <NavItem 
+            icon={<Cpu size={18}/>} 
+            label="Hardware_IoT" 
+            active={filter === 'IOT'} 
+            onClick={() => setFilter('IOT')} 
+          />
+          <NavItem 
+            icon={<Code2 size={18}/>} 
+            label="Backend_SaaS" 
+            active={filter === 'BE'} 
+            onClick={() => setFilter('BE')} 
+          />
+          <NavItem 
+            icon={<Microscope size={18}/>} 
+            label="AI_Computer_Vision" 
+            active={filter === 'CV'} 
+            onClick={() => setFilter('CV')} 
+          />
+          <div className="pt-4 pb-2 px-4 text-[10px] text-slate-600 font-mono uppercase">External_Links</div>
+          <NavItem icon={<User size={18}/>} label="Engineering_Bio" />
+          <NavItem icon={<Radio size={18}/>} label="Live_Telemetry" />
         </nav>
 
         <div className="p-4 border-t border-eng-border bg-black/40">
           <div className="flex items-center gap-3">
             <div className="w-2 h-2 rounded-full bg-eng-green animate-pulse shadow-[0_0_8px_#10b981]" />
-            <span className="text-[10px] font-mono text-slate-400">ENCRYPTION_ACTIVE</span>
+            <span className="text-[9px] font-mono text-slate-500 uppercase">Secure_Shell_Active</span>
           </div>
         </div>
       </aside>
 
-      {/* ÁREA PRINCIPAL */}
-      <main className="flex-1 flex flex-col">
+      {/* MAIN VIEWPORT */}
+      <main className="flex-1 flex flex-col relative overflow-hidden">
         <TelemetryHeader />
         
-        <div className="flex-1 p-8 overflow-y-auto">
-          <header className="mb-12">
-            <h2 className="text-4xl font-bold text-white tracking-tight">System_Overview</h2>
-            <div className="h-1 w-24 bg-eng-cyan mt-2" />
+        <div className="flex-1 p-8 overflow-y-auto custom-scrollbar">
+          <header className="mb-10 flex justify-between items-end">
+            <div>
+              <h2 className="text-3xl font-bold text-white tracking-tight uppercase font-mono">
+                {filter}_Modules
+              </h2>
+              <div className="h-1 w-20 bg-eng-cyan mt-2" />
+            </div>
+            <div className="text-[10px] font-mono text-slate-500 text-right">
+              TOTAL_NODES: {filteredProjects.length}<br/>
+              LOCATION: SÃO LUÍS, MA
+            </div>
           </header>
 
-          {/* GRID DE CASES (Placeholder por enquanto) */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <div className="border border-eng-border p-6 bg-slate-900/30 rounded-sm hover:border-eng-cyan transition-all group">
-              <span className="text-xs text-eng-cyan font-mono uppercase tracking-widest">Project_01</span>
-              <h3 className="text-xl font-bold text-white mt-1 group-hover:text-eng-cyan transition-colors">AutoFlow SaaS</h3>
-              <p className="text-sm text-slate-400 mt-4 leading-relaxed">
-                Sistema de automação multi-unidade para autoescolas integrando Django e React.
-              </p>
-            </div>
-            {/* Adicionaremos a integração com a API aqui em breve */}
-          </div>
+          {/* GRID DE CASES COM ANIMAÇÃO */}
+          <motion.div 
+            layout
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 pb-20"
+          >
+            <AnimatePresence mode='popLayout'>
+              {filteredProjects.map((project) => (
+                <ProjectCard key={project.id} project={project} />
+              ))}
+            </AnimatePresence>
+          </motion.div>
         </div>
+
+        {/* TERMINAL DE RODAPÉ */}
+        <SystemLogs />
       </main>
     </div>
   );
 }
 
-function NavItem({ icon, label, active = false }: { icon: any, label: string, active?: boolean }) {
+// Sub-componente de Navegação para manter o App.tsx limpo
+function NavItem({ icon, label, active = false, onClick }: any) {
   return (
-    <button className={`w-full flex items-center gap-3 px-4 py-3 rounded-sm transition-all font-mono text-xs uppercase tracking-wider
-      ${active ? 'bg-eng-cyan/10 text-eng-cyan border-l-2 border-eng-cyan' : 'text-slate-500 hover:bg-white/5 hover:text-slate-300'}`}>
+    <button 
+      onClick={onClick}
+      className={`w-full flex items-center gap-3 px-4 py-3 rounded-sm transition-all font-mono text-[11px] uppercase tracking-wider
+      ${active 
+        ? 'bg-eng-cyan/10 text-eng-cyan border-l-2 border-eng-cyan glow-cyan' 
+        : 'text-slate-500 hover:bg-white/5 hover:text-slate-300'
+      }`}
+    >
       {icon}
       {label}
     </button>
