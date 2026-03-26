@@ -1,11 +1,13 @@
 import { ExternalLink, Github, Code2, Cpu } from 'lucide-react';
 import { motion } from 'framer-motion';
 
+// Removi o import do api aqui, pois o Card apenas exibe dados recebidos.
+
 interface ProjectProps {
   project: {
     id: number;
-    title: str;
-    category: str;
+    title: string;    // Corrigido de str para string
+    category: string; // Corrigido de str para string
     technologies: string[];
     problem_statement: string;
     impact_metrics: string;
@@ -20,12 +22,17 @@ export default function ProjectCard({ project }: ProjectProps) {
       animate={{ opacity: 1, y: 0 }}
       className="group relative border border-eng-border bg-slate-900/40 p-5 rounded-sm hover:border-eng-cyan transition-all"
     >
+      {/* Resto do componente permanece igual */}
       <div className="flex justify-between items-start mb-4">
         <div className="p-2 bg-eng-cyan/10 text-eng-cyan rounded-sm">
           {project.category === 'IOT' ? <Cpu size={18} /> : <Code2 size={18} />}
         </div>
         <div className="flex gap-3 text-slate-500">
-          {project.github_link && <a href={project.github_link} className="hover:text-white"><Github size={16}/></a>}
+          {project.github_link && (
+            <a href={project.github_link} target="_blank" rel="noreferrer" className="hover:text-white">
+              <Github size={16}/>
+            </a>
+          )}
           <ExternalLink size={16} className="hover:text-white cursor-pointer" />
         </div>
       </div>
@@ -39,16 +46,16 @@ export default function ProjectCard({ project }: ProjectProps) {
       </p>
 
       <div className="mt-6 flex flex-wrap gap-2">
-        {project.technologies.slice(0, 3).map(tech => (
+        {project.technologies.map(tech => (
           <span key={tech} className="text-[9px] font-mono px-2 py-1 bg-white/5 border border-white/10 text-slate-400 uppercase">
             {tech}
           </span>
         ))}
       </div>
 
-      <div className="mt-4 pt-4 border-t border-eng-border flex justify-between items-center">
-        <span className="text-[10px] text-slate-500 font-mono italic">IMPACT_RESULT:</span>
-        <span className="text-[10px] text-eng-green font-mono font-bold uppercase">{project.impact_metrics}</span>
+      <div className="mt-4 pt-4 border-t border-eng-border flex justify-between items-center font-mono text-[10px]">
+        <span className="text-slate-500 italic uppercase">Metric:</span>
+        <span className="text-eng-green font-bold uppercase">{project.impact_metrics}</span>
       </div>
     </motion.div>
   );
