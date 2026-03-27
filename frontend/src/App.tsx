@@ -3,6 +3,8 @@ import MainLayout from './layout/MainLayout';
 import Dashboard from './pages/Dashboard';
 import EngineeringBio from './pages/EngineeringBio';
 import ProjectDetails from './pages/ProjectDetails';
+import AdminDashboard from './pages/AdminDashboard';
+import Login from './pages/Login';
 
 function App() {
   return (
@@ -18,6 +20,10 @@ function App() {
           
           {/* Rota de Detalhes: Deep Dive Técnico (Hardware/Software) */}
           <Route path="project/:id" element={<ProjectDetails />} />
+
+          <Route path="/admin" element={<AdminDashboard />} />
+          
+          <Route path="/login" element={<Login />} />
         </Route>
       </Routes>
     </Router>
