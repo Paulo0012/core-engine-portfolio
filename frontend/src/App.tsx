@@ -6,7 +6,7 @@ import {
 import { motion, AnimatePresence } from 'framer-motion';
 
 // Componentes Internos e API
-import api from './api';
+import api from './services/api';
 import TelemetryHeader from './components/TelemetryHeader';
 import ProjectCard from './components/ProjectCard';
 import SystemLogs from './components/SystemLogs';
