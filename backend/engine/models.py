@@ -16,7 +16,7 @@ class Project(models.Model):
     solution_architecture = models.TextField()
     impact_metrics = models.CharField(max_length=255) # Ex: "98% de precisão no ColorViz"
     github_link = models.URLField(blank=True)
-    live_demo = models.URLField(blank=True)
+    live_demo = models.URLField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
