@@ -1,11 +1,11 @@
 import axios from 'axios';
 
 /**
- * INSTÂNCIA DE COMUNICAÇÃO CORE_ENGINE
- * Define a base de conexão com o Django Ninja (v1)
+ * CORE_ENGINE_API_SERVICE
+ * Centraliza a comunicação com o Backend Django Ninja (v1)
  */
 const api = axios.create({
-  // Ajustado para bater exatamente no seu urls.py: path("api/v1/", api.urls)
+  // Bate exatamente no path("api/v1/", api.urls) do seu urls.py
   baseURL: 'http://localhost:8000/api/v1',
   headers: {
     'Content-Type': 'application/json',
@@ -13,19 +13,17 @@ const api = axios.create({
 });
 
 /**
- * INTERCEPTOR DE SEGURANÇA (GATEKEEPER)
- * Antes de cada requisição sair, verifica se existe um token no sistema local.
+ * REQUEST_INTERCEPTOR (GATEKEEPER)
+ * Injeta o Token JWT em todas as requisições protegidas (POST, PUT, DELETE).
+ * O auth_bearer do Ninja exige o prefixo "Bearer ".
  */
 api.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem('token');
     
     if (token) {
-      // O seu auth.py no backend espera o padrão Bearer
+      // IMPORTANTE: O espaço após 'Bearer' é obrigatório para o Django Ninja
       config.headers.Authorization = `Bearer ${token}`;
-      
-      // Log de depuração silencioso no console
-      // console.log("[CORE] Token_Injected_Successfully");
     }
     
     return config;
@@ -36,17 +34,28 @@ api.interceptors.request.use(
 );
 
 /**
- * INTERCEPTOR DE RESPOSTA (DETECTOR DE QUEDA)
- * Se o backend retornar 401 (Não autorizado), limpa o sistema e pede novo login.
+ * RESPONSE_INTERCEPTOR (PROTOCOL_FAILURE_HANDLER)
+ * Monitora se o token expirou ou se o servidor caiu.
  */
 api.interceptors.response.use(
   (response) => response,
   (error) => {
+    // Se o backend retornar 401, o acesso foi negado ou o token expirou
     if (error.response && error.response.status === 401) {
-      console.warn("[SECURITY] Session_Expired_or_Invalid. Clearing_Access...");
+      console.warn("[SECURITY_ALERT] Acesso negado. Limpando credenciais...");
       localStorage.removeItem('token');
-      // Opcional: window.location.href = '/login';
+      
+      // Se não estiver na página de login, redireciona o usuário
+      if (!window.location.pathname.includes('/login')) {
+        window.location.href = '/login';
+      }
     }
+    
+    // Tratamento de erros globais de rede
+    if (!error.response) {
+      console.error("[NETWORK_ERROR] O motor backend está offline.");
+    }
+
     return Promise.reject(error);
   }
 );

@@ -13,7 +13,8 @@ export default function ProjectForm() {
     problem_statement: '',
     solution_architecture: '',
     impact_metrics: '',
-    github_link: ''
+    github_link: '',
+    live_demo: ''
   });
 
   useEffect(() => {
