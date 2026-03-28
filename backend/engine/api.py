@@ -1,9 +1,12 @@
-from ninja import Router
-from typing import List
+from ninja import Router, File, Form
+from ninja.files import UploadedFile
+from typing import List, Optional
 from django.shortcuts import get_object_or_404
-from .models import Project
-from .schemas import ProjectIn, ProjectOut
-from core.auth import auth_bearer 
+from django.db import transaction
+from .models import Project, ProjectImage
+from .schemas import ProjectOut, ProjectIn
+from core.auth import auth_bearer
+import json
 
 router = Router(tags=["Engine - Cases de Engenharia"])
 
@@ -11,52 +14,54 @@ router = Router(tags=["Engine - Cases de Engenharia"])
 
 @router.get("/", response=List[ProjectOut])
 def list_projects(request):
-    """Lista todos os cases ordenados pelos mais recentes."""
-    return Project.objects.all().order_by('-created_at')
+    """Retorna todos os cases com galeria e vídeo inclusos."""
+    return Project.objects.all().prefetch_related('gallery').order_by('-created_at')
 
 @router.get("/{project_id}", response=ProjectOut)
 def get_project(request, project_id: int):
-    """Busca detalhes de um nó específico."""
+    """Busca um nó específico com todos os ativos de mídia."""
     return get_object_or_404(Project, id=project_id)
-
-@router.get("/logs/system", response=List[str])
-def get_engineering_logs(request):
-    """Logs estéticos para o SystemLogs do Frontend."""
-    count = Project.objects.count()
-    return [
-        "[INFO] Core Engine: Alpha Build 2026.03 Stable.",
-        f"[SUCCESS] Database linked: {count} technical nodes active.",
-        "[INFO] Telemetry: Latency 12ms via Localhost.",
-        "[WARN] Security: JWT Bearer protection active on POST/PUT/DELETE."
-    ]
 
 # --- ROTAS PROTEGIDAS (REQUEREM LOGIN) ---
 
 @router.post("/", response={201: ProjectOut}, auth=auth_bearer)
-def create_project(request, data: ProjectIn):
+def create_project(
+    request, 
+    data: Form[ProjectIn], 
+    cover: File[UploadedFile] = None, 
+    video: File[UploadedFile] = None,
+    gallery_images: List[File[UploadedFile]] = None
+):
     """
-    Cria um novo projeto. 
-    Filtra campos nulos para permitir que o Model gere o Slug automaticamente.
+    Cria um projeto completo com suporte a múltiplos arquivos.
+    Usa transação atômica para garantir que ou salva tudo, ou não salva nada.
     """
-    # Filtra apenas campos que não são None para evitar conflito de Slugs
-    clean_data = {k: v for k, v in data.dict().items() if v is not None}
-    
-    project = Project.objects.create(**clean_data)
-    return 201, project
+    with transaction.atomic():
+        # 1. Criar o Projeto Base
+        # Convertemos tecnologias (que vem como string do form) para lista se necessário
+        project_dict = data.dict()
+        if isinstance(project_dict['technologies'], str):
+            project_dict['technologies'] = [t.strip() for t in project_dict['technologies'].split(',')]
 
-@router.put("/{project_id}", response=ProjectOut, auth=auth_bearer)
-def update_project(request, project_id: int, data: ProjectIn):
-    """Atualiza dados de um projeto existente."""
-    project = get_object_or_404(Project, id=project_id)
-    for attr, value in data.dict().items():
-        if value is not None:
-            setattr(project, attr, value)
-    project.save()
-    return project
+        project = Project.objects.create(**project_dict)
+
+        # 2. Anexar Capa e Vídeo
+        if cover:
+            project.cover_image = cover
+        if video:
+            project.video_demo = video
+        project.save()
+
+        # 3. Processar Galeria de Fotos (Múltiplas)
+        if gallery_images:
+            for img in gallery_images:
+                ProjectImage.objects.create(project=project, image=img)
+
+    return 201, project
 
 @router.delete("/{project_id}", response={204: None}, auth=auth_bearer)
 def delete_project(request, project_id: int):
-    """Remove um nó do banco de dados."""
+    """Remove o projeto e limpa os arquivos de mídia associados."""
     project = get_object_or_404(Project, id=project_id)
     project.delete()
     return 204, None
