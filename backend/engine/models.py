@@ -1,5 +1,6 @@
 from django.db import models
 from django.utils.text import slugify
+from django.core.validators import FileExtensionValidator
 import uuid
 
 class Project(models.Model):
@@ -10,47 +11,46 @@ class Project(models.Model):
         ('AT', 'Automation & Data'),
     ]
 
-    # --- IDENTIFICADORES ---
+    # --- IDENTIFICADORES E METADADOS ---
     title = models.CharField(max_length=200)
-    # unique=True é vital, mas blank=True permite que o Django gere sozinho
     slug = models.SlugField(unique=True, blank=True, max_length=255)
-    
-    # --- METADADOS TÉCNICOS ---
     category = models.CharField(max_length=3, choices=CATEGORIES)
-    # JSONField é ideal para armazenar listas de tecnologias sem tabelas extras
-    technologies = models.JSONField(default=list) 
+    technologies = models.JSONField(default=list) # Ex: ["YOLOv11", "Python", "MQTT"]
     
     # --- DOSSIÊ DE ENGENHARIA ---
     problem_statement = models.TextField()
     solution_architecture = models.TextField()
     impact_metrics = models.CharField(max_length=255) 
     
-    # --- ATIVOS E REPOSITÓRIOS ---
-    # null=True e blank=True garantem que o banco não trave se o campo estiver vazio
-    image = models.ImageField(upload_to='projects/', null=True, blank=True)
+    # --- ATIVOS ÚNICOS ---
+    # Imagem de Capa (Principal)
+    cover_image = models.ImageField(upload_to='projects/covers/', null=True, blank=True)
+    
+    # Vídeo de Demonstração (Opcional - Aceita MP4/MOV)
+    # FileExtensionValidator garante que o usuário não suba arquivos errados
+    video_demo = models.FileField(
+        upload_to='projects/videos/', 
+        null=True, 
+        blank=True,
+        validators=[FileExtensionValidator(allowed_extensions=['mp4', 'mov', 'avi'])]
+    )
+    
+    # Repositórios
     github_link = models.URLField(blank=True, null=True)
-    live_demo = models.URLField(blank=True, null=True)
+    live_demo = models.URLField(blank=True, null=True) # Link para app web/demo ao vivo
     
     # --- TIMESTAMPS ---
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     def save(self, *args, **kwargs):
-        """
-        Gatilho de Automação: 
-        1. Gera o slug a partir do título se estiver vazio.
-        2. Resolve colisões de nomes (ex: 'projeto-v1', 'projeto-v1-1').
-        """
+        """Automação de Slug Anti-Colisão."""
         if not self.slug:
             base_slug = slugify(self.title)
-            
-            # Fallback caso o título seja apenas caracteres especiais
             if not base_slug:
                 base_slug = uuid.uuid4().hex[:8]
-            
             self.slug = base_slug
             
-            # Loop de Verificação de Unicidade (Anti-Colisão)
             counter = 1
             while Project.objects.filter(slug=self.slug).exists():
                 self.slug = f"{base_slug}-{counter}"
@@ -63,5 +63,18 @@ class Project(models.Model):
 
     class Meta:
         verbose_name = "Projeto de Engenharia"
-        verbose_name_plural = "Projetos de Engenharia"
         ordering = ['-created_at']
+
+
+class ProjectImage(models.Model):
+    """
+    Tabela de Galeria (1-para-Muitos). 
+    Um projeto pode ter várias fotos adicionais.
+    """
+    project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name='gallery')
+    image = models.ImageField(upload_to='projects/gallery/')
+    caption = models.CharField(max_length=200, blank=True, null=True) # Legenda opcional (ex: "Defeito no Isolador 4")
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Image for {self.project.title}"
