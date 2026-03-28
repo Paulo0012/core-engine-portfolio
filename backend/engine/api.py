@@ -27,32 +27,32 @@ def get_project(request, project_id: int):
 @router.post("/", response={201: ProjectOut}, auth=auth_bearer)
 def create_project(
     request, 
-    data: Form[ProjectIn], 
+    data: Form[ProjectIn], # Garante que ele leia o FormData
     cover: File[UploadedFile] = None, 
     video: File[UploadedFile] = None,
     gallery_images: List[File[UploadedFile]] = None
 ):
-    """
-    Cria um projeto completo com suporte a múltiplos arquivos.
-    Usa transação atômica para garantir que ou salva tudo, ou não salva nada.
-    """
     with transaction.atomic():
-        # 1. Criar o Projeto Base
-        # Convertemos tecnologias (que vem como string do form) para lista se necessário
+        # O React envia tudo como string no FormData. Precisamos tratar:
         project_dict = data.dict()
-        if isinstance(project_dict['technologies'], str):
-            project_dict['technologies'] = [t.strip() for t in project_dict['technologies'].split(',')]
+        
+        # Correção para o campo technologies (que o banco espera ser uma lista/JSON)
+        if isinstance(project_dict.get('technologies'), str):
+            # Transforma "Python, Django" em ["Python", "Django"]
+            project_dict['technologies'] = [t.strip() for t in project_dict['technologies'].split(',') if t.strip()]
+        
+        # Garante que campos vazios não quebrem o banco
+        if not project_dict.get('problem_statement'):
+            project_dict['problem_statement'] = project_dict.get('solution_architecture', 'N/A')
 
         project = Project.objects.create(**project_dict)
 
-        # 2. Anexar Capa e Vídeo
         if cover:
             project.cover_image = cover
         if video:
             project.video_demo = video
         project.save()
 
-        # 3. Processar Galeria de Fotos (Múltiplas)
         if gallery_images:
             for img in gallery_images:
                 ProjectImage.objects.create(project=project, image=img)
