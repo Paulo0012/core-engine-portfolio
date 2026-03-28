@@ -1,5 +1,7 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import MainLayout from './layout/MainLayout';
+
+// Páginas do Ecossistema
 import Dashboard from './pages/Dashboard';
 import EngineeringBio from './pages/EngineeringBio';
 import ProjectDetails from './pages/ProjectDetails';
@@ -7,26 +9,32 @@ import AdminDashboard from './pages/AdminDashboard';
 import ProjectForm from './pages/ProjectForm';
 import Login from './pages/Login';
 
-// HOC (Higher Order Component) para Proteger as Rotas de Admin
+/**
+ * PROTOCOLO DE PROTEÇÃO DE NÓ (HOC)
+ * Verifica a existência do Token JWT no armazenamento local.
+ * Se ausente, redireciona o intruso para o Login_Gateway.
+ */
 const PrivateRoute = ({ children }: { children: JSX.Element }) => {
   const isAuthenticated = !!localStorage.getItem('token');
-  return isAuthenticated ? children : <Navigate to="/login" />;
+  return isAuthenticated ? children : <Navigate to="/login" replace />;
 };
 
 function App() {
   return (
     <Router>
       <Routes>
-        {/* Camada de Layout: Sidebar, Header e Logs fixos para todas as páginas */}
+        {/* Camada de Gabinete: Sidebar, Header e Logs fixos */}
         <Route path="/" element={<MainLayout />}>
           
-          {/* VISTAS PÚBLICAS */}
+          {/* --- VISTAS PÚBLICAS (OPEN_ACCESS) --- */}
           <Route index element={<Dashboard />} />
           <Route path="bio" element={<EngineeringBio />} />
           <Route path="project/:id" element={<ProjectDetails />} />
           <Route path="login" element={<Login />} />
 
-          {/* VISTAS ADMINISTRATIVAS (PROTEGIDAS) */}
+          {/* --- VISTAS ADMINISTRATIVAS (RESTRICTED_ACCESS) --- */}
+          
+          {/* Painel de Controle Principal */}
           <Route 
             path="admin" 
             element={
@@ -36,7 +44,7 @@ function App() {
             } 
           />
           
-          {/* Rota para Criar Novo Projeto */}
+          {/* Inserção de Novo Ativo (Equatorial, SEAP, etc) */}
           <Route 
             path="admin/new" 
             element={
@@ -46,7 +54,7 @@ function App() {
             } 
           />
 
-          {/* Rota para Editar Projeto Existente */}
+          {/* Edição de Ativo Existente via ID_NODE */}
           <Route 
             path="admin/edit/:id" 
             element={
@@ -57,6 +65,9 @@ function App() {
           />
 
         </Route>
+
+        {/* CATCH_ALL: Redireciona rotas inexistentes para o Dashboard */}
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </Router>
   );
