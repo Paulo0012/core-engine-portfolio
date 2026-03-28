@@ -15,6 +15,7 @@ class ProjectIn(Schema):
     impact_metrics: str      # O "Resultado Real" (Ex: +40% de eficiência)
     github_link: Optional[str] = None
     live_demo: Optional[str] = None
+    slug: str = None
 
 class ProjectOut(Schema):
     """
