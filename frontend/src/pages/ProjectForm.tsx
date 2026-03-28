@@ -76,13 +76,11 @@ export default function ProjectForm() {
     setLoading(true);
     setError('');
 
-    // Validação Básica de Campo Obrigatório
-    if (!formData.title || !formData.problem_statement) {
-      setError("ERRO: Título e Descrição do Problema são mandatórios.");
+    if (!formData.title || !formData.solution_architecture) {
+      setError("ERRO: Título e Arquitetura da Solução são mandatórios.");
       setLoading(false);
       return;
-    }
-
+   }
     try {
       // O Pulo do Gato: FormData para enviar arquivos + texto
       const submitData = new FormData();
