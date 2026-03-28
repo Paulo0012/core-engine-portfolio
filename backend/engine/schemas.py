@@ -2,28 +2,29 @@ from ninja import Schema
 from typing import List, Optional
 from datetime import datetime
 
-# Esquema auxiliar para a galeria no ProjectOut
 class ProjectGalleryOut(Schema):
+    """Estrutura de cada foto na galeria."""
     id: int
-    image: str # URL da imagem
+    image: str # URL pública da imagem
     caption: Optional[str] = None
 
 class ProjectIn(Schema):
-    """Esquema de ENTRADA (O que o React envia no POST/PUT)"""
+    """
+    Esquema de ENTRADA.
+    No POST com arquivos, os campos de arquivo (cover, video) 
+    são passados fora do JSON.
+    """
     title: str
     category: str
     technologies: List[str]
     problem_statement: str
     solution_architecture: str
     impact_metrics: str
-    # Mídia Única (Capa e Vídeo)
-    # Nota: No upload via FormData, cover_image e video_demo são tratados separadamente
-    # github_link: Optional[str] = None
-    # live_demo: Optional[str] = None
-    slug: Optional[str] = None
+    github_link: Optional[str] = None
+    live_demo: Optional[str] = None
 
 class ProjectOut(Schema):
-    """Esquema de SAÍDA (O que o Frontend exibe)"""
+    """Esquema de SAÍDA (O que o seu Portfólio exibe)."""
     id: int
     title: str
     slug: str
@@ -32,10 +33,12 @@ class ProjectOut(Schema):
     problem_statement: str
     solution_architecture: str
     impact_metrics: str
-    # Mídia (Django Ninja resolve as URLs se MEDIA_URL estiver configurado)
+    
+    # URLs de Mídia
     cover_image: Optional[str] = None
     video_demo: Optional[str] = None
-    # A Mágica: Lista de imagens da galeria
+    
+    # Lista de fotos extras (Ex: Fotos dos Isoladores da Equatorial)
     gallery: List[ProjectGalleryOut]
     
     github_link: Optional[str] = None
