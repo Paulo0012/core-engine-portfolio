@@ -3,26 +3,7 @@ from typing import List, Optional
 from datetime import datetime
 
 class ProjectIn(Schema):
-    """
-    Schema de Entrada: O que o seu Dashboard (ou um script de automação) 
-    enviará para o servidor para cadastrar um novo case.
-    """
-    title: str
-    category: str  # Sugestão: IOT, BE (Backend), CV (Vision), AT (Automation)
-    technologies: List[str]  # Ex: ["Django", "React", "OpenCV"]
-    problem_statement: str   # O "Desafio"
-    solution_architecture: str # A "Decisão Técnica"
-    impact_metrics: str      # O "Resultado Real" (Ex: +40% de eficiência)
-    github_link: Optional[str] = None
-    live_demo: Optional[str] = None
-    slug: str = None
-
-class ProjectOut(Schema):
-    """
-    Schema de Saída: O que o Frontend (React) receberá da API.
-    Inclui campos gerados automaticamente pelo Banco de Dados (ID e Data).
-    """
-    id: int
+    """Esquema de ENTRADA (O que o React envia)"""
     title: str
     category: str
     technologies: List[str]
@@ -31,8 +12,20 @@ class ProjectOut(Schema):
     impact_metrics: str
     github_link: Optional[str] = None
     live_demo: Optional[str] = None
-    created_at: datetime  # Importante para ordenar no Frontend por 'Mais Recente'
+    # Slug é opcional: se o React não enviar, o Model.save() gera
+    slug: Optional[str] = None
 
-class ErrorMessage(Schema):
-    """Schema auxiliar para mensagens de erro padronizadas"""
-    message: str
+class ProjectOut(Schema):
+    """Esquema de SAÍDA (O que o Dashboard e Cards exibem)"""
+    id: int
+    title: str
+    slug: str
+    category: str
+    technologies: List[str]
+    problem_statement: str
+    solution_architecture: str
+    impact_metrics: str
+    image: Optional[str] = None # Retorna a URL da imagem
+    github_link: Optional[str] = None
+    live_demo: Optional[str] = None
+    created_at: datetime
