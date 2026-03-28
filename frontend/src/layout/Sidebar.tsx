@@ -1,84 +1,72 @@
-import { NavLink } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { 
-  Terminal, Cpu, Database, LayoutDashboard, 
-  User, Code2, Microscope, Radio, ShieldCheck 
+  LayoutDashboard, Cpu, Code2, 
+  ScanEye, UserCircle, Radio, ShieldCheck 
 } from 'lucide-react';
-import profileImg from '../assets/profile.png'; 
 
 export default function Sidebar() {
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const menuItems = [
+    { id: 'dash', label: 'DASHBOARD_GERAL', icon: <LayoutDashboard size={22} />, path: '/' },
+    { id: 'iot', label: 'HARDWARE_IOT', icon: <Cpu size={22} />, path: '/iot' },
+    { id: 'saas', label: 'BACKEND_SAAS', icon: <Code2 size={22} />, path: '/saas' },
+    { id: 'cv', label: 'AI_COMPUTER_VISION', icon: <ScanEye size={22} />, path: '/cv' },
+    { id: 'bio', label: 'ENGINEERING_BIO', icon: <UserCircle size={22} />, path: '/bio' },
+    { id: 'live', label: 'LIVE_FEED', icon: <Radio size={22} />, path: '/live' },
+  ];
+
   return (
-    <aside className="w-68 border-r border-eng-border bg-slate-900/40 flex flex-col z-20 backdrop-blur-md">
-      
-      {/* HEADER: SISTEMA OPERACIONAL */}
-      <div className="p-6 border-b border-eng-border">
-        <div className="flex items-center gap-2 text-eng-cyan mb-1">
-          <Terminal size={18} />
-          <h1 className="font-mono font-bold tracking-tighter text-sm uppercase">SG_ENGINE.CORE</h1>
-        </div>
-        <p className="text-[9px] text-slate-600 font-mono uppercase tracking-widest">Build: 2026.03.26_STABLE</p>
+    <aside className="w-80 h-full border-r border-eng-border bg-eng-black p-8 flex flex-col gap-10">
+      {/* Brand Header */}
+      <div className="space-y-1">
+        <h1 className="text-xl font-black text-eng-cyan tracking-tighter flex items-center gap-2">
+          {'>'}_ SG_ENGINE.CORE
+        </h1>
+        <p className="text-[10px] text-slate-600 font-mono uppercase tracking-[0.3em]">Build: 2026.03.27_Stable</p>
       </div>
 
-      {/* PERFIL RÁPIDO: SUA IDENTIDADE VISUAL */}
-      <NavLink 
-        to="/bio" 
-        className={({ isActive }) => `p-6 border-b border-eng-border flex items-center gap-4 transition-all hover:bg-white/5 ${isActive ? 'bg-eng-cyan/5' : ''}`}
-      >
+      {/* Perfil (Root_Engineer) */}
+      <div className="flex items-center gap-4 p-4 border border-eng-border/50 bg-white/5 rounded-sm">
         <div className="relative">
-          <img 
-            src={profileImg} 
-            alt="Paulo Gomes" 
-            className="w-12 h-12 rounded-full object-cover border border-eng-cyan/50 p-0.5"
-          />
-          <div className="absolute -bottom-1 -right-1 w-3 h-3 bg-eng-green rounded-full border-2 border-eng-black animate-pulse" />
+           <div className="w-14 h-14 rounded-full border-2 border-eng-cyan overflow-hidden bg-slate-800">
+              <img src="/profile.png" alt="Root" className="grayscale" />
+           </div>
+           <div className="absolute bottom-0 right-0 w-3 h-3 bg-eng-green rounded-full border-2 border-eng-black" />
         </div>
         <div>
-          <h2 className="text-xs font-bold text-white uppercase tracking-tight">Paulo Gomes</h2>
-          <p className="text-[9px] font-mono text-slate-500 uppercase italic">Root_Engineer</p>
-        </div>
-      </NavLink>
-
-      {/* NAVEGAÇÃO PRINCIPAL */}
-      <nav className="flex-1 p-4 space-y-1 overflow-y-auto custom-scrollbar">
-        <div className="pb-2 px-4 text-[9px] text-slate-700 font-mono uppercase tracking-[0.2em]">Sistemas</div>
-        
-        <SidebarLink to="/" icon={<LayoutDashboard size={18}/>} label="Dashboard_Geral" />
-        <SidebarLink to="/hardware" icon={<Cpu size={18}/>} label="Hardware_IoT" />
-        <SidebarLink to="/backend" icon={<Code2 size={18}/>} label="Backend_SaaS" />
-        <SidebarLink to="/ai" icon={<Microscope size={18}/>} label="AI_Computer_Vision" />
-        
-        <div className="pt-6 pb-2 px-4 text-[9px] text-slate-700 font-mono uppercase tracking-[0.2em]">Documentação</div>
-        <SidebarLink to="/bio" icon={<User size={18}/>} label="Engineering_Bio" />
-        <SidebarLink to="/telemetry" icon={<Radio size={18}/>} label="Live_Feed" />
-      </nav>
-
-      {/* FOOTER: STATUS DE SEGURANÇA */}
-      <div className="p-4 border-t border-eng-border bg-black/40">
-        <div className="flex items-center gap-3 px-2">
-          <ShieldCheck size={14} className="text-eng-green shadow-glow-green" />
-          <span className="text-[9px] font-mono text-slate-600 uppercase tracking-widest italic">
-            Secure_Shell_Active
-          </span>
+          <h3 className="text-base font-bold text-white uppercase tracking-tight">Paulo Gomes</h3>
+          <p className="text-[10px] text-eng-cyan font-mono italic">ROOT_ENGINEER</p>
         </div>
       </div>
-    </aside>
-  );
-}
 
-// Sub-componente interno para links estilizados
-function SidebarLink({ to, icon, label }: { to: string, icon: any, label: string }) {
-  return (
-    <NavLink 
-      to={to}
-      className={({ isActive }) => `
-        w-full flex items-center gap-3 px-4 py-3 rounded-sm transition-all font-mono text-[10px] uppercase tracking-wider
-        ${isActive 
-          ? 'bg-eng-cyan/10 text-eng-cyan border-l-2 border-eng-cyan glow-cyan' 
-          : 'text-slate-500 hover:bg-white/5 hover:text-slate-300'
-        }
-      `}
-    >
-      <span className="opacity-80">{icon}</span>
-      {label}
-    </NavLink>
+      {/* Navegação Principal */}
+      <nav className="flex-1 space-y-3">
+        <span className="text-[10px] text-slate-700 font-bold uppercase tracking-[0.5em] block mb-6">Sistemas</span>
+        {menuItems.map((item) => (
+          <button
+            key={item.id}
+            onClick={() => navigate(item.path)}
+            className={`w-full flex items-center gap-4 p-4 transition-all duration-300 border-l-2 text-base font-medium tracking-tight
+              ${location.pathname === item.path 
+                ? 'bg-eng-cyan/10 border-eng-cyan text-eng-cyan shadow-[inset_10px_0_20px_-10px_rgba(6,182,212,0.2)]' 
+                : 'border-transparent text-slate-500 hover:text-white hover:bg-white/5'
+              }`}
+          >
+            {item.icon}
+            <span className="uppercase">{item.label}</span>
+          </button>
+        ))}
+      </nav>
+
+      {/* Admin Quick Access */}
+      <button 
+        onClick={() => navigate('/admin')}
+        className="mt-auto flex items-center gap-4 p-4 text-slate-600 hover:text-eng-cyan border border-dashed border-slate-800 hover:border-eng-cyan/50 transition-all uppercase text-sm font-mono tracking-widest"
+      >
+        <ShieldCheck size={20} /> Access_Vault
+      </button>
+    </aside>
   );
 }
