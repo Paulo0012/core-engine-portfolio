@@ -15,18 +15,16 @@ export default function ProjectForm() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-
-  // 1. Estado de Metadados (Texto)
   const [formData, setFormData] = useState({
     title: '',
     category: 'BE',
-    technologies: '', // Enviado como string separada por vírgula
-    problem_statement: '',
+    technologies: 'React, Django', // Coloque um valor padrão para testar
+    problem_statement: 'Resumo do problema',
     solution_architecture: '',
-    impact_metrics: '',
+    impact_metrics: 'N/A',
     github_link: '',
     live_demo: '',
-  });
+   });
 
   // 2. Estado de Mídia (Arquivos Únicos)
   const [coverImage, setCoverImage] = useState<File | null>(null);
