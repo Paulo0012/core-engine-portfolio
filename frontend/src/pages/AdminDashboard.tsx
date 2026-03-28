@@ -1,72 +1,152 @@
 import { useEffect, useState } from 'react';
-import { Plus, Edit, Trash2, RefreshCw } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { 
+  Plus, Edit, Trash2, RefreshCw, 
+  Database, ShieldCheck, AlertTriangle 
+} from 'lucide-react';
 import api from '../services/api';
 
-export default function AdminDashboard() {
-  const [projects, setProjects] = useState([]);
-  const [loading, setLoading] = useState(true);
+interface Project {
+  id: number;
+  title: string;
+  category: string;
+  impact_metrics: string;
+}
 
+export default function AdminDashboard() {
+  const [projects, setProjects] = useState<Project[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
+  const navigate = useNavigate();
+
+  // Protocolo de Sincronização com o Backend
   const loadProjects = async () => {
     setLoading(true);
+    setError('');
     try {
       const res = await api.get('/cases/');
       setProjects(res.data);
     } catch (err) {
-      alert("ERRO_DE_CONEXÃO_COM_MOTOR_DATABASE");
+      setError("CRITICAL_FAILURE: Falha na conexão com o Banco de Dados.");
+      console.error(err);
     } finally {
       setLoading(false);
     }
   };
 
-  useEffect(() => { loadProjects(); }, []);
+  useEffect(() => {
+    loadProjects();
+  }, []);
 
-  const handleDelete = async (id: number) => {
-    if (window.confirm("CONFIRMAR_DELEÇÃO_PERMANENTE_DO_NÓ?")) {
-      await api.delete(`/cases/${id}/`);
-      loadProjects();
+  // Operação de Deleção de Nó (D)
+  const handleDelete = async (id: number, title: string) => {
+    if (window.confirm(`SISTEMA: Confirmar deleção permanente do nó [${title}]?`)) {
+      try {
+        await api.delete(`/cases/${id}/`);
+        loadProjects(); // Recarrega a lista após deletar
+      } catch (err) {
+        alert("ERRO: O sistema impediu a exclusão. Verifique permissões.");
+      }
     }
   };
 
   return (
     <div className="max-w-6xl mx-auto space-y-8 pb-20 font-mono">
+      
+      {/* HEADER DE COMANDO */}
       <header className="flex justify-between items-end border-b border-eng-border pb-6">
         <div>
-          <h2 className="text-2xl font-bold text-white uppercase tracking-tighter">System_Admin_Panel</h2>
-          <p className="text-[10px] text-eng-cyan">Gestão de Ativos e Casos Técnicos</p>
+          <div className="flex items-center gap-2 text-eng-cyan text-[10px] uppercase tracking-[0.3em] mb-1">
+            <ShieldCheck size={14} /> System_Root_Access
+          </div>
+          <h2 className="text-3xl font-black text-white uppercase tracking-tighter italic">
+            Admin_<span className="text-eng-cyan">Panel</span>
+          </h2>
         </div>
-        <button className="bg-eng-cyan text-black px-6 py-2 text-xs font-bold uppercase hover:bg-white transition-all flex items-center gap-2">
-          <Plus size={16} /> New_Entry
+
+        {/* GATILHO: NOVO PROJETO */}
+        <button 
+          onClick={() => navigate('/admin/new')}
+          className="bg-eng-cyan text-black px-8 py-3 text-xs font-bold uppercase hover:bg-white transition-all flex items-center gap-3 shadow-glow-cyan"
+        >
+          <Plus size={18} /> New_Project_Entry
         </button>
       </header>
 
-      <div className="overflow-x-auto border border-eng-border">
+      {/* TABELA DE ATIVOS TÉCNICOS */}
+      <div className="border border-eng-border bg-slate-900/20 backdrop-blur-sm overflow-hidden">
         <table className="w-full text-left text-[11px] uppercase tracking-wider">
           <thead className="bg-white/5 text-slate-500 border-b border-eng-border">
             <tr>
-              <th className="p-4">ID</th>
-              <th className="p-4">Project_Title</th>
-              <th className="p-4">Category</th>
-              <th className="p-4">Impact</th>
-              <th className="p-4 text-right">Operations</th>
+              <th className="p-5 font-bold">ID_NODE</th>
+              <th className="p-5 font-bold">Project_Identifier</th>
+              <th className="p-5 font-bold">Category</th>
+              <th className="p-5 font-bold">Efficiency_Impact</th>
+              <th className="p-5 text-right font-bold">Operations</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-eng-border">
-            {projects.map((p: any) => (
-              <tr key={p.id} className="hover:bg-white/5 transition-colors">
-                <td className="p-4 text-slate-600">{p.id}</td>
-                <td className="p-4 text-white font-bold">{p.title}</td>
-                <td className="p-4 text-eng-cyan">{p.category}</td>
-                <td className="p-4 text-eng-green">{p.impact_metrics}</td>
-                <td className="p-4 text-right space-x-4">
-                  <button className="text-slate-500 hover:text-white"><Edit size={14}/></button>
-                  <button onClick={() => handleDelete(p.id)} className="text-slate-500 hover:text-red-500"><Trash2 size={14}/></button>
+            {projects.map((p) => (
+              <tr key={p.id} className="hover:bg-white/5 transition-colors group">
+                <td className="p-5 text-slate-600 font-mono italic">#{p.id}</td>
+                <td className="p-5 text-white font-bold group-hover:text-eng-cyan transition-colors">
+                  {p.title}
+                </td>
+                <td className="p-5 text-eng-cyan font-mono opacity-80">{p.category}</td>
+                <td className="p-5 text-eng-green font-bold glow-green">
+                  {p.impact_metrics}
+                </td>
+                <td className="p-5 text-right flex justify-end gap-6 items-center">
+                  
+                  {/* GATILHO: EDITAR PROJETO (PASSANDO O ID) */}
+                  <button 
+                    onClick={() => navigate(`/admin/edit/${p.id}`)}
+                    className="text-slate-500 hover:text-amber-500 transition-colors flex items-center gap-1"
+                    title="EDIT_NODE"
+                  >
+                    <Edit size={16}/>
+                  </button>
+                  
+                  {/* GATILHO: DELETAR PROJETO */}
+                  <button 
+                    onClick={() => handleDelete(p.id, p.title)} 
+                    className="text-slate-500 hover:text-red-500 transition-colors"
+                    title="TERMINATE_NODE"
+                  >
+                    <Trash2 size={16}/>
+                  </button>
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
-        {loading && <div className="p-10 text-center animate-pulse">Syncing_Database...</div>}
+
+        {/* ESTADOS DE CARREGAMENTO E ERRO */}
+        {loading && (
+          <div className="p-20 text-center flex flex-col items-center gap-4">
+            <RefreshCw className="animate-spin text-eng-cyan" size={24} />
+            <span className="text-eng-cyan text-[10px] animate-pulse">Syncing_Database_Cores...</span>
+          </div>
+        )}
+
+        {error && (
+          <div className="p-20 text-center text-red-500 flex flex-col items-center gap-4">
+            <AlertTriangle size={32} />
+            <span className="text-[10px]">{error}</span>
+          </div>
+        )}
+
+        {!loading && projects.length === 0 && (
+          <div className="p-20 text-center text-slate-600 italic font-mono text-xs">
+            NO_DATA_NODES_FOUND_IN_CORE.
+          </div>
+        )}
       </div>
+
+      {/* FOOTER DE STATUS */}
+      <footer className="flex items-center gap-4 text-[9px] text-slate-700 uppercase tracking-[0.4em] pt-4">
+        <Database size={12} /> Database_Status: <span className="text-eng-green italic font-bold tracking-normal">Online_Stable</span>
+      </footer>
     </div>
   );
 }
