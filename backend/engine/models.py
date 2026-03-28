@@ -10,44 +10,47 @@ class Project(models.Model):
         ('AT', 'Automation & Data'),
     ]
 
-    # Identificadores de Sistema
+    # --- IDENTIFICADORES ---
     title = models.CharField(max_length=200)
-    # Slug opcional no formulário, mas obrigatório no banco (auto-gerado no save)
+    # unique=True é vital, mas blank=True permite que o Django gere sozinho
     slug = models.SlugField(unique=True, blank=True, max_length=255)
     
-    # Metadados Técnicos
+    # --- METADADOS TÉCNICOS ---
     category = models.CharField(max_length=3, choices=CATEGORIES)
-    technologies = models.JSONField(default=list) # Ex: ["Python", "Django", "OpenCV"]
+    # JSONField é ideal para armazenar listas de tecnologias sem tabelas extras
+    technologies = models.JSONField(default=list) 
     
-    # Dossiê de Engenharia
+    # --- DOSSIÊ DE ENGENHARIA ---
     problem_statement = models.TextField()
     solution_architecture = models.TextField()
-    impact_metrics = models.CharField(max_length=255) # Ex: "98% Accuracy"
+    impact_metrics = models.CharField(max_length=255) 
     
-    # Ativos Visuais e Repositórios
-    # Adicionei null=True/blank=True para evitar travamentos de integridade
+    # --- ATIVOS E REPOSITÓRIOS ---
+    # null=True e blank=True garantem que o banco não trave se o campo estiver vazio
     image = models.ImageField(upload_to='projects/', null=True, blank=True)
     github_link = models.URLField(blank=True, null=True)
     live_demo = models.URLField(blank=True, null=True)
     
-    # Timestamps de Auditoria
+    # --- TIMESTAMPS ---
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     def save(self, *args, **kwargs):
         """
-        Gatilho de Automação: Gera o slug automaticamente se estiver vazio
-        e garante que seja único anexando um sufixo se houver colisão.
+        Gatilho de Automação: 
+        1. Gera o slug a partir do título se estiver vazio.
+        2. Resolve colisões de nomes (ex: 'projeto-v1', 'projeto-v1-1').
         """
         if not self.slug:
             base_slug = slugify(self.title)
-            # Se o título for vazio ou caracteres especiais, usa um UUID curto
+            
+            # Fallback caso o título seja apenas caracteres especiais
             if not base_slug:
                 base_slug = uuid.uuid4().hex[:8]
             
             self.slug = base_slug
             
-            # Checagem de colisão simples (evita o erro UNIQUE constraint failed)
+            # Loop de Verificação de Unicidade (Anti-Colisão)
             counter = 1
             while Project.objects.filter(slug=self.slug).exists():
                 self.slug = f"{base_slug}-{counter}"
@@ -59,4 +62,6 @@ class Project(models.Model):
         return f"[{self.category}] {self.title}"
 
     class Meta:
-        ordering = ['-created_at'] # Projetos mais novos aparecem primeiro
+        verbose_name = "Projeto de Engenharia"
+        verbose_name_plural = "Projetos de Engenharia"
+        ordering = ['-created_at']
