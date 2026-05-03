@@ -4,9 +4,7 @@ import {
   Mail, 
   Cpu, 
   Code2, 
-  Database, 
-  Github, 
-  Linkedin, 
+  Database,
   ExternalLink, 
   Award, 
   CheckCircle2,
@@ -151,7 +149,6 @@ export default function Dashboard() {
                 <div className="pt-6 border-t border-white/5 flex justify-between items-center">
                   <span className="text-xs text-slate-600 font-mono">Case_Study_v1.0</span>
                   <div className="flex gap-4">
-                    <Github className="text-slate-500 hover:text-white cursor-pointer transition-colors" size={20} />
                     <ExternalLink className="text-slate-500 hover:text-purple-500 cursor-pointer transition-colors" size={20} />
                   </div>
                 </div>
@@ -183,10 +180,8 @@ export default function Dashboard() {
           </div>
           <div className="flex justify-center gap-10">
              <a href="#" className="p-6 rounded-full border border-white/10 hover:border-purple-500 hover:bg-purple-500/10 transition-all group">
-                <Linkedin className="text-slate-500 group-hover:text-white" />
              </a>
              <a href="#" className="p-6 rounded-full border border-white/10 hover:border-purple-500 hover:bg-purple-500/10 transition-all group">
-                <Github className="text-slate-500 group-hover:text-white" />
              </a>
              <a href="#" className="p-6 rounded-full border border-white/10 hover:border-purple-500 hover:bg-purple-500/10 transition-all group">
                 <Mail className="text-slate-500 group-hover:text-white" />
