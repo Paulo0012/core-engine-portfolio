@@ -1,53 +1,58 @@
-import { useNavigate, useLocation } from 'react-router-dom';
-import { 
-  LayoutDashboard, Cpu, Code2, 
-  ScanEye, UserCircle, Radio, ShieldCheck 
-} from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
+/**
+ * NAVBAR_TOP_ENGINE
+ * Navegação superior unificada baseada nas referências de UI.
+ */
 export default function Navbar() {
   const navigate = useNavigate();
-  const location = useLocation();
 
   const menuItems = [
-    { id: 'dash', label: 'Dashboard', icon: <LayoutDashboard size={20} />, path: '/' },
-    { id: 'iot', label: 'Hardware', icon: <Cpu size={20} />, path: '/iot' },
-    { id: 'saas', label: 'Backend', icon: <Code2 size={20} />, path: '/saas' },
-    { id: 'cv', label: 'AI Vision', icon: <ScanEye size={20} />, path: '/cv' },
-    { id: 'bio', label: 'Bio', icon: <UserCircle size={20} />, path: '/bio' },
-    { id: 'live', label: 'Live', icon: <Radio size={20} />, path: '/live' },
+    { label: 'Formações', id: 'formacoes' },
+    { label: 'Sobre mim', id: 'sobre' },
+    { label: 'Soft skills', id: 'skills' },
+    { label: 'Linguagens', id: 'linguagens' },
+    { label: 'Projetos', id: 'projetos' },
+    { label: 'Certificados', id: 'certificados' },
+    { label: 'Contato', id: 'contato' },
   ];
 
+  // Função para scroll suave até a seção
+  const scrollToSection = (id: string) => {
+    const element = document.getElementById(id);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    } else {
+      navigate('/'); // Se não estiver na home, volta para ela
+    }
+  };
+
   return (
-    <nav className="fixed top-0 left-0 right-0 h-20 bg-black/80 backdrop-blur-md border-b border-white/10 z-50 px-10 flex items-center justify-between">
-      {/* Brand */}
-      <div className="flex items-center gap-4">
-        <div className="w-10 h-10 rounded-full border border-cyan-500/50 overflow-hidden bg-slate-900">
-           <img src="/profile.jpg" alt="Paulo" className="w-full h-full object-cover grayscale" />
-        </div>
-        <h1 className="text-xl font-bold text-white tracking-tighter uppercase font-mono">
-          SG_ENGINE<span className="text-cyan-500">.CORE</span>
+    <nav className="fixed top-0 left-0 right-0 h-20 bg-black/60 backdrop-blur-xl border-b border-white/5 z-50 px-6 lg:px-20 flex items-center justify-between">
+      {/* Brand Logo */}
+      <div className="flex items-center gap-3">
+        <h1 className="text-xl font-black text-white tracking-tighter uppercase italic">
+          Paulo<span className="text-purple-500">Gomes</span>
         </h1>
       </div>
 
-      {/* Nav Links */}
-      <div className="hidden lg:flex items-center gap-8">
+      {/* Nav Links (Inspirado na imagem e0a586.png) */}
+      <div className="hidden xl:flex items-center gap-8">
         {menuItems.map((item) => (
           <button
             key={item.id}
-            onClick={() => navigate(item.path)}
-            className={`flex items-center gap-2 text-sm font-bold uppercase tracking-widest transition-all
-              ${location.pathname === item.path ? 'text-cyan-400' : 'text-slate-500 hover:text-white'}
-            `}
+            onClick={() => scrollToSection(item.id)}
+            className="text-sm font-medium text-slate-400 hover:text-white transition-all uppercase tracking-widest"
           >
             {item.label}
           </button>
         ))}
       </div>
 
-      {/* Action */}
+      {/* Call to Action (Inspirado na imagem e1869e.png) */}
       <button 
-        onClick={() => navigate('/admin')}
-        className="px-6 py-2 bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 text-xs font-bold uppercase hover:bg-cyan-500 hover:text-black transition-all rounded-full"
+        onClick={() => scrollToSection('contato')}
+        className="px-8 py-2.5 bg-gradient-to-r from-purple-600 to-pink-500 text-white text-xs font-bold uppercase rounded-lg shadow-[0_0_20px_rgba(168,85,247,0.4)] hover:scale-105 transition-all"
       >
         Hire Me
       </button>
