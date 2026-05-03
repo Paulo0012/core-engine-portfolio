@@ -1,7 +1,5 @@
 import { useEffect, useState } from 'react';
-import { 
-  Github, 
-  Linkedin, 
+import {
   Mail, 
   ExternalLink, 
   Terminal, 
@@ -45,8 +43,6 @@ export default function Dashboard() {
             </p>
 
             <div className="flex gap-6 pt-4">
-              <a href="#" className="p-4 rounded-full border border-white/10 hover:border-purple-500/50 hover:bg-purple-500/10 transition-all"><Github size={24}/></a>
-              <a href="#" className="p-4 rounded-full border border-white/10 hover:border-purple-500/50 hover:bg-purple-500/10 transition-all"><Linkedin size={24}/></a>
               <a href="#" className="p-4 rounded-full border border-white/10 hover:border-purple-500/50 hover:bg-purple-500/10 transition-all"><Mail size={24}/></a>
             </div>
           </div>
