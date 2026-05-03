@@ -1,94 +1,22 @@
-@import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;500;700&family=JetBrains+Mono&display=swap');
 
-/* DEFINIÇÃO DE TEMA: CORES TÉCNICAS */
-@theme {
-  --color-eng-black: #0a0a0c;
-  --color-eng-green: #10b981;
-  --color-eng-cyan: #06b6d4;
-  --color-eng-border: #1e293b;
-  --font-mono: "JetBrains Mono", monospace;
-}
-
-/* ----------------------------------------------------------------
-  COMPONENTES DE FORMULÁRIO (CORREÇÃO V4)
-  ----------------------------------------------------------------
-*/
-
-@utility label-style {
-  display: block;
-  font-family: var(--font-mono);
-  font-size: 10px;
-  text-transform: uppercase;
-  color: #64748b;
-  margin-bottom: 0.5rem;
-  letter-spacing: 0.1em;
-}
-
-@utility input-style {
-  width: 100%;
-  background-color: #0f172a;
-  border: 1px solid var(--color-eng-border);
-  padding: 0.75rem;
-  color: white;
-  font-family: var(--font-mono);
-  font-size: 12px;
-  outline: none;
-  transition: all 0.2s;
-
-  /* Correção: O focus deve ser declarado como um seletor interno */
-  &:focus {
-    border-color: var(--color-eng-cyan);
-    box-shadow: 0 0 10px rgba(6, 182, 212, 0.1);
-  }
-}
-
-/* ----------------------------------------------------------------
-  ESTÉTICA INDUSTRIAL E SCANLINES
-  ----------------------------------------------------------------
-*/
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 :root {
-  color-scheme: dark;
+  font-size: 16px; /* Base 16px conforme pedido */
 }
 
 body {
-  background-color: var(--color-eng-black);
-  background-image: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), 
-                    linear-gradient(90deg, rgba(255, 0, 0, 0.04), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.04));
-  background-size: 100% 4px, 3px 100%;
-  @apply text-slate-300 font-sans antialiased overflow-x-hidden;
+  @apply bg-[#050505] text-slate-300 antialiased overflow-x-hidden;
+  font-family: 'Space+Grotesk', sans-serif;
 }
 
-/* Utilitários de Brilho */
-.glow-cyan { box-shadow: 0 0 20px rgba(6, 182, 212, 0.15); }
-.glow-green { box-shadow: 0 0 15px rgba(16, 185, 129, 0.15); }
-
-/* Scrollbar Estilo Terminal */
-.custom-scrollbar::-webkit-scrollbar { width: 4px; }
-.custom-scrollbar::-webkit-scrollbar-thumb {
-  background-color: var(--color-eng-border);
-  border-radius: 10px;
-}
-.custom-scrollbar::-webkit-scrollbar-thumb:hover { background-color: var(--color-eng-cyan); }
-
-@layer base {
-  html {
-    /* Define o tamanho base para 16px */
-    font-size: 16px; 
-    @apply bg-eng-black text-slate-300 antialiased;
-  }
-
-  body {
-    /* Garante que o texto padrão seja legível */
-    @apply leading-relaxed;
-  }
+.neon-border {
+  @apply border border-cyan-500/30 shadow-[0_0_15px_rgba(6,182,212,0.1)];
 }
 
-/* Custom Utilities para legibilidade */
-.text-eng-base {
-  font-size: 1rem; /* 16px */
-}
-
-.text-eng-large {
-  font-size: 1.25rem; /* 20px */
+.text-gradient {
+  @apply bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-purple-500;
 }
