@@ -27,32 +27,34 @@ def get_project(request, project_id: int):
 @router.post("/", response={201: ProjectOut}, auth=auth_bearer)
 def create_project(
     request, 
-    data: Form[ProjectIn], # Garante que ele leia o FormData
-    cover: File[UploadedFile] = None, 
-    video: File[UploadedFile] = None,
-    gallery_images: List[File[UploadedFile]] = None
+    data: Form[ProjectIn], 
+    cover_image: File[UploadedFile] = None, 
+    demo_video: File[UploadedFile] = None,
+    # O nome aqui DEVE ser exatamente o mesmo que você usa no data.append do React
+    gallery_images: List[File[UploadedFile]] = None 
 ):
     with transaction.atomic():
-        # O React envia tudo como string no FormData. Precisamos tratar:
-        project_dict = data.dict()
+        project_data = data.dict()
         
-        # Correção para o campo technologies (que o banco espera ser uma lista/JSON)
-        if isinstance(project_dict.get('technologies'), str):
-            # Transforma "Python, Django" em ["Python", "Django"]
-            project_dict['technologies'] = [t.strip() for t in project_dict['technologies'].split(',') if t.strip()]
+        # O React envia tecnologias como string ou JSON stringificado
+        # Vamos garantir que vire uma lista para o banco de dados
+        techs = project_data.get('technologies', "[]")
+        if isinstance(techs, str):
+            try:
+                project_data['technologies'] = json.loads(techs)
+            except:
+                project_data['technologies'] = [t.strip() for t in techs.split(',') if t]
+
+        project = Project.objects.create(**project_data)
+
+        if cover_image:
+            project.cover_image = cover_image
+        if demo_video:
+            project.demo_video = demo_video
         
-        # Garante que campos vazios não quebrem o banco
-        if not project_dict.get('problem_statement'):
-            project_dict['problem_statement'] = project_dict.get('solution_architecture', 'N/A')
-
-        project = Project.objects.create(**project_dict)
-
-        if cover:
-            project.cover_image = cover
-        if video:
-            project.video_demo = video
         project.save()
 
+        # Salva as várias fotos na tabela de galeria
         if gallery_images:
             for img in gallery_images:
                 ProjectImage.objects.create(project=project, image=img)
