@@ -1,254 +1,233 @@
-import { useState, ChangeEvent, FormEvent } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useEffect, useState, useRef } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import { 
-  Save, XCircle, FileImage, FileVideo, 
-  Trash2, Layers3, Zap, PlusCircle 
+  Save, ArrowLeft, Upload, Film, 
+  Image as ImageIcon, RefreshCw, CheckCircle2 
 } from 'lucide-react';
 import api from '../services/api';
 
-/**
- * PROJECT_FORM_GATEWAY
- * Gerencia o ciclo de vida de criação de novos ativos técnicos.
- * Suporta metadados JSON e Mídia Binária (FormData).
- */
 export default function ProjectForm() {
+  const { id } = useParams();
   const navigate = useNavigate();
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const videoInputRef = useRef<HTMLInputElement>(null);
+
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
   const [formData, setFormData] = useState({
     title: '',
-    category: 'BE',
-    technologies: 'React, Django', // Coloque um valor padrão para testar
-    problem_statement: 'Resumo do problema',
-    solution_architecture: '',
-    impact_metrics: 'N/A',
+    category: '',
+    description: '',
+    impact_metrics: '',
+    technologies: '', // Enviado como string separada por vírgulas
     github_link: '',
-    live_demo: '',
-   });
+  });
 
-  // 2. Estado de Mídia (Arquivos Únicos)
   const [coverImage, setCoverImage] = useState<File | null>(null);
-  const [videoDemo, setVideoDemo] = useState<File | null>(null);
+  const [demoVideo, setDemoVideo] = useState<File | null>(null);
+  const [preview, setPreview] = useState<string | null>(null);
 
-  // 3. Estado de Mídia (Galeria Múltipla)
-  const [galleryImages, setGalleryImages] = useState<File[]>([]);
-  
-  // Estado para previews visuais (para conferência antes de salvar)
-  const [coverPreview, setCoverPreview] = useState<string | null>(null);
-  const [galleryPreviews, setGalleryPreviews] = useState<string[]>([]);
-
-  // Manipulador de Arquivos Únicos (Capa e Vídeo)
-  const handleFileChange = (e: ChangeEvent<HTMLInputElement>, type: 'cover' | 'video') => {
-    if (e.target.files && e.target.files[0]) {
-      const file = e.target.files[0];
-      if (type === 'cover') {
-        setCoverImage(file);
-        setCoverPreview(URL.createObjectURL(file)); // Gera preview temporário
-      } else {
-        setVideoDemo(file);
-      }
+  // Carregar dados se for edição
+  useEffect(() => {
+    if (id) {
+      api.get(`/cases/${id}/`).then((res) => {
+        const p = res.data;
+        setFormData({
+          title: p.title,
+          category: p.category,
+          description: p.description,
+          impact_metrics: p.impact_metrics,
+          technologies: p.technologies.join(', '),
+          github_link: p.github_link || '',
+        });
+        if (p.cover_image) setPreview(p.cover_image);
+      });
     }
-  };
+  }, [id]);
 
-  // Manipulador de Arquivos Múltiplos (Galeria)
-  const handleGalleryChange = (e: ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files) {
-      const filesArray = Array.from(e.target.files);
-      setGalleryImages(prev => [...prev, ...filesArray]);
-      
-      // Gera previews temporários para todas as novas imagens
-      const newPreviews = filesArray.map(file => URL.createObjectURL(file));
-      setGalleryPreviews(prev => [...prev, ...newPreviews]);
-    }
-  };
-
-  // Remove imagem da galeria antes de enviar
-  const removeGalleryItem = (index: number) => {
-    setGalleryImages(prev => prev.filter((_, i) => i !== index));
-    setGalleryPreviews(prev => prev.filter((_, i) => i !== index));
-  };
-
-  // Protocolo de Commit (Inicia Upload)
-  const handleSubmit = async (e: FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    setError('');
 
-    if (!formData.title || !formData.solution_architecture) {
-      setError("ERRO: Título e Arquitetura da Solução são mandatórios.");
-      setLoading(false);
-      return;
-   }
+    const data = new FormData();
+    data.append('title', formData.title);
+    data.append('category', formData.category);
+    data.append('description', formData.description);
+    data.append('impact_metrics', formData.impact_metrics);
+    data.append('github_link', formData.github_link);
+    
+    // Converte a string de tecnologias de volta para array para o backend
+    const techArray = formData.technologies.split(',').map(t => t.trim());
+    data.append('technologies', JSON.stringify(techArray));
+
+    if (coverImage) data.append('cover_image', coverImage);
+    if (demoVideo) data.append('demo_video', demoVideo);
+
     try {
-      // O Pulo do Gato: FormData para enviar arquivos + texto
-      const submitData = new FormData();
-      
-      // Anexa metadados (texto)
-      Object.entries(formData).forEach(([key, value]) => {
-        if (value) submitData.append(key, value);
-      });
-
-      // Anexa arquivos únicos
-      if (coverImage) submitData.append('cover', coverImage);
-      if (videoDemo) submitData.append('video', videoDemo);
-
-      // Anexa arquivos múltiplos (Galeria)
-      galleryImages.forEach((image) => {
-        submitData.append('gallery_images', image);
-      });
-
-      // Envia para o Backend (A rota POST / exige AuthBearer)
-      await api.post('/cases/', submitData, {
-        headers: {
-          'Content-Type': 'multipart/form-data', // Sobrescreve o JSON padrão do api.ts
-        },
-      });
-
-      console.log("COMMIT_SUCCESS: Novo nó persistido no Core.");
-      navigate('/admin'); // Retorna para o Dashboard
-    } catch (err: any) {
-      const msg = err.response?.data?.message || "CRITICAL_FAILURE: Falha na persistência de dados binários.";
-      setError(msg);
-      console.error(err);
+      if (id) {
+        await api.put(`/cases/${id}/`, data);
+      } else {
+        await api.post('/cases/', data);
+      }
+      navigate('/admin');
+    } catch (err) {
+      console.error("Erro ao salvar projeto:", err);
+      alert("Falha ao salvar. Verifique se todos os campos estão preenchidos.");
     } finally {
       setLoading(false);
     }
   };
 
-  const inputClass = "w-full bg-black/60 border border-eng-border p-5 text-white text-base outline-none focus:border-eng-cyan focus:bg-black/80 transition-all font-mono placeholder:text-slate-800 rounded-sm";
-  const labelClass = "text-[11px] text-slate-500 uppercase tracking-[0.3em] font-bold block mb-3 flex items-center gap-2";
-  const fileLabelClass = "flex flex-col items-center justify-center gap-4 w-full h-40 border-2 border-eng-border border-dashed bg-white/5 hover:border-eng-cyan hover:bg-eng-cyan/5 transition-all cursor-pointer rounded-sm text-slate-500 hover:text-eng-cyan p-6";
-
   return (
-    <form onSubmit={handleSubmit} className="max-w-7xl mx-auto space-y-12 pb-24 font-mono text-base">
+    <div className="max-w-5xl mx-auto pb-40 pt-10 px-6 font-mono text-base">
       
-      {/* HEADER DE OPERAÇÃO */}
-      <header className="flex justify-between items-end border-b border-eng-border pb-8">
-        <div>
-          <h2 className="text-3xl font-black text-white uppercase tracking-tighter italic">
-            Create_<span className="text-eng-cyan">New_Entry</span>
-          </h2>
-          <p className="text-sm text-slate-500 uppercase mt-2 tracking-widest">Módulo de Ingestão de Ativos Técnicos</p>
-        </div>
-        <div className="flex gap-4">
-          <button 
-            type="button" 
-            onClick={() => navigate('/admin')}
-            className="border border-slate-700 text-slate-500 px-8 py-3 text-sm font-bold uppercase hover:bg-white/5 transition-all flex items-center gap-3"
-          >
-            <XCircle size={18} /> Abort_Mission
-          </button>
-          <button 
-            type="submit" 
-            disabled={loading}
-            className="bg-eng-cyan text-black px-10 py-3 text-sm font-bold uppercase hover:bg-white transition-all flex items-center gap-3 shadow-glow-cyan disabled:bg-slate-700 disabled:cursor-wait"
-          >
-            {loading ? <Layers3 className='animate-spin'/> : <Save size={18} />} Commit_Data_to_Core
-          </button>
-        </div>
-      </header>
+      {/* CABEÇALHO */}
+      <div className="flex items-center justify-between mb-12">
+        <button 
+          onClick={() => navigate('/admin')}
+          className="flex items-center gap-2 text-slate-500 hover:text-white transition-colors uppercase text-xs font-bold"
+        >
+          <ArrowLeft size={16} /> Voltar ao Painel
+        </button>
+        <h2 className="text-3xl font-black text-white italic uppercase">
+          {id ? 'Edit' : 'New'}_<span className="text-purple-500">Project</span>
+        </h2>
+      </div>
 
-      {error && (
-        <div className="text-sm text-red-400 border border-red-500/20 bg-red-500/5 p-5 flex items-center gap-4 animate-pulse uppercase font-bold tracking-tight">
-          <Zap size={20} className='text-red-500' /> {error}
-        </div>
-      )}
-
-      {/* SEÇÃO 1: METADADOS ESSENCIAIS (16px) */}
-      <section className="grid grid-cols-1 md:grid-cols-3 gap-8 p-8 border border-eng-border bg-slate-900/10">
-        <div className="md:col-span-2 space-y-2">
-          <label className={labelClass}><PlusCircle size={14}/> Project_Identifier (Title)</label>
-          <input type="text" placeholder="e.g. Inspeções Equatorial Energia" className={`${inputClass} text-lg font-bold`} required onChange={e => setFormData({...formData, title: e.target.value})} />
-        </div>
-        <div className="space-y-2">
-          <label className={labelClass}>Technical_Category</label>
-          <select className={inputClass} onChange={e => setFormData({...formData, category: e.target.value})}>
-            <option value="BE">Backend & Scalability</option>
-            <option value="CV">Computer Vision (YOLO/IA)</option>
-            <option value="IOT">Internet of Things</option>
-            <option value="AT">Automation & Data</option>
-          </select>
-        </div>
-        <div className="md:col-span-3 space-y-2">
-          <label className={labelClass}>Solution_Architecture (Resumo Técnico)</label>
-          <textarea placeholder="Backend Django Ninja com pipeline de Visão Computacional..." className={`${inputClass} h-32 resize-none`} required onChange={e => setFormData({...formData, solution_architecture: e.target.value})}></textarea>
-        </div>
-      </section>
-
-      {/* SEÇÃO 2: MÍDIA CRÍTICA (CAPA E VÍDEO) */}
-      <section className="space-y-6">
-          <h3 className="text-xl font-bold text-white uppercase tracking-tight border-l-4 border-eng-cyan pl-4">Media_Dossier</h3>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              {/* Upload de Capa */}
-              <div className="space-y-3">
-                  <label className={labelClass}>Project_Cover (16:9 Image)</label>
-                  {coverPreview ? (
-                    <div className="relative group border border-eng-border">
-                       <img src={coverPreview} alt="Preview" className="w-full h-48 object-cover grayscale group-hover:grayscale-0 transition-all"/>
-                       <button onClick={() => setCoverPreview(null)} className='absolute top-2 right-2 p-2 bg-black/80 rounded-full text-red-500 hover:bg-red-500 hover:text-white transition-colors'><XCircle size={18}/></button>
-                    </div>
-                  ) : (
-                    <label className={fileLabelClass}>
-                        <FileImage size={32} />
-                        <span className='text-sm uppercase font-bold tracking-widest'>Select Cover</span>
-                        <input type="file" accept="image/*" className="hidden" onChange={(e) => handleFileChange(e, 'cover')} />
-                    </label>
-                  )}
-              </div>
-
-              {/* Upload de Vídeo Opcional */}
-              <div className="space-y-3">
-                  <label className={labelClass}>video_demonstration (Optional MP4/MOV)</label>
-                  {videoDemo ? (
-                    <div className="flex items-center gap-4 p-5 bg-white/5 border border-eng-border rounded-sm">
-                        <FileVideo size={24} className='text-eng-cyan'/>
-                        <div className='flex-1'>
-                            <p className='text-sm text-white font-bold'>{videoDemo.name}</p>
-                            <p className='text-[10px] text-slate-600'>{(videoDemo.size / (1024*1024)).toFixed(2)} MB</p>
-                        </div>
-                        <button onClick={() => setVideoDemo(null)} className='text-slate-600 hover:text-red-500'><Trash2 size={18}/></button>
-                    </div>
-                  ) : (
-                    <label className={fileLabelClass}>
-                        <FileVideo size={32} />
-                        <span className='text-sm uppercase font-bold tracking-widest'>Select Demo Video</span>
-                        <input type="file" accept="video/*" className="hidden" onChange={(e) => handleFileChange(e, 'video')} />
-                    </label>
-                  )}
-              </div>
+      <form onSubmit={handleSubmit} className="space-y-12">
+        
+        {/* SEÇÃO 1: INFORMAÇÕES BÁSICAS */}
+        <section className="grid grid-cols-1 md:grid-cols-2 gap-8 bg-white/5 p-8 rounded-2xl border border-white/10">
+          <div className="space-y-2">
+            <label className="text-xs font-bold text-slate-500 uppercase tracking-widest">Identificador do Projeto</label>
+            <input 
+              required
+              className="w-full bg-black border border-white/10 p-4 text-white focus:border-purple-500 outline-none transition-all rounded-lg"
+              placeholder="Ex: Sistema de Gestão SEAP"
+              value={formData.title}
+              onChange={e => setFormData({...formData, title: e.target.value})}
+            />
           </div>
-      </section>
 
-      {/* SEÇÃO 3: GALERIA MÚLTIPLA (EQUATORIAL FOTOS) */}
-      <section className="space-y-6 p-8 border border-eng-border bg-slate-900/20">
-          <h3 className="text-xl font-bold text-white uppercase tracking-tight border-l-4 border-eng-green pl-4">Inspection_Gallery</h3>
-          
-          {/* Grid de Previews da Galeria */}
-          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
-              {galleryPreviews.map((src, index) => (
-                  <div key={index} className="relative border border-eng-border group aspect-square overflow-hidden rounded-sm bg-black/60">
-                      <img src={src} alt={`Galeria ${index}`} className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-300"/>
-                      <button 
-                        type='button'
-                        onClick={() => removeGalleryItem(index)}
-                        className='absolute -top-10 -right-10 p-2 bg-red-500/80 rounded-full text-white group-hover:top-2 group-hover:right-2 transition-all hover:bg-red-500'
-                        title="Remove Image"
-                      >
-                        <Trash2 size={16}/>
-                      </button>
-                  </div>
-              ))}
-              
-              {/* Botão de Adicionar mais à Galeria */}
-              <label className="flex flex-col items-center justify-center gap-3 aspect-square border-2 border-eng-border border-dashed bg-white/5 hover:border-eng-cyan hover:bg-eng-cyan/5 transition-all cursor-pointer rounded-sm text-slate-600 hover:text-eng-cyan">
-                <PlusCircle size={28} />
-                <span className='text-[10px] uppercase font-bold tracking-widest'>Add_Images</span>
-                <input type="file" accept="image/*" multiple className="hidden" onChange={handleGalleryChange} />
-              </label>
+          <div className="space-y-2">
+            <label className="text-xs font-bold text-slate-500 uppercase tracking-widest">Categoria_Core</label>
+            <select 
+              className="w-full bg-black border border-white/10 p-4 text-white focus:border-purple-500 outline-none transition-all rounded-lg"
+              value={formData.category}
+              onChange={e => setFormData({...formData, category: e.target.value})}
+            >
+              <option value="">Selecionar...</option>
+              <option value="Backend">Backend Engineer</option>
+              <option value="Computer Vision">AI Vision</option>
+              <option value="Embedded">Embedded Systems</option>
+              <option value="Fullstack">Fullstack Development</option>
+            </select>
           </div>
-      </section>
 
-    </form>
+          <div className="md:col-span-2 space-y-2">
+            <label className="text-xs font-bold text-slate-500 uppercase tracking-widest">Descrição_Técnica</label>
+            <textarea 
+              rows={4}
+              className="w-full bg-black border border-white/10 p-4 text-white focus:border-purple-500 outline-none transition-all rounded-lg"
+              placeholder="Descreva a arquitetura e o propósito do projeto..."
+              value={formData.description}
+              onChange={e => setFormData({...formData, description: e.target.value})}
+            />
+          </div>
+        </section>
+
+        {/* SEÇÃO 2: MÉTRICAS E LINKS */}
+        <section className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div className="space-y-2">
+            <label className="text-xs font-bold text-slate-500 uppercase tracking-widest">Métricas de Impacto</label>
+            <input 
+              className="w-full bg-black border border-white/10 p-4 text-white focus:border-purple-500 outline-none transition-all rounded-lg"
+              placeholder="Ex: +45% Eficiência"
+              value={formData.impact_metrics}
+              onChange={e => setFormData({...formData, impact_metrics: e.target.value})}
+            />
+          </div>
+          <div className="space-y-2">
+            <label className="text-xs font-bold text-slate-500 uppercase tracking-widest">Github_Source</label>
+            <input 
+              className="w-full bg-black border border-white/10 p-4 text-white focus:border-purple-500 outline-none transition-all rounded-lg"
+              placeholder="https://github.com/..."
+              value={formData.github_link}
+              onChange={e => setFormData({...formData, github_link: e.target.value})}
+            />
+          </div>
+        </section>
+
+        {/* SEÇÃO 3: MÍDIA (UPLOAD) */}
+        <section className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          {/* Foto de Capa */}
+          <div 
+            onClick={() => fileInputRef.current?.click()}
+            className="group relative h-64 border-2 border-dashed border-white/10 rounded-2xl flex flex-col items-center justify-center gap-4 hover:border-purple-500/50 hover:bg-purple-500/5 transition-all cursor-pointer overflow-hidden"
+          >
+            {preview ? (
+              <img src={preview} className="absolute inset-0 w-full h-full object-cover opacity-40" />
+            ) : (
+              <ImageIcon size={40} className="text-slate-700 group-hover:text-purple-500" />
+            )}
+            <span className="text-xs font-bold text-slate-500 group-hover:text-white uppercase tracking-[0.2em]">Capa do Projeto</span>
+            <input type="file" ref={fileInputRef} hidden onChange={e => {
+              const file = e.target.files?.[0];
+              if (file) {
+                setCoverImage(file);
+                setPreview(URL.createObjectURL(file));
+              }
+            }} />
+          </div>
+
+          {/* Vídeo de Demo */}
+          <div 
+            onClick={() => videoInputRef.current?.click()}
+            className="group h-64 border-2 border-dashed border-white/10 rounded-2xl flex flex-col items-center justify-center gap-4 hover:border-cyan-500/50 hover:bg-cyan-500/5 transition-all cursor-pointer"
+          >
+            <Film size={40} className={`text-slate-700 group-hover:text-cyan-500 ${demoVideo ? 'text-cyan-500' : ''}`} />
+            <span className="text-xs font-bold text-slate-500 group-hover:text-white uppercase tracking-[0.2em]">
+              {demoVideo ? 'Vídeo Selecionado ✅' : 'Demo_Video (MP4)'}
+            </span>
+            <input type="file" ref={videoInputRef} hidden accept="video/*" onChange={e => setDemoVideo(e.target.files?.[0] || null)} />
+          </div>
+        </section>
+
+        {/* BARRA DE AÇÕES FIXA (BOTÃO DE SALVAR) */}
+        <div className="fixed bottom-0 left-0 right-0 bg-black/90 backdrop-blur-xl border-t border-white/10 p-6 z-50 shadow-[0_-20px_50px_rgba(0,0,0,0.5)]">
+          <div className="max-w-5xl mx-auto flex justify-between items-center">
+             <p className="hidden md:block text-[10px] text-slate-600 uppercase tracking-[0.3em]">
+               System_Status: <span className="text-green-500 italic">Ready_to_Deploy</span>
+             </p>
+             
+             <div className="flex gap-4 w-full md:w-auto">
+                <button 
+                  type="button" 
+                  onClick={() => navigate('/admin')}
+                  className="flex-1 md:flex-none px-8 py-4 border border-white/10 text-slate-500 font-bold uppercase text-xs hover:bg-white/5 transition-all rounded-lg"
+                >
+                  Cancelar
+                </button>
+                
+                <button 
+                  type="submit" 
+                  disabled={loading}
+                  className="flex-1 md:flex-none bg-purple-600 text-white px-12 py-4 font-black uppercase text-xs hover:bg-white hover:text-black transition-all flex items-center justify-center gap-3 shadow-[0_0_30px_rgba(168,85,247,0.4)] rounded-lg disabled:bg-slate-800 disabled:cursor-not-allowed"
+                >
+                  {loading ? (
+                    <>
+                      <RefreshCw className="animate-spin" size={18} /> Sincronizando...
+                    </>
+                  ) : (
+                    <>
+                      <CheckCircle2 size={18} /> Finalizar_Ativo
+                    </>
+                  )}
+                </button>
+             </div>
+          </div>
+        </div>
+
+      </form>
+    </div>
   );
 }
