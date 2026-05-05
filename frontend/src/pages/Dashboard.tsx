@@ -57,7 +57,7 @@ export default function Dashboard() {
             <div className="relative group">
               <div className="absolute inset-0 rounded-full bg-purple-600 blur-[80px] opacity-20 group-hover:opacity-40 transition-opacity"></div>
               <div className="relative w-80 h-80 lg:w-[480px] lg:h-[480px] rounded-full border-2 border-purple-500/30 p-3 bg-black">
-                <img src="/profile.jpg" alt="Paulo Gomes" className="w-full h-full object-cover rounded-full grayscale group-hover:grayscale-0 transition-all duration-700" />
+                <img src="/profile.jpg" alt="Paulo Gomes" className="w-full h-full object-cover object-top rounded-full grayscale group-hover:grayscale-0 transition-all duration-700" />
               </div>
             </div>
           </div>
