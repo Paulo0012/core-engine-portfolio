@@ -2,14 +2,9 @@ import { useEffect, useState } from 'react';
 // Imports revisados para evitar erros de compilação
 import { 
   Mail, 
-  Cpu, 
   Code2, 
-  Database,
   ExternalLink, 
-  Award, 
-  CheckCircle2,
   Terminal,
-  ChevronRight,
   Briefcase
 } from 'lucide-react';
 import api from '../services/api';
@@ -129,32 +124,53 @@ export default function Dashboard() {
           Meus_<span className="text-purple-500">Projetos</span>
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
-          {projects.map((p: any) => (
-            <div key={p.id} className="bg-[#0c0c0c] border border-white/10 rounded-[2.5rem] overflow-hidden group hover:border-purple-500/30 transition-all">
-              <div className="aspect-video bg-black overflow-hidden relative">
-                <img src={p.cover_image} alt={p.title} className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700" />
-                <div className="absolute top-4 right-4 p-2 bg-black/60 rounded-full border border-white/10">
-                   <ExternalLink size={16} className="text-white" />
+          {projects.map((p: any) => {
+            const coverUrl = p.cover_image?.startsWith('http') 
+              ? p.cover_image 
+              : p.cover_image 
+                ? `http://localhost:8000${p.cover_image}`
+                : '';
+                
+            return (
+              <div key={p.id} className="bg-[#0c0c0c] flex flex-col border border-white/10 rounded-[2.5rem] overflow-hidden group hover:border-purple-500/30 transition-all">
+                <div className="aspect-video bg-black overflow-hidden relative">
+                  {coverUrl && (
+                    <img src={coverUrl} alt={p.title} className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700" />
+                  )}
+                  <div className="absolute top-4 right-4 p-2 bg-black/60 rounded-full border border-white/10">
+                     <ExternalLink size={16} className="text-white" />
+                  </div>
                 </div>
-              </div>
-              <div className="p-10 space-y-6">
-                <h3 className="text-2xl font-bold text-white tracking-tight">{p.title}</h3>
-                <div className="flex flex-wrap gap-2">
-                  {p.technologies.map((t: string) => (
-                    <span key={t} className="text-[10px] px-3 py-1 bg-white/5 rounded-full border border-white/10 text-slate-400 uppercase font-bold">
-                      {t}
-                    </span>
-                  ))}
-                </div>
-                <div className="pt-6 border-t border-white/5 flex justify-between items-center">
-                  <span className="text-xs text-slate-600 font-mono">Case_Study_v1.0</span>
-                  <div className="flex gap-4">
-                    <ExternalLink className="text-slate-500 hover:text-purple-500 cursor-pointer transition-colors" size={20} />
+                <div className="p-10 space-y-6 flex-1 flex flex-col">
+                  <h3 className="text-2xl font-bold text-white tracking-tight">{p.title}</h3>
+                  <p className="text-slate-500 text-sm line-clamp-3">{p.problem_statement || p.description}</p>
+                  
+                  <div className="flex flex-wrap gap-2 flex-1">
+                    {p.technologies?.map((t: string) => (
+                      <span key={t} className="text-[10px] px-3 py-1 bg-white/5 rounded-full border border-white/10 text-slate-400 uppercase font-bold h-fit">
+                        {t}
+                      </span>
+                    ))}
+                  </div>
+                  <div className="pt-6 border-t border-white/5 flex justify-between items-center">
+                    <span className="text-xs text-slate-600 font-mono" title={p.impact_metrics}>Case_Study_v1.0</span>
+                    <div className="flex gap-4">
+                      {p.github_link && (
+                        <a href={p.github_link} target="_blank" rel="noopener noreferrer">
+                          <Code2 className="text-slate-500 hover:text-purple-500 cursor-pointer transition-colors" size={20} />
+                        </a>
+                      )}
+                      {p.live_demo && (
+                        <a href={p.live_demo} target="_blank" rel="noopener noreferrer">
+                          <ExternalLink className="text-slate-500 hover:text-purple-500 cursor-pointer transition-colors" size={20} />
+                        </a>
+                      )}
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </section>
 

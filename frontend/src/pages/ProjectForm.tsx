@@ -18,11 +18,13 @@ export default function ProjectForm() {
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     title: '',
-    category: '',
-    description: '',
+    category: 'IOT', // Default category
+    problem_statement: '',
+    solution_architecture: '',
     impact_metrics: '',
     technologies: '', // Digitado como: React, Django, Python
     github_link: '',
+    live_demo: '',
   });
 
   // Estados para Armazenamento de Arquivos (Binários)
@@ -41,11 +43,13 @@ export default function ProjectForm() {
         const p = res.data;
         setFormData({
           title: p.title,
-          category: p.category,
-          description: p.description,
-          impact_metrics: p.impact_metrics,
-          technologies: p.technologies.join(', '),
+          category: p.category || 'IOT',
+          problem_statement: p.problem_statement || '',
+          solution_architecture: p.solution_architecture || '',
+          impact_metrics: p.impact_metrics || '',
+          technologies: p.technologies ? p.technologies.join(', ') : '',
           github_link: p.github_link || '',
+          live_demo: p.live_demo || '',
         });
         if (p.cover_image) setPreview(p.cover_image);
         if (p.gallery) setGalleryPreviews(p.gallery.map((img: any) => img.image));
@@ -79,9 +83,11 @@ export default function ProjectForm() {
     // Anexar campos de texto
     data.append('title', formData.title);
     data.append('category', formData.category);
-    data.append('description', formData.description);
+    data.append('problem_statement', formData.problem_statement);
+    data.append('solution_architecture', formData.solution_architecture);
     data.append('impact_metrics', formData.impact_metrics);
     data.append('github_link', formData.github_link);
+    data.append('live_demo', formData.live_demo);
     
     // Converter tecnologias para formato JSON esperado pelo Backend
     const techArray = formData.technologies.split(',').map(t => t.trim()).filter(t => t !== "");
@@ -128,7 +134,7 @@ export default function ProjectForm() {
         
         {/* SEÇÃO 1: NÚCLEO TÉCNICO */}
         <section className="grid grid-cols-1 md:grid-cols-2 gap-8 bg-white/5 p-8 rounded-2xl border border-white/10">
-          <div className="md:col-span-2 space-y-3">
+          <div className="space-y-3">
             <label className="text-xs font-bold text-slate-500 uppercase tracking-widest flex items-center gap-2">
               <Terminal size={14}/> Identificador_do_Projeto
             </label>
@@ -141,15 +147,94 @@ export default function ProjectForm() {
             />
           </div>
 
+          <div className="space-y-3">
+            <label className="text-xs font-bold text-slate-500 uppercase tracking-widest">Categoria</label>
+            <select
+              required
+              className="w-full bg-black border border-white/10 p-5 text-white focus:border-purple-500 outline-none rounded-xl transition-all"
+              value={formData.category}
+              onChange={e => setFormData({...formData, category: e.target.value})}
+            >
+              <option value="IOT">Internet of Things (IOT)</option>
+              <option value="BE">Backend & Scalability (BE)</option>
+              <option value="CV">Computer Vision (CV)</option>
+              <option value="AT">Automation & Data (AT)</option>
+            </select>
+          </div>
+
+          <div className="space-y-3">
+            <label className="text-xs font-bold text-slate-500 uppercase tracking-widest flex items-center gap-2">
+               Tecnologias (Separadas por vírgula)
+            </label>
+            <input 
+              required 
+              className="w-full bg-black border border-white/10 p-5 text-white focus:border-purple-500 outline-none rounded-xl transition-all" 
+              placeholder="Ex: Python, Django, React"
+              value={formData.technologies} 
+              onChange={e => setFormData({...formData, technologies: e.target.value})} 
+            />
+          </div>
+
+          <div className="space-y-3">
+            <label className="text-xs font-bold text-slate-500 uppercase tracking-widest flex items-center gap-2">
+               Métricas de Impacto
+            </label>
+            <input 
+              required 
+              className="w-full bg-black border border-white/10 p-5 text-white focus:border-purple-500 outline-none rounded-xl transition-all" 
+              placeholder="Ex: +40% velocidade, -10h trabalho"
+              value={formData.impact_metrics} 
+              onChange={e => setFormData({...formData, impact_metrics: e.target.value})} 
+            />
+          </div>
+
           <div className="md:col-span-2 space-y-3">
-            <label className="text-xs font-bold text-slate-500 uppercase tracking-widest">Arquitetura_da_Solução</label>
+            <label className="text-xs font-bold text-slate-500 uppercase tracking-widest">Problema (Problem Statement)</label>
+            <textarea 
+              rows={3} 
+              required
+              className="w-full bg-black border border-white/10 p-5 text-white focus:border-purple-500 outline-none rounded-xl transition-all resize-none" 
+              placeholder="Descreva o problema que o projeto resolve..."
+              value={formData.problem_statement} 
+              onChange={e => setFormData({...formData, problem_statement: e.target.value})} 
+            />
+          </div>
+
+          <div className="md:col-span-2 space-y-3">
+            <label className="text-xs font-bold text-slate-500 uppercase tracking-widest">Arquitetura da Solução</label>
             <textarea 
               rows={4} 
               required
               className="w-full bg-black border border-white/10 p-5 text-white focus:border-purple-500 outline-none rounded-xl transition-all resize-none" 
-              placeholder="Descreva o problema e a solução técnica implementada..."
-              value={formData.description} 
-              onChange={e => setFormData({...formData, description: e.target.value})} 
+              placeholder="Descreva a solução técnica implementada..."
+              value={formData.solution_architecture} 
+              onChange={e => setFormData({...formData, solution_architecture: e.target.value})} 
+            />
+          </div>
+
+          <div className="space-y-3">
+            <label className="text-xs font-bold text-slate-500 uppercase tracking-widest flex items-center gap-2">
+               Github Link (Opcional)
+            </label>
+            <input 
+              type="url"
+              className="w-full bg-black border border-white/10 p-5 text-white focus:border-purple-500 outline-none rounded-xl transition-all" 
+              placeholder="https://github.com/seu-repo"
+              value={formData.github_link} 
+              onChange={e => setFormData({...formData, github_link: e.target.value})} 
+            />
+          </div>
+
+          <div className="space-y-3">
+            <label className="text-xs font-bold text-slate-500 uppercase tracking-widest flex items-center gap-2">
+               Live Demo (Opcional)
+            </label>
+            <input 
+              type="url"
+              className="w-full bg-black border border-white/10 p-5 text-white focus:border-purple-500 outline-none rounded-xl transition-all" 
+              placeholder="https://sua-demo.com"
+              value={formData.live_demo} 
+              onChange={e => setFormData({...formData, live_demo: e.target.value})} 
             />
           </div>
         </section>

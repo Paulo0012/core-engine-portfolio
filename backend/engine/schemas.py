@@ -16,7 +16,7 @@ class ProjectIn(Schema):
     """
     title: str
     category: str
-    technologies: List[str]
+    technologies: str # Recebe JSON string do frontend via FormData
     problem_statement: str
     solution_architecture: str
     impact_metrics: str
