@@ -16,12 +16,12 @@ interface ProjectsSectionProps {
 
 export default function ProjectsSection({ projects }: ProjectsSectionProps) {
   return (
-    <section id="projetos" className="scroll-mt-32 pt-16 border-t border-white/5">
+    <section id="projetos" className="scroll-mt-32 pt-16 border-t border-gn-surface">
       <div className="flex items-center gap-4 mb-12">
-        <h2 className="text-2xl font-medium text-white tracking-tight">
+        <h2 className="text-2xl font-medium text-gn-highlight tracking-tight">
           Estudos de Caso
         </h2>
-        <div className="flex-1 h-px bg-white/5"></div>
+        <div className="flex-1 h-px bg-gn-surface/50"></div>
       </div>
       
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -35,9 +35,9 @@ export default function ProjectsSection({ projects }: ProjectsSectionProps) {
           return (
             <div 
               key={p.id} 
-              className="flex flex-col bg-[#0a0a0a] border border-white/10 rounded-2xl overflow-hidden group hover:border-neutral-500 transition-all"
+              className="flex flex-col bg-gn-bg border border-gn-surface rounded-2xl overflow-hidden group hover:border-gn-accent transition-all"
             >
-              <div className="aspect-video bg-neutral-900 overflow-hidden relative border-b border-white/10">
+              <div className="aspect-video bg-[#050505] overflow-hidden relative border-b border-gn-surface">
                 {coverUrl ? (
                   <img 
                     src={coverUrl} 
@@ -45,7 +45,7 @@ export default function ProjectsSection({ projects }: ProjectsSectionProps) {
                     className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700" 
                   />
                 ) : (
-                   <div className="w-full h-full flex items-center justify-center text-neutral-600 font-mono text-xs">
+                   <div className="w-full h-full flex items-center justify-center text-gn-accent font-mono text-xs">
                       no_image.jpg
                    </div>
                 )}
@@ -55,7 +55,7 @@ export default function ProjectsSection({ projects }: ProjectsSectionProps) {
                     href={p.live_demo}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="absolute top-4 right-4 p-2 bg-black/60 backdrop-blur-md rounded-full border border-white/10 hover:bg-white hover:text-black transition-colors"
+                    className="absolute top-4 right-4 p-2 bg-gn-bg/80 backdrop-blur-md rounded-full border border-gn-surface hover:bg-gn-highlight hover:text-gn-bg transition-colors"
                   >
                     <ExternalLink size={14} />
                   </a>
@@ -63,8 +63,8 @@ export default function ProjectsSection({ projects }: ProjectsSectionProps) {
               </div>
               
               <div className="p-8 space-y-5 flex-1 flex flex-col">
-                <h3 className="text-xl font-medium text-neutral-100 tracking-tight">{p.title}</h3>
-                <p className="text-neutral-400 text-sm line-clamp-3 leading-relaxed font-light">
+                <h3 className="text-xl font-medium text-gn-highlight tracking-tight">{p.title}</h3>
+                <p className="text-gn-text text-sm line-clamp-3 leading-relaxed font-light">
                   {p.problem_statement || p.description}
                 </p>
                 
@@ -72,7 +72,7 @@ export default function ProjectsSection({ projects }: ProjectsSectionProps) {
                   {p.technologies?.map((t: string) => (
                     <span 
                       key={t} 
-                      className="text-[10px] px-2 py-1 bg-white/[0.03] border border-white/5 rounded-md text-neutral-400 font-mono tracking-widest uppercase"
+                      className="text-[10px] px-2 py-1 bg-gn-surface/10 border border-gn-surface rounded-md text-gn-accent font-mono tracking-widest uppercase"
                     >
                       {t}
                     </span>

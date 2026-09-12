@@ -7,10 +7,11 @@ export default {
   theme: {
     extend: {
       colors: {
-        'eng-black': '#0a0a0c', // Fundo profundo
-        'eng-green': '#10b981', // Status Online
-        'eng-cyan': '#06b6d4',  // Telemetria/IA
-        'eng-border': '#1e293b', // Bordas de Painel
+        'gn-bg': '#000000',
+        'gn-surface': '#5C4E4E',
+        'gn-accent': '#988686',
+        'gn-text': '#D1D0D0',
+        'gn-highlight': '#FFFFFF',
       },
       fontFamily: {
         mono: ['JetBrains Mono', 'monospace'],

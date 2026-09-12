@@ -16,7 +16,7 @@ export default function Dashboard() {
   }, []);
 
   return (
-    <div className="space-y-32 pb-32 px-6 lg:px-20 max-w-6xl mx-auto bg-[#0a0a0a] min-h-screen text-neutral-200">
+    <div className="space-y-32 pb-32 px-6 lg:px-20 max-w-6xl mx-auto bg-gn-bg min-h-screen text-gn-text font-sans">
       <HeroSection />
       <EducationSection />
       <ExperienceSection />
