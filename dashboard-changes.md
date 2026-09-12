@@ -30,9 +30,9 @@ As modificações recentes no `Dashboard.tsx` e `ProjectForm.tsx` indicam uma ev
 - **Bug Fix**: O teste identificou um problema na conversão do campo `technologies` no Django Ninja via `FormData`. O schema `ProjectIn` foi ajustado de `List[str]` para `str` permitindo a correta decodificação JSON pelo backend.
 - Todos os testes de criação e listagem (`GET /cases/`) foram aprovados.
 
-### Fase 4: Commit e Versionamento
-- Executar os testes estáticos/lint (`npm run lint`).
-- Realizar um commit atômico encapsulando as mudanças nos dois arquivos relacionados.
+### Fase 4: Commit e Versionamento [Concluído]
+- Executados os testes estáticos (`eslint` apontou sucesso após limpeza).
+- Realizado commit atômico das mudanças em frontend (`Dashboard.tsx`, `ProjectForm.tsx`) e backend (`schemas.py`, `tests.py`). O projeto está devidamente versionado com a feature `feat(projects): evolve project data model and forms`.
 
 ---
 
