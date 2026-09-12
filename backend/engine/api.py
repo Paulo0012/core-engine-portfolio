@@ -45,6 +45,12 @@ def create_project(
             except:
                 project_data['technologies'] = [t.strip() for t in techs.split(',') if t]
 
+        if project_data.get('github_link') == "":
+            project_data['github_link'] = None
+            
+        if project_data.get('live_demo') == "":
+            project_data['live_demo'] = None
+
         project = Project.objects.create(**project_data)
 
         if cover_image:

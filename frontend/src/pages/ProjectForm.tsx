@@ -2,9 +2,10 @@ import { useEffect, useState, useRef } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { 
   Save, ArrowLeft, Upload, Film, 
-  Image as ImageIcon, RefreshCw, CheckCircle2, X, Plus, Terminal
+  Image as ImageIcon, RefreshCw, CheckCircle2, X, Plus, Terminal, AlertTriangle
 } from 'lucide-react';
 import api from '../services/api';
+import { useProjectSubmit } from '../hooks/useProjectSubmit';
 
 export default function ProjectForm() {
   const { id } = useParams();
@@ -15,7 +16,8 @@ export default function ProjectForm() {
   const videoInputRef = useRef<HTMLInputElement>(null);
   const galleryInputRef = useRef<HTMLInputElement>(null);
 
-  const [loading, setLoading] = useState(false);
+  const { submitForm, loading, errorMsg, setErrorMsg } = useProjectSubmit(id);
+
   const [formData, setFormData] = useState({
     title: '',
     category: 'IOT', // Default category
@@ -73,55 +75,16 @@ export default function ProjectForm() {
     setGalleryPreviews(prev => prev.filter((_, i) => i !== index));
   };
 
-  // Submissão do Formulário via FormData
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setLoading(true);
-
-    const data = new FormData();
-    
-    // Anexar campos de texto
-    data.append('title', formData.title);
-    data.append('category', formData.category);
-    data.append('problem_statement', formData.problem_statement);
-    data.append('solution_architecture', formData.solution_architecture);
-    data.append('impact_metrics', formData.impact_metrics);
-    data.append('github_link', formData.github_link);
-    data.append('live_demo', formData.live_demo);
-    
-    // Converter tecnologias para formato JSON esperado pelo Backend
-    const techArray = formData.technologies.split(',').map(t => t.trim()).filter(t => t !== "");
-    data.append('technologies', JSON.stringify(techArray));
-
-    // Anexar arquivos únicos
-    if (coverImage) data.append('cover_image', coverImage);
-    if (demoVideo) data.append('demo_video', demoVideo);
-    
-    // Anexar lista de fotos da galeria
-    galleryImages.forEach((file) => {
-      data.append('gallery_images', file);
-    });
-
-    try {
-      if (id) {
-        await api.put(`/cases/${id}/`, data);
-      } else {
-        await api.post('/cases/', data);
-      }
-      navigate('/admin');
-    } catch (err: any) {
-      console.error("Erro 422/500:", err.response?.data);
-      alert("Falha na sincronização. Verifique os campos obrigatórios no console.");
-    } finally {
-      setLoading(false);
-    }
+    await submitForm(formData, coverImage, demoVideo, galleryImages);
   };
 
   return (
     <div className="max-w-5xl mx-auto pb-48 pt-10 px-6 font-mono text-base">
       
       {/* CABEÇALHO DE OPERAÇÃO */}
-      <div className="flex items-center justify-between mb-12">
+      <div className="flex items-center justify-between mb-8">
         <button onClick={() => navigate('/admin')} className="flex items-center gap-2 text-slate-500 hover:text-white transition-colors uppercase text-xs font-bold">
           <ArrowLeft size={16} /> Voltar ao Painel
         </button>
@@ -129,6 +92,16 @@ export default function ProjectForm() {
           {id ? 'Update' : 'New'}_<span className="text-purple-500">Technical_Asset</span>
         </h2>
       </div>
+
+      {errorMsg && (
+        <div className="mb-8 flex items-start gap-3 bg-red-500/10 border border-red-500/20 text-red-400 p-4 rounded-xl">
+          <AlertTriangle size={20} className="shrink-0 mt-0.5" />
+          <div className="flex-1 text-sm">{errorMsg}</div>
+          <button type="button" onClick={() => setErrorMsg(null)} className="text-red-400 hover:text-white">
+            <X size={16} />
+          </button>
+        </div>
+      )}
 
       <form onSubmit={handleSubmit} className="space-y-12">
         
