@@ -26,9 +26,9 @@ function App() {
   return (
     <Router>
       {/* O Navbar fica fora das Routes para aparecer em todas as páginas.
-          O fundo #050505 garante a estética Deep Black do seu projeto.
+          O fundo usa a variável Gothic Noir (gn-bg).
       */}
-      <div className="min-h-screen bg-[#050505] flex flex-col">
+      <div className="min-h-screen bg-gn-bg flex flex-col">
         
         <Navbar />
 

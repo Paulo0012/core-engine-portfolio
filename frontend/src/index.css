@@ -1,15 +1,18 @@
 @import "tailwindcss";
 
-@layer base {
-  html {
-    font-size: 16px; /* Letra maior conforme solicitado */
-    background-color: #050505;
-    -webkit-font-smoothing: antialiased;
-  }
+@theme {
+  --color-gn-bg: #D1D0D0;
+  --color-gn-surface: #988686;
+  --color-gn-accent: #5C4E4E;
+  --color-gn-text: #000000;
+  --color-gn-highlight: #000000;
+  --font-mono: "JetBrains Mono", monospace;
 }
 
-@layer components {
-  .text-gradient {
-    @apply bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-purple-500;
+@layer base {
+  html {
+    font-size: 16px;
+    background-color: var(--color-gn-bg);
+    -webkit-font-smoothing: antialiased;
   }
 }
