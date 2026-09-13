@@ -8,7 +8,7 @@ export default function HeroMedia() {
       <img
         src={profileImg}
         alt="Paulo Gomes"
-        className="w-full h-full object-contain object-bottom object-right z-20 grayscale hover:grayscale-0 transition-all duration-700 opacity-90 hover:opacity-100"
+        className="w-full h-full object-contain object-bottom object-right z-20 grayscale-0 lg:grayscale hover:grayscale-0 transition-all duration-700 opacity-100 lg:opacity-90 hover:opacity-100"
       />
     </div>
   );
