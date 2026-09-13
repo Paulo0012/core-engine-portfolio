@@ -14,5 +14,10 @@
     font-size: 16px;
     background-color: var(--color-gn-bg);
     -webkit-font-smoothing: antialiased;
+    cursor: url('./assets/cursor.png'), auto;
+  }
+  
+  a, button, [role="button"], input, select, textarea, .cursor-pointer {
+    cursor: url('./assets/pointer.png'), pointer;
   }
 }
