@@ -69,14 +69,14 @@ export default function ProjectsSection({ projects }: ProjectsSectionProps) {
               {/* Card Principal */}
               <div 
                 onClick={() => setSelectedProject(p)} 
-                className="flex-1 bg-gn-bg border border-gn-surface/30 rounded-3xl p-6 lg:p-8 flex flex-col lg:flex-row gap-8 hover:bg-gn-surface/5 transition-colors group cursor-pointer hover:border-gn-surface/60 hover:shadow-xl hover:shadow-gn-surface/5"
+                className="flex-1 min-w-0 bg-gn-bg border border-gn-surface/30 rounded-3xl p-6 lg:p-8 flex flex-col lg:flex-row gap-8 hover:bg-gn-surface/5 transition-colors group cursor-pointer hover:border-gn-surface/60 hover:shadow-xl hover:shadow-gn-surface/5"
               >
                 {/* Coluna Esquerda: Info */}
-                <div className="flex-1 flex flex-col justify-center space-y-5">
+                <div className="flex-1 min-w-0 flex flex-col justify-center space-y-5">
                   <span className="text-[10px] font-black uppercase text-gn-highlight tracking-widest">
                     Projetos
                   </span>
-                  <h3 className="text-2xl lg:text-3xl font-medium text-gn-highlight tracking-tight group-hover:text-gn-accent transition-colors">
+                  <h3 className="text-2xl lg:text-3xl font-medium text-gn-highlight tracking-tight group-hover:text-gn-accent transition-colors break-words">
                     {p.title}
                   </h3>
                   <p className="text-sm text-gn-text leading-relaxed font-light line-clamp-4">
@@ -93,7 +93,7 @@ export default function ProjectsSection({ projects }: ProjectsSectionProps) {
                     {p.technologies?.map((t: string) => (
                       <span 
                         key={t} 
-                        className="text-[10px] px-3 py-1.5 bg-gn-surface/10 border border-gn-surface/20 rounded-lg text-gn-highlight font-bold tracking-wider uppercase"
+                        className="text-[10px] px-3 py-1.5 bg-gn-surface/10 border border-gn-surface/20 rounded-lg text-gn-highlight font-bold tracking-wider uppercase max-w-full break-words"
                       >
                         {t}
                       </span>
