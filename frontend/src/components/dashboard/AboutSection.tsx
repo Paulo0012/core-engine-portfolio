@@ -1,13 +1,14 @@
-import { BookOpen, Dumbbell, Guitar, Heart } from 'lucide-react';
+import { BookOpen, Dumbbell, Guitar, Heart, User } from 'lucide-react';
 
 export default function AboutSection() {
   return (
-    <section id="sobre-detalhe" className="scroll-mt-32 pt-16 border-t border-gn-surface">
+    <section id="sobre-detalhe" className="scroll-mt-32 pt-16 ">
       <div className="flex items-center gap-4 mb-12">
-        <h2 className="text-2xl font-medium text-gn-highlight tracking-tight">
+        <h2 className="text-2xl font-medium text-gn-highlight tracking-tight flex items-center gap-3">
+          <User className="text-gn-highlight" size={28} />
           SOBRE MIM
         </h2>
-        <div className="flex-1 h-px bg-gn-surface/50"></div>
+        
       </div>
 
       <h3 className="text-4xl lg:text-5xl font-black text-gn-highlight tracking-tighter mb-12 max-w-2xl leading-tight">
@@ -15,19 +16,21 @@ export default function AboutSection() {
         atenção aos detalhes.
       </h3>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 items-start">
-        {/* Texto sobre a trajetória */}
-        <div className="lg:col-span-2 space-y-6 text-gn-text text-base leading-relaxed font-light">
-          <p>
-            Vindo do interior e de origem humilde, mudei-me para São Luís movido pelo sonho de me tornar engenheiro. Minha jornada na tecnologia começou com o Bacharelado em Ciências e Tecnologia e, hoje, estou no último período de Engenharia da Computação.
-          </p>
-          <p>
-            Mais do que criar infraestruturas escaláveis e escrever bons códigos, meu grande objetivo de vida é usar meu conhecimento para inspirar, incentivar e ensinar jovens da minha cidade natal. Quero provar que, com dedicação, é possível transformar a própria realidade e criar oportunidades mesmo onde as chances parecem escassas.
-          </p>
+      <div className="grid grid-cols-1 md:grid-cols-12 gap-12 items-start">
+        {/* Lado Esquerdo - Biografia em Card */}
+        <div className="md:col-span-8 p-8 bg-white/30 backdrop-blur-md border border-white/40 rounded-3xl shadow-lg shadow-black/5 hover:shadow-xl hover:bg-white/40 transition-all duration-300">
+          <div className="space-y-6 text-lg text-gn-text font-light leading-relaxed">
+            <p>
+              Vindo do interior e de origem humilde, mudei-me para São Luís movido pelo sonho de me tornar engenheiro. Minha jornada na tecnologia começou com o Bacharelado em Ciências e Tecnologia e, hoje, estou no último período de Engenharia da Computação.
+            </p>
+            <p>
+              Mais do que criar infraestruturas escaláveis e escrever bons códigos, meu grande objetivo de vida é usar meu conhecimento para inspirar, incentivar e ensinar jovens da minha cidade natal. Quero provar que, com dedicação, é possível transformar a própria realidade e criar oportunidades mesmo onde as chances parecem escassas.
+            </p>
+          </div>
         </div>
 
         {/* Informações rápidas */}
-        <div className="bg-gn-bg border border-gn-surface rounded-2xl p-6 divide-y divide-gn-surface/50">
+        <div className="md:col-span-4 bg-gn-bg border border-gn-surface rounded-2xl p-6 divide-y divide-gn-surface/50">
           <div className="pb-4">
             <span className="text-[10px] font-black uppercase text-gn-surface tracking-widest block mb-1">Trajetória</span>
             <span className="text-gn-highlight font-medium text-sm">Graduando em Engenharia da Computação</span>

@@ -40,7 +40,7 @@ export default function Dashboard() {
       </div>
 
       {/* CONTEÚDO PRINCIPAL (z-index maior para ficar acima do vídeo) */}
-      <div className="relative z-10 space-y-32 pb-32 px-6 lg:px-20 max-w-6xl mx-auto text-gn-text">
+      <div className="relative z-10 space-y-20 pb-32 px-6 lg:px-20 max-w-6xl mx-auto text-gn-text">
         <HeroSection />
         <AboutSection />
         <EducationSection />

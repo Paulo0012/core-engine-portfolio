@@ -1,5 +1,6 @@
 import { FaPython, FaReact, FaPhp, FaDatabase } from 'react-icons/fa';
 import { SiDjango, SiTypescript, SiCplusplus, SiOpencv } from 'react-icons/si';
+import { Code2 } from 'lucide-react';
 
 export default function TechStackSection() {
   const technologies = [
@@ -33,12 +34,13 @@ export default function TechStackSection() {
   );
 
   return (
-    <section id="linguagens" className="scroll-mt-32 border-t border-gn-surface pt-16 overflow-hidden">
+    <section id="linguagens" className="scroll-mt-32 pt-16 overflow-hidden">
       <div className="flex items-center gap-4 mb-12">
-        <h2 className="text-2xl font-medium text-gn-highlight tracking-tight">
+        <h2 className="text-2xl font-medium text-gn-highlight tracking-tight flex items-center gap-3">
+          <Code2 className="text-gn-highlight" size={28} />
           Stack & Tecnologias
         </h2>
-        <div className="flex-1 h-px bg-gn-surface/50"></div>
+        
       </div>
       
       {/* Container com máscara de gradiente e track animada */}

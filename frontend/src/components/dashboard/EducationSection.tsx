@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { ExternalLink, GraduationCap } from 'lucide-react';
 import api from '../../services/api';
 
 interface Academic {
@@ -33,12 +34,13 @@ export default function EducationSection() {
   if (academics.length === 0 && certs.length === 0) return null;
 
   return (
-    <section id="formacoes" className="scroll-mt-32 border-t border-gn-surface pt-16">
+    <section id="formacoes" className="scroll-mt-32  pt-16">
       <div className="flex items-center gap-4 mb-12">
-        <h2 className="text-2xl font-medium text-gn-highlight tracking-tight">
+        <h2 className="text-2xl font-medium text-gn-highlight tracking-tight flex items-center gap-3">
+          <GraduationCap className="text-gn-highlight" size={28} />
           Formação Acadêmica & Certificações
         </h2>
-        <div className="flex-1 h-px bg-gn-surface/50"></div>
+        
       </div>
       
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">

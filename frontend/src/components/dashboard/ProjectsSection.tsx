@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { ExternalLink, X, Code2, PlayCircle } from 'lucide-react';
+import { ExternalLink, X, Code2, PlayCircle, CheckCircle2, Circle, AlertCircle, FolderGit2 } from 'lucide-react';
 
 interface ProjectGallery {
   id: number;
@@ -36,12 +36,13 @@ export default function ProjectsSection({ projects }: ProjectsSectionProps) {
   };
 
   return (
-    <section id="projetos" className="scroll-mt-32 pt-16 border-t border-gn-surface">
+    <section id="projetos" className="scroll-mt-32 pt-16 ">
       <div className="flex items-center gap-4 mb-12">
-        <h2 className="text-2xl font-medium text-gn-highlight tracking-tight">
+        <h2 className="text-2xl font-medium text-gn-highlight tracking-tight flex items-center gap-3">
+          <FolderGit2 className="text-gn-highlight" size={28} />
           Estudos de Caso
         </h2>
-        <div className="flex-1 h-px bg-gn-surface/50"></div>
+        
       </div>
       
       <div className="flex flex-col gap-12 relative">

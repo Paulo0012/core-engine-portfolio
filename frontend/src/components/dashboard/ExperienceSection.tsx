@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { ExternalLink, Briefcase } from 'lucide-react';
 import api from '../../services/api';
 
 interface Experience {
@@ -21,12 +22,13 @@ export default function ExperienceSection() {
   if (experiences.length === 0) return null;
 
   return (
-    <section id="experiencia" className="scroll-mt-32 border-t border-gn-surface pt-16">
+    <section id="experiencia" className="scroll-mt-32 pt-16">
       <div className="flex items-center gap-4 mb-12">
-        <h2 className="text-2xl font-medium text-gn-highlight tracking-tight">
+        <h2 className="text-2xl font-medium text-gn-highlight tracking-tight flex items-center gap-3">
+          <Briefcase className="text-gn-highlight" size={28} />
           Experiência Profissional
         </h2>
-        <div className="flex-1 h-px bg-gn-surface/50"></div>
+        
       </div>
       
       <div className="space-y-6">

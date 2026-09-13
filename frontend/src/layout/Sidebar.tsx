@@ -1,8 +1,22 @@
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Server, Home, User, GraduationCap, Code, Briefcase, Globe } from 'lucide-react';
 
 export default function Navbar() {
   const navigate = useNavigate();
+  const [scrollProgress, setScrollProgress] = useState(0);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const totalScroll = document.documentElement.scrollTop;
+      const windowHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+      if (windowHeight <= 0) return;
+      const scroll = `${totalScroll / windowHeight}`;
+      setScrollProgress(Number(scroll) * 100);
+    }
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   const menuItems = [
     { label: 'Início', id: 'inicio', icon: Home },
@@ -35,6 +49,12 @@ export default function Navbar() {
   return (
     <nav className="fixed top-0 left-0 right-0 h-20 bg-white/40 backdrop-blur-xl border-b border-white/20 z-50 px-6 lg:px-20 flex items-center justify-between shadow-sm">
       
+      {/* Progress Bar Topo */}
+      <div 
+        className="absolute top-0 left-0 h-1 bg-gn-highlight z-50 transition-all duration-150" 
+        style={{ width: `${scrollProgress}%` }}
+      ></div>
+
       {/* Brand / Logo */}
       <div 
         className="flex items-center gap-3 cursor-pointer group"
