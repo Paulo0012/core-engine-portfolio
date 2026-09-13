@@ -5,6 +5,8 @@ import EducationSection from '../components/dashboard/EducationSection';
 import ExperienceSection from '../components/dashboard/ExperienceSection';
 import TechStackSection from '../components/dashboard/TechStackSection';
 import ProjectsSection from '../components/dashboard/ProjectsSection';
+import AboutSection from '../components/dashboard/AboutSection';
+import ContactSection from '../components/dashboard/ContactSection';
 import videoSrc from '../assets/transicao.mp4';
 
 export default function Dashboard() {
@@ -40,10 +42,12 @@ export default function Dashboard() {
       {/* CONTEÚDO PRINCIPAL (z-index maior para ficar acima do vídeo) */}
       <div className="relative z-10 space-y-32 pb-32 px-6 lg:px-20 max-w-6xl mx-auto text-gn-text">
         <HeroSection />
+        <AboutSection />
         <EducationSection />
         <ExperienceSection />
         <TechStackSection />
         <ProjectsSection projects={projects} />
+        <ContactSection />
       </div>
     </div>
   );

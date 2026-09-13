@@ -6,28 +6,44 @@ export default function HeroSection() {
     <section id="sobre" className="min-h-[90vh] flex items-center pt-20 border-b border-gn-surface">
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center w-full">
         
-        {/* TEXT CONTENT */}
-        <div className="space-y-8 z-10">
-          <div className="inline-flex items-center gap-2 px-3 py-1 bg-gn-surface/20 border border-gn-surface rounded-full">
-            <Terminal size={14} className="text-gn-accent" />
-            <span className="text-xs font-mono tracking-widest text-gn-text uppercase">Paulo Gomes</span>
-          </div>
+        {/* TEXT CONTENT - Text Ticker */}
+        <div className="w-full flex flex-col gap-4 py-4 z-10">
           
-          <h1 className="text-5xl lg:text-7xl font-black text-gn-highlight leading-[1.1] tracking-tighter">
-            Engenheiro de <br />
-            <span className="text-gn-accent font-medium tracking-tight">Sistemas Embarcados & IoT</span>
+          {/* Linha 1 Estática */}
+          <h1 className="text-4xl lg:text-6xl font-black text-gn-highlight tracking-tighter">
+            Olá, Meu nome é Paulo Gabriel.
           </h1>
+
+          <div className="relative overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_10%,black_90%,transparent)] mt-2">
+
+
+          {/* Linha 2 - Reverse */}
+          <div className="ticker-track flex w-max gap-8 group hover:[animation-play-state:paused]" style={{ animationDirection: 'reverse' }}>
+            {Array.from({ length: 8 }).map((_, i) => (
+              <h2 key={`l2-${i}`} className="text-4xl lg:text-6xl font-black text-gn-surface whitespace-nowrap tracking-tighter">
+                Sou engenheiro da computação <span className="text-gn-accent/50 mx-4">•</span>
+              </h2>
+            ))}
+          </div>
+
+          {/* Linha 3 */}
+          <div className="ticker-track flex w-max gap-8 group hover:[animation-play-state:paused] mt-4">
+            {Array.from({ length: 8 }).map((_, i) => (
+              <h2 key={`l3-${i}`} className="text-4xl lg:text-6xl font-black text-gn-accent whitespace-nowrap tracking-tighter">
+                e te ajudo a criar e automatizar sistemas. <span className="text-gn-surface/50 mx-4">•</span>
+              </h2>
+            ))}
+          </div>
+
+          </div> {/* FIM DO WRAPPER DO CARROSSEL */}
           
-          <p className="text-lg text-gn-text max-w-lg leading-relaxed font-light">
-            Especialista em C/C++, Python e desenvolvimento de hardware (FPGA, ESP32). Focado em automação, IoT, visão computacional e arquiteturas escaláveis.
-          </p>
-          
-          <div className="flex gap-4">
-             <div className="flex flex-col p-5 bg-gn-surface/10 rounded-xl border border-gn-surface w-32">
+          {/* Info Cards Extras */}
+          <div className="flex gap-4 mt-8 px-4">
+             <div className="flex flex-col p-5 bg-gn-surface/10 rounded-xl border border-gn-surface w-32 hover:bg-gn-surface/20 transition-colors">
                 <span className="text-3xl font-light text-gn-highlight tracking-tighter">2+</span>
                 <span className="text-[10px] text-gn-accent uppercase tracking-widest mt-1">Anos Exp.</span>
              </div>
-             <div className="flex flex-col p-5 bg-gn-surface/10 rounded-xl border border-gn-surface w-32">
+             <div className="flex flex-col p-5 bg-gn-surface/10 rounded-xl border border-gn-surface w-32 hover:bg-gn-surface/20 transition-colors">
                 <span className="text-3xl font-light text-gn-highlight tracking-tighter">10+</span>
                 <span className="text-[10px] text-gn-accent uppercase tracking-widest mt-1">Projetos</span>
              </div>
@@ -35,7 +51,7 @@ export default function HeroSection() {
         </div>
 
         {/* INTERACTIVE HERO MEDIA */}
-        <div className="flex justify-center lg:justify-end">
+        <div className="flex justify-center lg:justify-end z-10">
           <HeroMedia />
         </div>
 

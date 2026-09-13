@@ -10,6 +10,7 @@ interface ProjectGallery {
 interface Project {
   id: string;
   title: string;
+  status?: string;
   description?: string;
   problem_statement?: string;
   solution_architecture?: string;
@@ -55,7 +56,7 @@ export default function ProjectsSection({ projects }: ProjectsSectionProps) {
               {/* Timeline Lateral Esquerda */}
               <div className="hidden md:flex flex-col items-end w-[120px] shrink-0 pt-10 pr-2 relative">
                 <span className="text-[10px] font-black uppercase text-gn-surface tracking-widest text-right">
-                  Em construção
+                  {p.status || 'Em construção'}
                 </span>
                 <div className="absolute right-[-25px] lg:right-[-29px] top-11 w-2.5 h-2.5 rounded-full bg-gn-surface ring-4 ring-gn-bg z-10"></div>
               </div>

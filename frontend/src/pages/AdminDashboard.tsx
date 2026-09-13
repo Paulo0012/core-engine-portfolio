@@ -56,22 +56,22 @@ export default function AdminDashboard() {
   };
 
   return (
-    <div className="max-w-7xl mx-auto space-y-12 pb-24 pt-10 px-6 font-mono text-base">
+    <div className="max-w-7xl mx-auto space-y-12 pb-24 pt-10 px-6 font-mono text-base text-gn-text">
       
-      {/* HEADER DE OPERAÇÃO (Escala 20px+) */}
-      <header className="flex flex-col md:flex-row justify-between items-start md:items-end border-b border-white/10 pb-10 gap-6">
+      {/* HEADER DE OPERAÇÃO */}
+      <header className="flex flex-col md:flex-row justify-between items-start md:items-end border-b border-gn-surface pb-10 gap-6">
         <div className="space-y-2">
-          <div className="flex items-center gap-3 text-purple-500 text-xs uppercase tracking-[0.4em] font-bold">
+          <div className="flex items-center gap-3 text-gn-accent text-xs uppercase tracking-[0.4em] font-bold">
             <ShieldCheck size={18} /> System_Root_Authorized
           </div>
-          <h2 className="text-4xl font-black text-white uppercase tracking-tighter italic">
-            Admin_<span className="text-purple-500">Vault</span>
+          <h2 className="text-4xl font-black text-gn-highlight uppercase tracking-tighter italic">
+            Admin_<span className="text-gn-accent">Vault</span>
           </h2>
         </div>
 
         <button 
           onClick={() => navigate('/admin/new')}
-          className="bg-purple-600 text-white px-10 py-4 text-sm font-black uppercase hover:bg-white hover:text-black transition-all flex items-center gap-3 shadow-[0_0_20px_rgba(168,85,247,0.3)] rounded-sm"
+          className="bg-gn-highlight text-gn-bg px-10 py-4 text-sm font-black uppercase hover:bg-gn-accent transition-all flex items-center gap-3 rounded-lg shadow-lg"
         >
           <Plus size={20} /> Deploy_New_Project
         </button>
@@ -79,50 +79,50 @@ export default function AdminDashboard() {
 
       {/* PAINEL DE MONITORAMENTO (Cards Rápidos) */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div className="p-6 bg-white/5 border border-white/10 rounded-sm">
-          <p className="text-xs text-slate-500 uppercase tracking-widest mb-2">Total_Nodes</p>
-          <p className="text-3xl font-bold text-white">{projects.length}</p>
+        <div className="p-6 bg-gn-surface/10 border border-gn-surface/50 rounded-xl">
+          <p className="text-xs text-gn-text uppercase tracking-widest mb-2">Total_Nodes</p>
+          <p className="text-3xl font-bold text-gn-highlight">{projects.length}</p>
         </div>
-        <div className="p-6 bg-white/5 border border-white/10 rounded-sm">
-          <p className="text-xs text-slate-500 uppercase tracking-widest mb-2">System_Uptime</p>
-          <p className="text-3xl font-bold text-eng-green text-green-500">99.9%</p>
+        <div className="p-6 bg-gn-surface/10 border border-gn-surface/50 rounded-xl">
+          <p className="text-xs text-gn-text uppercase tracking-widest mb-2">System_Uptime</p>
+          <p className="text-3xl font-bold text-gn-accent">99.9%</p>
         </div>
-        <div className="p-6 bg-white/5 border border-white/10 rounded-sm">
-          <p className="text-xs text-slate-500 uppercase tracking-widest mb-2">Database_Type</p>
-          <p className="text-3xl font-bold text-purple-500 italic">SQLite_V3</p>
+        <div className="p-6 bg-gn-surface/10 border border-gn-surface/50 rounded-xl">
+          <p className="text-xs text-gn-text uppercase tracking-widest mb-2">Database_Type</p>
+          <p className="text-3xl font-bold text-gn-accent italic">SQLite_V3</p>
         </div>
       </div>
 
       {/* INTEGRAÇÃO CMS (DJANGO ADMIN) */}
-      <div className="border border-purple-500/30 bg-purple-500/5 rounded-sm p-8 space-y-6">
+      <div className="border border-gn-surface/50 bg-gn-surface/10 rounded-xl p-8 space-y-6 shadow-sm">
         <div className="flex items-center gap-3">
-          <Database size={24} className="text-purple-400" />
-          <h3 className="text-xl font-bold text-white uppercase tracking-widest">Master CMS Access</h3>
+          <Database size={24} className="text-gn-accent" />
+          <h3 className="text-xl font-bold text-gn-highlight uppercase tracking-widest">Master CMS Access</h3>
         </div>
-        <p className="text-sm text-slate-400">
+        <p className="text-sm text-gn-text">
           Para realizar o CRUD avançado (com suporte a upload de certificados, ordenação e metadados) nas demais entidades do sistema, utilize o Master CMS (Django Admin).
         </p>
         <div className="flex flex-wrap gap-4">
-          <a href="http://localhost:8000/admin/engine/academicjourney/" target="_blank" rel="noreferrer" className="px-6 py-3 border border-white/10 hover:border-purple-500 bg-white/5 hover:bg-purple-500/20 text-white text-sm font-bold uppercase transition-all rounded-sm flex items-center gap-2">
+          <a href="http://localhost:8000/admin/engine/academicjourney/" target="_blank" rel="noreferrer" className="px-6 py-3 border border-gn-surface/50 hover:border-gn-accent bg-gn-surface/20 hover:bg-gn-surface/40 text-gn-highlight text-sm font-bold uppercase transition-all rounded-lg flex items-center gap-2">
             <LayoutGrid size={16}/> Jornada Acadêmica
           </a>
-          <a href="http://localhost:8000/admin/engine/certification/" target="_blank" rel="noreferrer" className="px-6 py-3 border border-white/10 hover:border-purple-500 bg-white/5 hover:bg-purple-500/20 text-white text-sm font-bold uppercase transition-all rounded-sm flex items-center gap-2">
+          <a href="http://localhost:8000/admin/engine/certification/" target="_blank" rel="noreferrer" className="px-6 py-3 border border-gn-surface/50 hover:border-gn-accent bg-gn-surface/20 hover:bg-gn-surface/40 text-gn-highlight text-sm font-bold uppercase transition-all rounded-lg flex items-center gap-2">
             <LayoutGrid size={16}/> Certificações
           </a>
-          <a href="http://localhost:8000/admin/engine/professionalexperience/" target="_blank" rel="noreferrer" className="px-6 py-3 border border-white/10 hover:border-purple-500 bg-white/5 hover:bg-purple-500/20 text-white text-sm font-bold uppercase transition-all rounded-sm flex items-center gap-2">
+          <a href="http://localhost:8000/admin/engine/professionalexperience/" target="_blank" rel="noreferrer" className="px-6 py-3 border border-gn-surface/50 hover:border-gn-accent bg-gn-surface/20 hover:bg-gn-surface/40 text-gn-highlight text-sm font-bold uppercase transition-all rounded-lg flex items-center gap-2">
             <LayoutGrid size={16}/> Experiências
           </a>
-          <a href="http://localhost:8000/admin/engine/skill/" target="_blank" rel="noreferrer" className="px-6 py-3 border border-white/10 hover:border-purple-500 bg-white/5 hover:bg-purple-500/20 text-white text-sm font-bold uppercase transition-all rounded-sm flex items-center gap-2">
+          <a href="http://localhost:8000/admin/engine/skill/" target="_blank" rel="noreferrer" className="px-6 py-3 border border-gn-surface/50 hover:border-gn-accent bg-gn-surface/20 hover:bg-gn-surface/40 text-gn-highlight text-sm font-bold uppercase transition-all rounded-lg flex items-center gap-2">
             <LayoutGrid size={16}/> Habilidades
           </a>
         </div>
       </div>
 
-      {/* TABELA DE ATIVOS (Escala 16px) */}
-      <div className="border border-white/10 bg-[#0a0a0a] rounded-sm overflow-hidden shadow-2xl">
+      {/* TABELA DE ATIVOS */}
+      <div className="border border-gn-surface/50 bg-white/50 rounded-xl overflow-hidden shadow-sm">
         <div className="overflow-x-auto">
           <table className="w-full text-left text-base uppercase tracking-tight">
-            <thead className="bg-white/5 text-slate-500 border-b border-white/10">
+            <thead className="bg-gn-surface/20 text-gn-text border-b border-gn-surface/50">
               <tr>
                 <th className="p-6 font-bold"># ID</th>
                 <th className="p-6 font-bold">Project_Name</th>
@@ -130,18 +130,18 @@ export default function AdminDashboard() {
                 <th className="p-6 font-bold text-right">Operations</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-white/5">
+            <tbody className="divide-y divide-gn-surface/30">
               {projects.map((p) => (
-                <tr key={p.id} className="hover:bg-purple-500/5 transition-colors group">
-                  <td className="p-6 text-slate-600 italic font-bold">#{p.id}</td>
+                <tr key={p.id} className="hover:bg-gn-surface/10 transition-colors group">
+                  <td className="p-6 text-gn-text italic font-bold">#{p.id}</td>
                   <td className="p-6">
                     <div className="flex flex-col">
-                      <span className="text-white font-bold group-hover:text-purple-400 transition-colors">{p.title}</span>
-                      <span className="text-[10px] text-slate-600 lowercase tracking-normal">{p.impact_metrics}</span>
+                      <span className="text-gn-highlight font-bold group-hover:text-gn-accent transition-colors">{p.title}</span>
+                      <span className="text-[10px] text-gn-text lowercase tracking-normal">{p.impact_metrics}</span>
                     </div>
                   </td>
                   <td className="p-6 text-center">
-                    <span className="px-3 py-1 bg-white/5 border border-white/10 rounded-full text-xs text-purple-400 font-bold">
+                    <span className="px-3 py-1 bg-gn-surface/20 border border-gn-surface/30 rounded-full text-xs text-gn-accent font-bold">
                       {p.category}
                     </span>
                   </td>
@@ -149,14 +149,14 @@ export default function AdminDashboard() {
                     <div className="flex justify-end gap-8">
                       <button 
                         onClick={() => navigate(`/admin/edit/${p.id}`)}
-                        className="text-slate-500 hover:text-white transition-all transform hover:scale-125"
+                        className="text-gn-text hover:text-gn-accent transition-all transform hover:scale-125"
                         title="EDIT_NODE"
                       >
                         <Edit size={20}/>
                       </button>
                       <button 
                         onClick={() => handleDelete(p.id, p.title)} 
-                        className="text-slate-500 hover:text-red-500 transition-all transform hover:scale-125"
+                        className="text-gn-text hover:text-red-500 transition-all transform hover:scale-125"
                         title="TERMINATE_NODE"
                       >
                         <Trash2 size={20}/>
@@ -172,8 +172,8 @@ export default function AdminDashboard() {
         {/* FEEDBACK DE ESTADO */}
         {loading && (
           <div className="p-24 text-center flex flex-col items-center gap-6">
-            <RefreshCw className="animate-spin text-purple-500" size={40} />
-            <span className="text-purple-500 text-sm animate-pulse tracking-[0.3em]">SYNCHRONIZING_CORES...</span>
+            <RefreshCw className="animate-spin text-gn-accent" size={40} />
+            <span className="text-gn-accent text-sm animate-pulse tracking-[0.3em]">SYNCHRONIZING_CORES...</span>
           </div>
         )}
 
@@ -186,21 +186,21 @@ export default function AdminDashboard() {
         )}
 
         {!loading && projects.length === 0 && (
-          <div className="p-24 text-center text-slate-700 italic text-sm">
+          <div className="p-24 text-center text-gn-text italic text-sm">
             --- NO_TECHNICAL_NODES_REGISTERED ---
           </div>
         )}
       </div>
 
       {/* BARRA DE STATUS INFERIOR */}
-      <footer className="flex flex-col md:flex-row justify-between items-center gap-4 text-[10px] text-slate-700 uppercase tracking-[0.5em] border-t border-white/5 pt-10">
+      <footer className="flex flex-col md:flex-row justify-between items-center gap-4 text-[10px] text-gn-text uppercase tracking-[0.5em] border-t border-gn-surface/50 pt-10">
         <div className="flex items-center gap-3">
-          <Activity size={14} className="text-green-500" /> 
-          Server_Status: <span className="text-green-500 font-bold tracking-normal">Optimal_200_OK</span>
+          <Activity size={14} className="text-gn-accent" /> 
+          Server_Status: <span className="text-gn-accent font-bold tracking-normal">Optimal_200_OK</span>
         </div>
         <div className="flex items-center gap-3">
           <Database size={14} /> 
-          Storage: <span className="text-slate-500 font-bold tracking-normal italic">Local_SQLite_Provider</span>
+          Storage: <span className="text-gn-text font-bold tracking-normal italic">Local_SQLite_Provider</span>
         </div>
       </footer>
     </div>

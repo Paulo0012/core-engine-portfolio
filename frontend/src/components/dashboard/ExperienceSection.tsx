@@ -21,7 +21,7 @@ export default function ExperienceSection() {
   if (experiences.length === 0) return null;
 
   return (
-    <section id="sobre-detalhe" className="scroll-mt-32 border-t border-gn-surface pt-16">
+    <section id="experiencia" className="scroll-mt-32 border-t border-gn-surface pt-16">
       <div className="flex items-center gap-4 mb-12">
         <h2 className="text-2xl font-medium text-gn-highlight tracking-tight">
           Experiência Profissional

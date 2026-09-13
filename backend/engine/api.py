@@ -29,6 +29,7 @@ def create_project(
     request, 
     title: str = Form(...),
     category: str = Form(...),
+    status: str = Form(...),
     technologies: str = Form(...),
     problem_statement: str = Form(...),
     solution_architecture: str = Form(...),
@@ -43,6 +44,7 @@ def create_project(
         project_data = {
             'title': title,
             'category': category,
+            'status': status,
             'problem_statement': problem_statement,
             'solution_architecture': solution_architecture,
             'impact_metrics': impact_metrics,
@@ -85,6 +87,7 @@ def update_project(
     project_id: int,
     title: str = Form(...),
     category: str = Form(...),
+    status: str = Form(...),
     technologies: str = Form(...),
     problem_statement: str = Form(...),
     solution_architecture: str = Form(...),
@@ -102,6 +105,7 @@ def update_project(
         project_data = {
             'title': title,
             'category': category,
+            'status': status,
             'problem_statement': problem_statement,
             'solution_architecture': solution_architecture,
             'impact_metrics': impact_metrics,

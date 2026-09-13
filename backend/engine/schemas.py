@@ -16,6 +16,7 @@ class ProjectIn(Schema):
     """
     title: str
     category: str
+    status: str
     technologies: str # Recebe JSON string do frontend via FormData
     problem_statement: str
     solution_architecture: str
@@ -29,6 +30,7 @@ class ProjectOut(Schema):
     title: str
     slug: str
     category: str
+    status: str
     technologies: List[str]
     problem_statement: str
     solution_architecture: str

@@ -11,10 +11,16 @@ class Project(models.Model):
         ('AT', 'Automation & Data'),
     ]
 
+    STATUS_CHOICES = [
+        ('Em construção', 'Em construção'),
+        ('Concluído', 'Concluído'),
+    ]
+
     # --- IDENTIFICADORES E METADADOS ---
     title = models.CharField(max_length=200)
     slug = models.SlugField(unique=True, blank=True, max_length=255)
     category = models.CharField(max_length=3, choices=CATEGORIES)
+    status = models.CharField(max_length=50, choices=STATUS_CHOICES, default='Em construção')
     technologies = models.JSONField(default=list) # Ex: ["YOLOv11", "Python", "MQTT"]
     
     # --- DOSSIÊ DE ENGENHARIA ---

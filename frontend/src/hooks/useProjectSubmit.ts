@@ -5,6 +5,7 @@ import api from '../services/api';
 export interface ProjectFormData {
   title: string;
   category: string;
+  status: string;
   problem_statement: string;
   solution_architecture: string;
   impact_metrics: string;
@@ -30,6 +31,7 @@ export function useProjectSubmit(id?: string) {
     const data = new FormData();
     data.append('title', formData.title);
     data.append('category', formData.category);
+    data.append('status', formData.status);
     data.append('problem_statement', formData.problem_statement);
     data.append('solution_architecture', formData.solution_architecture);
     data.append('impact_metrics', formData.impact_metrics);
