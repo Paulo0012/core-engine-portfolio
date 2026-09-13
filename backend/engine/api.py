@@ -36,9 +36,9 @@ def create_project(
     impact_metrics: str = Form(...),
     github_link: str = Form(None),
     live_demo: str = Form(None),
-    cover_image: File[UploadedFile] = None, 
-    demo_video: File[UploadedFile] = None,
-    gallery_images: List[File[UploadedFile]] = None 
+    cover_image: UploadedFile = File(None), 
+    demo_video: UploadedFile = File(None),
+    gallery_images: List[UploadedFile] = File(None) 
 ):
     with transaction.atomic():
         project_data = {
@@ -94,12 +94,10 @@ def update_project(
     impact_metrics: str = Form(...),
     github_link: str = Form(None),
     live_demo: str = Form(None),
-    cover_image: File[UploadedFile] = None, 
-    demo_video: File[UploadedFile] = None,
-    gallery_images: List[File[UploadedFile]] = None 
+    cover_image: UploadedFile = File(None), 
+    demo_video: UploadedFile = File(None),
+    gallery_images: List[UploadedFile] = File(None) 
 ):
-    """Atualiza as informações e mídias de um projeto existente."""
-    project = get_object_or_404(Project, id=project_id)
     
     with transaction.atomic():
         project_data = {

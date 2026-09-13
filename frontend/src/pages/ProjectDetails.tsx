@@ -7,6 +7,12 @@ import {
 import { motion } from 'framer-motion';
 import api from '../services/api';
 
+interface ProjectGallery {
+  id: number;
+  image: string;
+  caption?: string;
+}
+
 interface Project {
   id: number;
   title: string;
@@ -17,6 +23,7 @@ interface Project {
   impact_metrics: string;
   github_link?: string;
   image?: string;
+  gallery?: ProjectGallery[];
 }
 
 export default function ProjectDetails() {
@@ -145,6 +152,31 @@ export default function ProjectDetails() {
         </section>
 
       </div>
+
+      {/* BLOCO: EVIDÊNCIAS DE PROJETO (INSPECTION GALLERY) */}
+      {project.gallery && project.gallery.length > 0 && (
+        <section className="mt-16 space-y-6">
+          <div className="flex items-center gap-3 font-mono text-xs text-slate-400 uppercase tracking-widest">
+            <Layers size={16} className="text-eng-cyan" /> 03_Inspection_Gallery
+          </div>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+            {project.gallery.map(img => (
+              <div key={img.id} className="relative group border border-eng-border bg-slate-900/40 p-2 overflow-hidden">
+                <img 
+                  src={img.image.startsWith('http') ? img.image : (import.meta.env.VITE_API_URL?.replace('/api/v1', '') || 'http://localhost:8000') + img.image} 
+                  alt={img.caption || 'Project Evidence'} 
+                  className="w-full aspect-square object-cover transition-transform duration-700 group-hover:scale-105"
+                />
+                {img.caption && (
+                  <div className="absolute bottom-2 left-2 right-2 bg-black/80 backdrop-blur border border-eng-border/50 p-2 text-[9px] font-mono text-slate-300 uppercase text-center">
+                    {img.caption}
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
 
       {/* FOOTER DA PÁGINA */}
       <footer className="mt-24 pt-8 border-t border-eng-border text-center">
