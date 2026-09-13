@@ -1,13 +1,27 @@
 import os
 from pathlib import Path
 from datetime import timedelta
+from decouple import config, Csv
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # --- SEGURANÇA BÁSICA ---
-SECRET_KEY = 'django-insecure-sua-chave-secreta-aqui' # Em produção, use Variável de Ambiente
-DEBUG = True
-ALLOWED_HOSTS = ['*'] # Permite acesso de qualquer IP na sua rede local
+SECRET_KEY = config('SECRET_KEY')
+DEBUG = config('DEBUG', default=False, cast=bool)
+ALLOWED_HOSTS = config('ALLOWED_HOSTS', cast=Csv())
+
+# --- HEADERS DE SEGURANÇA OWASP ---
+# Ajuda a proteger contra XSS e Content Sniffing
+SECURE_BROWSER_XSS_FILTER = True
+SECURE_CONTENT_TYPE_NOSNIFF = True
+X_FRAME_OPTIONS = 'DENY'
+
+# NOTA: Em produção com HTTPS, as variáveis abaixo devem ser ativadas
+# SECURE_SSL_REDIRECT = config('SECURE_SSL_REDIRECT', default=False, cast=bool)
+# SESSION_COOKIE_SECURE = config('SESSION_COOKIE_SECURE', default=False, cast=bool)
+# CSRF_COOKIE_SECURE = config('CSRF_COOKIE_SECURE', default=False, cast=bool)
+# Se estiver usando HTTPS, também descomente SECURE_HSTS_SECONDS
+# SECURE_HSTS_SECONDS = 31536000
 
 # --- APLICAÇÕES DO SISTEMA ---
 INSTALLED_APPS = [
@@ -93,16 +107,13 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # --- CONFIGURAÇÃO DE CORS (LIBERA O REACT) ---
-# Permite que o frontend na porta 5173 acesse o backend na 8000
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:5173",
-    "http://127.0.0.1:5173",
-]
+CORS_ALLOWED_ORIGINS = config('CORS_ALLOWED_ORIGINS', cast=Csv())
 
 # --- CONFIGURAÇÃO JWT (NINJA-JWT / AUTH CUSTOM) ---
 NINJA_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(days=1), # Expira em 1 dia para facilitar o dev
-    'REFRESH_TOKEN_LIFETIME': timedelta(days=7),
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=15), # Expira rápido (Segurança)
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=1), # Expira em 1 dia
+
     'AUTH_HEADER_TYPES': ('Bearer',),
 }
 
