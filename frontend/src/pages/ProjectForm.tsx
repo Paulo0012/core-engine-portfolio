@@ -41,7 +41,7 @@ export default function ProjectForm() {
   // Carregar dados existentes em caso de edição
   useEffect(() => {
     if (id) {
-      api.get(`/cases/${id}/`).then((res) => {
+      api.get(`/cases/${id}`).then((res) => {
         const p = res.data;
         setFormData({
           title: p.title,

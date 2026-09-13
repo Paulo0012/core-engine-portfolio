@@ -27,29 +27,35 @@ def get_project(request, project_id: int):
 @router.post("/", response={201: ProjectOut}, auth=auth_bearer)
 def create_project(
     request, 
-    data: Form[ProjectIn], 
+    title: str = Form(...),
+    category: str = Form(...),
+    technologies: str = Form(...),
+    problem_statement: str = Form(...),
+    solution_architecture: str = Form(...),
+    impact_metrics: str = Form(...),
+    github_link: str = Form(None),
+    live_demo: str = Form(None),
     cover_image: File[UploadedFile] = None, 
     demo_video: File[UploadedFile] = None,
-    # O nome aqui DEVE ser exatamente o mesmo que você usa no data.append do React
     gallery_images: List[File[UploadedFile]] = None 
 ):
     with transaction.atomic():
-        project_data = data.dict()
+        project_data = {
+            'title': title,
+            'category': category,
+            'problem_statement': problem_statement,
+            'solution_architecture': solution_architecture,
+            'impact_metrics': impact_metrics,
+            'github_link': github_link if github_link != "" else None,
+            'live_demo': live_demo if live_demo != "" else None,
+        }
         
-        # O React envia tecnologias como string ou JSON stringificado
-        # Vamos garantir que vire uma lista para o banco de dados
-        techs = project_data.get('technologies', "[]")
+        techs = technologies
         if isinstance(techs, str):
             try:
                 project_data['technologies'] = json.loads(techs)
             except:
                 project_data['technologies'] = [t.strip() for t in techs.split(',') if t]
-
-        if project_data.get('github_link') == "":
-            project_data['github_link'] = None
-            
-        if project_data.get('live_demo') == "":
-            project_data['live_demo'] = None
 
         project = Project.objects.create(**project_data)
 
@@ -60,7 +66,6 @@ def create_project(
         
         project.save()
 
-        # Salva as várias fotos na tabela de galeria
         if gallery_images:
             for img in gallery_images:
                 ProjectImage.objects.create(project=project, image=img)
@@ -73,3 +78,56 @@ def delete_project(request, project_id: int):
     project = get_object_or_404(Project, id=project_id)
     project.delete()
     return 204, None
+
+@router.post("/{project_id}", response=ProjectOut, auth=auth_bearer)
+def update_project(
+    request, 
+    project_id: int,
+    title: str = Form(...),
+    category: str = Form(...),
+    technologies: str = Form(...),
+    problem_statement: str = Form(...),
+    solution_architecture: str = Form(...),
+    impact_metrics: str = Form(...),
+    github_link: str = Form(None),
+    live_demo: str = Form(None),
+    cover_image: File[UploadedFile] = None, 
+    demo_video: File[UploadedFile] = None,
+    gallery_images: List[File[UploadedFile]] = None 
+):
+    """Atualiza as informações e mídias de um projeto existente."""
+    project = get_object_or_404(Project, id=project_id)
+    
+    with transaction.atomic():
+        project_data = {
+            'title': title,
+            'category': category,
+            'problem_statement': problem_statement,
+            'solution_architecture': solution_architecture,
+            'impact_metrics': impact_metrics,
+            'github_link': github_link if github_link != "" else None,
+            'live_demo': live_demo if live_demo != "" else None,
+        }
+        
+        techs = technologies
+        if isinstance(techs, str):
+            try:
+                project_data['technologies'] = json.loads(techs)
+            except:
+                project_data['technologies'] = [t.strip() for t in techs.split(',') if t]
+
+        for key, value in project_data.items():
+            setattr(project, key, value)
+            
+        if cover_image:
+            project.cover_image = cover_image
+        if demo_video:
+            project.demo_video = demo_video
+            
+        project.save()
+
+        if gallery_images:
+            for img in gallery_images:
+                ProjectImage.objects.create(project=project, image=img)
+                
+    return project

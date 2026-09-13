@@ -78,3 +78,80 @@ class ProjectImage(models.Model):
 
     def __str__(self):
         return f"Image for {self.project.title}"
+
+# --- CMS MODELS ---
+
+class AcademicJourney(models.Model):
+    STATUS_CHOICES = [
+        ('Cursando', 'Cursando'),
+        ('Concluído', 'Concluído'),
+        ('Trancado', 'Trancado'),
+    ]
+    course = models.CharField(max_length=200)
+    institution = models.CharField(max_length=200)
+    period = models.CharField(max_length=100) # Ex: 2020 - 2026
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='Concluído')
+    order = models.IntegerField(default=0)
+    
+    class Meta:
+        ordering = ['order', '-id']
+        verbose_name = "Jornada Acadêmica"
+        
+    def __str__(self):
+        return f"{self.course} - {self.institution}"
+
+class Certification(models.Model):
+    name = models.CharField(max_length=200)
+    issuer = models.CharField(max_length=200)
+    date_info = models.CharField(max_length=100, blank=True, null=True) # Ex: 30h, 2025
+    certificate_file = models.FileField(upload_to='certifications/', null=True, blank=True)
+    link = models.URLField(blank=True, null=True)
+    order = models.IntegerField(default=0)
+
+    class Meta:
+        ordering = ['order', '-id']
+        verbose_name = "Certificação"
+
+    def __str__(self):
+        return self.name
+
+class ProfessionalExperience(models.Model):
+    role = models.CharField(max_length=200)
+    company = models.CharField(max_length=200)
+    period = models.CharField(max_length=100) # Ex: 2024 - Atual
+    description = models.TextField(blank=True, null=True)
+    order = models.IntegerField(default=0)
+
+    class Meta:
+        ordering = ['order', '-id']
+        verbose_name = "Experiência Profissional"
+
+    def __str__(self):
+        return f"{self.role} at {self.company}"
+
+class Skill(models.Model):
+    category = models.CharField(max_length=100) # Ex: Linguagens & Web
+    name = models.CharField(max_length=100) # Ex: Python, C++
+    level = models.CharField(max_length=50, blank=True, null=True)
+    order = models.IntegerField(default=0)
+
+    class Meta:
+        ordering = ['order', '-id']
+        verbose_name = "Habilidade"
+
+    def __str__(self):
+        return f"{self.category}: {self.name}"
+
+class ContactInfo(models.Model):
+    email = models.EmailField(max_length=255, blank=True, null=True)
+    phone = models.CharField(max_length=50, blank=True, null=True)
+    linkedin = models.URLField(blank=True, null=True)
+    github = models.URLField(blank=True, null=True)
+    lattes = models.URLField(blank=True, null=True)
+
+    class Meta:
+        verbose_name = "Informação de Contato"
+        verbose_name_plural = "Informações de Contato"
+
+    def __str__(self):
+        return "Contact Details"

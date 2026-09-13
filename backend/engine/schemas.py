@@ -44,3 +44,45 @@ class ProjectOut(Schema):
     github_link: Optional[str] = None
     live_demo: Optional[str] = None
     created_at: datetime
+
+# --- CMS SCHEMAS ---
+
+class AcademicJourneySchema(Schema):
+    id: Optional[int] = None
+    course: str
+    institution: str
+    period: str
+    status: str
+    order: Optional[int] = 0
+
+class CertificationSchema(Schema):
+    id: Optional[int] = None
+    name: str
+    issuer: str
+    date_info: Optional[str] = None
+    certificate_file: Optional[str] = None
+    link: Optional[str] = None
+    order: Optional[int] = 0
+
+class ProfessionalExperienceSchema(Schema):
+    id: Optional[int] = None
+    role: str
+    company: str
+    period: str
+    description: Optional[str] = None
+    order: Optional[int] = 0
+
+class SkillSchema(Schema):
+    id: Optional[int] = None
+    category: str
+    name: str
+    level: Optional[str] = None
+    order: Optional[int] = 0
+
+class ContactInfoSchema(Schema):
+    id: Optional[int] = None
+    email: Optional[str] = None
+    phone: Optional[str] = None
+    linkedin: Optional[str] = None
+    github: Optional[str] = None
+    lattes: Optional[str] = None

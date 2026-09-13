@@ -3,12 +3,12 @@ import profileImg from '../../assets/profile.png';
 
 export default function HeroMedia() {
   return (
-    <div className="relative w-80 h-80 lg:w-[400px] lg:h-[400px]">
+    <div className="relative w-full max-w-lg lg:max-w-xl h-[400px] lg:h-[600px] flex justify-end items-end">
       {/* FOREGROUND PROFILE IMAGE */}
       <img
         src={profileImg}
         alt="Paulo Gomes"
-        className="w-full h-full object-cover object-top z-20 grayscale hover:grayscale-0 transition-all duration-700 mix-blend-multiply opacity-90 hover:opacity-100"
+        className="w-full h-full object-contain object-bottom object-right z-20 grayscale hover:grayscale-0 transition-all duration-700 opacity-90 hover:opacity-100"
       />
     </div>
   );

@@ -41,5 +41,9 @@ def login(request, data: LoginSchema):
 # Módulo de Projetos/Cases (AutoFlow, SEAP, Equatorial)
 api.add_router("/cases", engine_router, tags=["Engine"])
 
+# Módulo do CMS (Experiências, Certificados, etc)
+from engine.cms_api import router as cms_router
+api.add_router("/cms", cms_router, tags=["Engine CMS"])
+
 # Módulo de Telemetria (Monitoramento de CPU/Hardware)
 api.add_router("/telemetry", telemetry_router, tags=["Telemetry"])

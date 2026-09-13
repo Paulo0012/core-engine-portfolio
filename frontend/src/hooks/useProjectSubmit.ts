@@ -48,10 +48,16 @@ export function useProjectSubmit(id?: string) {
     });
 
     try {
+      const config = {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        }
+      };
+
       if (id) {
-        await api.put(`/cases/${id}/`, data);
+        await api.post(`/cases/${id}`, data, config);
       } else {
-        await api.post('/cases/', data);
+        await api.post('/cases/', data, config);
       }
       navigate('/admin');
     } catch (err: any) {

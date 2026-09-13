@@ -93,6 +93,31 @@ export default function AdminDashboard() {
         </div>
       </div>
 
+      {/* INTEGRAÇÃO CMS (DJANGO ADMIN) */}
+      <div className="border border-purple-500/30 bg-purple-500/5 rounded-sm p-8 space-y-6">
+        <div className="flex items-center gap-3">
+          <Database size={24} className="text-purple-400" />
+          <h3 className="text-xl font-bold text-white uppercase tracking-widest">Master CMS Access</h3>
+        </div>
+        <p className="text-sm text-slate-400">
+          Para realizar o CRUD avançado (com suporte a upload de certificados, ordenação e metadados) nas demais entidades do sistema, utilize o Master CMS (Django Admin).
+        </p>
+        <div className="flex flex-wrap gap-4">
+          <a href="http://localhost:8000/admin/engine/academicjourney/" target="_blank" rel="noreferrer" className="px-6 py-3 border border-white/10 hover:border-purple-500 bg-white/5 hover:bg-purple-500/20 text-white text-sm font-bold uppercase transition-all rounded-sm flex items-center gap-2">
+            <LayoutGrid size={16}/> Jornada Acadêmica
+          </a>
+          <a href="http://localhost:8000/admin/engine/certification/" target="_blank" rel="noreferrer" className="px-6 py-3 border border-white/10 hover:border-purple-500 bg-white/5 hover:bg-purple-500/20 text-white text-sm font-bold uppercase transition-all rounded-sm flex items-center gap-2">
+            <LayoutGrid size={16}/> Certificações
+          </a>
+          <a href="http://localhost:8000/admin/engine/professionalexperience/" target="_blank" rel="noreferrer" className="px-6 py-3 border border-white/10 hover:border-purple-500 bg-white/5 hover:bg-purple-500/20 text-white text-sm font-bold uppercase transition-all rounded-sm flex items-center gap-2">
+            <LayoutGrid size={16}/> Experiências
+          </a>
+          <a href="http://localhost:8000/admin/engine/skill/" target="_blank" rel="noreferrer" className="px-6 py-3 border border-white/10 hover:border-purple-500 bg-white/5 hover:bg-purple-500/20 text-white text-sm font-bold uppercase transition-all rounded-sm flex items-center gap-2">
+            <LayoutGrid size={16}/> Habilidades
+          </a>
+        </div>
+      </div>
+
       {/* TABELA DE ATIVOS (Escala 16px) */}
       <div className="border border-white/10 bg-[#0a0a0a] rounded-sm overflow-hidden shadow-2xl">
         <div className="overflow-x-auto">

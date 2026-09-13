@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import { Terminal } from 'lucide-react';
+import { Server } from 'lucide-react';
 
 export default function Navbar() {
   const navigate = useNavigate();
@@ -27,17 +27,17 @@ export default function Navbar() {
   };
 
   return (
-    <nav className="fixed top-0 left-0 right-0 h-20 bg-gn-bg/90 backdrop-blur-md border-b border-gn-surface/20 z-50 px-6 lg:px-20 flex items-center justify-between">
+    <nav className="fixed top-0 left-0 right-0 h-20 bg-white/40 backdrop-blur-xl border-b border-white/20 z-50 px-6 lg:px-20 flex items-center justify-between shadow-sm">
       
       {/* Brand / Logo */}
       <div 
         className="flex items-center gap-3 cursor-pointer group"
         onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
       >
-        <div className="p-2 bg-gn-highlight/5 rounded-lg group-hover:bg-gn-highlight/10 transition-colors">
-          <Terminal size={20} className="text-gn-highlight" />
+        <div className="p-2 bg-gn-highlight/5 rounded-lg group-hover:bg-gn-highlight/10 transition-colors shadow-sm bg-white/60">
+          <Server size={20} className="text-gn-highlight" />
         </div>
-        <h1 className="text-xl font-black text-gn-highlight tracking-tighter uppercase italic">
+        <h1 className="text-xl font-black text-gn-highlight tracking-tighter uppercase italic drop-shadow-sm">
           Paulo<span className="text-gn-surface">Gomes</span>
         </h1>
       </div>

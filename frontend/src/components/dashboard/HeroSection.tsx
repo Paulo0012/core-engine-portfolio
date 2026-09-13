@@ -14,12 +14,12 @@ export default function HeroSection() {
           </div>
           
           <h1 className="text-5xl lg:text-7xl font-black text-gn-highlight leading-[1.1] tracking-tighter">
-            Systems & <br />
-            <span className="text-gn-accent font-medium tracking-tight">Backend Engineer</span>
+            Engenheiro de <br />
+            <span className="text-gn-accent font-medium tracking-tight">Sistemas Embarcados & IoT</span>
           </h1>
           
           <p className="text-lg text-gn-text max-w-lg leading-relaxed font-light">
-            Especialista em arquitetura escalável e integração de sistemas. Focado em tolerância a falhas, pipelines de dados e infraestrutura crítica de alto desempenho.
+            Especialista em C/C++, Python e desenvolvimento de hardware (FPGA, ESP32). Focado em automação, IoT, visão computacional e arquiteturas escaláveis.
           </p>
           
           <div className="flex gap-4">
