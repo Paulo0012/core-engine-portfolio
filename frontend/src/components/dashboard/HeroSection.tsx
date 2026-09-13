@@ -14,7 +14,7 @@ export default function HeroSection() {
             Olá, Meu nome é Paulo Gabriel.
           </h1>
 
-          <div className="relative overflow-hidden w-[110%] lg:w-[140%] max-w-none [mask-image:linear-gradient(to_right,transparent,black_5%,black_100%)] mt-2">
+          <div className="relative overflow-hidden w-[100vw] -ml-6 lg:ml-0 px-6 lg:px-0 lg:w-[140%] max-w-none [mask-image:linear-gradient(to_right,transparent,black_5%,black_100%)] mt-2">
 
 
             {/* Linha 2 - Reverse */}

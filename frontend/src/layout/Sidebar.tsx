@@ -84,13 +84,13 @@ export default function Navbar() {
       </div>
 
       {/* Links de Navegação (Mobile / Tablet) */}
-      <div className="flex lg:hidden items-center gap-4">
+      <div className="flex lg:hidden items-center gap-2 overflow-x-auto pb-1 max-w-[60vw]">
          {menuItems.map(({ id, icon: Icon, label }) => (
           <button
             key={id}
             onClick={() => handleNavigation(id)}
             title={label}
-            className="p-2 text-gn-surface hover:text-gn-highlight transition-colors rounded-lg hover:bg-white/50"
+            className="p-2 text-gn-surface hover:text-gn-highlight transition-colors rounded-lg hover:bg-white/10 shrink-0"
           >
             <Icon size={20} />
           </button>

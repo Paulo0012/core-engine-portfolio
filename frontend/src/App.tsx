@@ -28,7 +28,7 @@ function App() {
       {/* O Navbar fica fora das Routes para aparecer em todas as páginas.
           O fundo usa a variável Gothic Noir (gn-bg).
       */}
-      <div className="min-h-screen bg-gn-bg flex flex-col">
+      <div className="min-h-screen bg-gn-bg flex flex-col overflow-x-hidden">
         
         <Navbar />
 
