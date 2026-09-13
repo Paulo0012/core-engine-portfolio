@@ -30,8 +30,8 @@
   }
 
   .ticker-track {
-    /* Animação com duração de 45s */
-    animation: ticker-slide 45s linear infinite;
+    /* Animação com duração de 75s */
+    animation: ticker-slide 75s linear infinite;
   }
 
   /* animation-play-state: paused ativada pelo evento :hover no container */

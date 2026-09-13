@@ -5,7 +5,7 @@ export default function AboutSection() {
     <section id="sobre-detalhe" className="scroll-mt-32 pt-16 border-t border-gn-surface">
       <div className="flex items-center gap-4 mb-12">
         <h2 className="text-2xl font-medium text-gn-highlight tracking-tight">
-          02 — SOBRE MIM
+          SOBRE MIM
         </h2>
         <div className="flex-1 h-px bg-gn-surface/50"></div>
       </div>
@@ -46,26 +46,26 @@ export default function AboutSection() {
       {/* Seção de hobbies / Quando não estou programando */}
       <div className="mt-16">
         <h4 className="text-[10px] font-black uppercase text-gn-surface tracking-widest mb-6">Quando não estou programando</h4>
-        
+
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           <div className="bg-gn-bg border border-gn-surface/50 rounded-2xl p-5 hover:bg-gn-surface/10 transition-colors">
             <Guitar size={24} className="text-gn-highlight mb-3" />
             <h5 className="text-gn-highlight font-bold text-sm mb-1">Música</h5>
             <p className="text-gn-text text-xs font-light">Tocar contrabaixo e violão é meu jeito favorito de desacelerar e criar.</p>
           </div>
-          
+
           <div className="bg-gn-bg border border-gn-surface/50 rounded-2xl p-5 hover:bg-gn-surface/10 transition-colors">
             <Dumbbell size={24} className="text-gn-highlight mb-3" />
             <h5 className="text-gn-highlight font-bold text-sm mb-1">Musculação</h5>
             <p className="text-gn-text text-xs font-light">Treino diário para manter o corpo ativo e a mente focada.</p>
           </div>
-          
+
           <div className="bg-gn-bg border border-gn-surface/50 rounded-2xl p-5 hover:bg-gn-surface/10 transition-colors">
             <Heart size={24} className="text-gn-highlight mb-3" />
             <h5 className="text-gn-highlight font-bold text-sm mb-1">Fé Cristã</h5>
             <p className="text-gn-text text-xs font-light">Base dos meus valores, propósitos e da forma como busco ajudar o próximo.</p>
           </div>
-          
+
           <div className="bg-gn-bg border border-gn-surface/50 rounded-2xl p-5 hover:bg-gn-surface/10 transition-colors">
             <BookOpen size={24} className="text-gn-highlight mb-3" />
             <h5 className="text-gn-highlight font-bold text-sm mb-1">Ensinar</h5>
