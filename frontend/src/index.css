@@ -21,3 +21,38 @@
     cursor: url('./assets/pointer.png'), pointer;
   }
 }
+
+@layer components {
+  .ticker-wrapper {
+    /* Gradiente linear transparente para efeito de fade nas bordas */
+    -webkit-mask-image: linear-gradient(to right, transparent, black 15%, black 85%, transparent);
+    mask-image: linear-gradient(to right, transparent, black 15%, black 85%, transparent);
+  }
+
+  .ticker-track {
+    /* Animação com duração de 20s */
+    animation: ticker-slide 20s linear infinite;
+  }
+
+  /* animation-play-state: paused ativada pelo evento :hover no container */
+  .ticker-track:hover {
+    animation-play-state: paused;
+  }
+
+  @keyframes ticker-slide {
+    0% {
+      /* translate3d no eixo X para aceleração de hardware (GPU) */
+      transform: translate3d(0, 0, 0);
+    }
+    100% {
+      transform: translate3d(-50%, 0, 0);
+    }
+  }
+
+  /* Desativar animação automaticamente para usuários com configurações de acessibilidade */
+  @media (prefers-reduced-motion: reduce) {
+    .ticker-track {
+      animation: none !important;
+    }
+  }
+}

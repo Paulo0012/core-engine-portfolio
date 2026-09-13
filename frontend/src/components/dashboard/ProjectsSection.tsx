@@ -43,63 +43,82 @@ export default function ProjectsSection({ projects }: ProjectsSectionProps) {
         <div className="flex-1 h-px bg-gn-surface/50"></div>
       </div>
       
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        {projects.map((p) => {
+      <div className="flex flex-col gap-12 relative">
+        {/* Linha vertical da timeline (desktop) */}
+        <div className="hidden md:block absolute left-[140px] top-8 bottom-8 w-px bg-gn-surface/30"></div>
+
+        {projects.map((p, index) => {
           const coverUrl = getMediaUrl(p.cover_image);
               
           return (
-            <div 
-              key={p.id}
-              onClick={() => setSelectedProject(p)} 
-              className="flex flex-col bg-gn-bg border border-gn-surface rounded-2xl overflow-hidden group hover:border-gn-accent transition-all h-[420px] cursor-pointer"
-            >
-              <div className="aspect-video bg-[#050505] overflow-hidden relative border-b border-gn-surface shrink-0 group-hover:after:absolute group-hover:after:inset-0 group-hover:after:bg-gn-bg/20 group-hover:after:transition-all">
-                {coverUrl ? (
-                  <img 
-                    src={coverUrl} 
-                    alt={p.title} 
-                    className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 group-hover:scale-105" 
-                  />
-                ) : (
-                   <div className="w-full h-full flex items-center justify-center text-gn-accent font-mono text-xs">
-                      no_image.jpg
-                   </div>
-                )}
-                
-                {p.video_demo && (
-                  <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity z-10">
-                    <PlayCircle size={48} className="text-gn-highlight drop-shadow-lg" />
-                  </div>
-                )}
-                
-                {p.live_demo && (
-                  <a 
-                    href={p.live_demo}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    onClick={(e) => e.stopPropagation()}
-                    className="absolute top-4 right-4 p-2 bg-gn-bg/80 backdrop-blur-md rounded-full border border-gn-surface hover:bg-gn-highlight hover:text-gn-bg transition-colors z-20"
-                  >
-                    <ExternalLink size={14} />
-                  </a>
-                )}
+            <div key={p.id} className="flex gap-6 lg:gap-10 relative">
+              {/* Timeline Lateral Esquerda */}
+              <div className="hidden md:flex flex-col items-end w-[120px] shrink-0 pt-10 pr-2 relative">
+                <span className="text-[10px] font-black uppercase text-gn-surface tracking-widest text-right">
+                  Em construção
+                </span>
+                <div className="absolute right-[-25px] lg:right-[-29px] top-11 w-2.5 h-2.5 rounded-full bg-gn-surface ring-4 ring-gn-bg z-10"></div>
               </div>
-              
-              <div className="p-8 space-y-5 flex-1 flex flex-col">
-                <h3 className="text-xl font-medium text-gn-highlight tracking-tight group-hover:text-gn-accent transition-colors">{p.title}</h3>
-                <p className="text-gn-text text-sm line-clamp-3 leading-relaxed font-light">
-                  {p.problem_statement || p.description}
-                </p>
-                
-                <div className="flex flex-wrap gap-2 pt-4 mt-auto">
-                  {p.technologies?.map((t: string) => (
-                    <span 
-                      key={t} 
-                      className="text-[10px] px-2 py-1 bg-gn-surface/10 border border-gn-surface rounded-md text-gn-accent font-mono tracking-widest uppercase"
-                    >
-                      {t}
+
+              {/* Card Principal */}
+              <div 
+                onClick={() => setSelectedProject(p)} 
+                className="flex-1 bg-gn-bg border border-gn-surface/30 rounded-3xl p-6 lg:p-8 flex flex-col lg:flex-row gap-8 hover:bg-gn-surface/5 transition-colors group cursor-pointer hover:border-gn-surface/60 hover:shadow-xl hover:shadow-gn-surface/5"
+              >
+                {/* Coluna Esquerda: Info */}
+                <div className="flex-1 flex flex-col justify-center space-y-5">
+                  <span className="text-[10px] font-black uppercase text-gn-highlight tracking-widest">
+                    Projetos
+                  </span>
+                  <h3 className="text-2xl lg:text-3xl font-medium text-gn-highlight tracking-tight group-hover:text-gn-accent transition-colors">
+                    {p.title}
+                  </h3>
+                  <p className="text-sm text-gn-text leading-relaxed font-light line-clamp-4">
+                    {p.description || p.problem_statement}
+                  </p>
+                  
+                  <div className="border-l-2 border-gn-surface/30 pl-4 py-1 my-2">
+                    <span className="text-xs text-gn-surface font-light">
+                      Concepção e desenvolvimento autoral
                     </span>
-                  ))}
+                  </div>
+
+                  <div className="flex flex-wrap gap-2 pt-2 mt-auto">
+                    {p.technologies?.map((t: string) => (
+                      <span 
+                        key={t} 
+                        className="text-[10px] px-3 py-1.5 bg-gn-surface/10 border border-gn-surface/20 rounded-lg text-gn-highlight font-bold tracking-wider uppercase"
+                      >
+                        {t}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Coluna Direita: Imagem & Prévia */}
+                <div className="lg:w-[45%] xl:w-[50%] shrink-0 relative rounded-2xl overflow-hidden border border-gn-surface/30 bg-[#050505] aspect-video lg:aspect-auto min-h-[240px]">
+                  {coverUrl ? (
+                    <img 
+                      src={coverUrl} 
+                      alt={p.title} 
+                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" 
+                    />
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center text-gn-accent font-mono text-xs">
+                      no_image.jpg
+                    </div>
+                  )}
+                  
+                  {p.video_demo && (
+                    <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity z-10 bg-black/20">
+                      <PlayCircle size={48} className="text-white drop-shadow-lg" />
+                    </div>
+                  )}
+
+                  {/* Botão de Prévia estilo flutuante */}
+                  <div className="absolute bottom-4 right-4 bg-white/95 backdrop-blur text-gn-text text-[10px] font-black uppercase px-4 py-2.5 rounded-lg shadow-lg hover:bg-gn-highlight hover:text-gn-bg transition-colors z-20">
+                    Prévia da Home
+                  </div>
                 </div>
               </div>
             </div>
