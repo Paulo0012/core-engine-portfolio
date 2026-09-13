@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { createPortal } from 'react-dom';
 import { ExternalLink, X, Code2, PlayCircle, CheckCircle2, Circle, AlertCircle, FolderGit2 } from 'lucide-react';
 
 interface ProjectGallery {
@@ -129,8 +130,8 @@ export default function ProjectsSection({ projects }: ProjectsSectionProps) {
       </div>
 
       {/* MODAL DO PROJETO */}
-      {selectedProject && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6 pt-24 sm:pt-6 bg-black/80 backdrop-blur-sm" onClick={() => setSelectedProject(null)}>
+      {selectedProject && createPortal(
+        <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 sm:p-6 bg-black/80 backdrop-blur-sm" onClick={() => setSelectedProject(null)}>
           <div 
             className="bg-gn-bg border border-gn-surface rounded-2xl w-full max-w-4xl max-h-[90vh] overflow-y-auto shadow-2xl relative"
             onClick={(e) => e.stopPropagation()}
@@ -248,7 +249,8 @@ export default function ProjectsSection({ projects }: ProjectsSectionProps) {
               )}
             </div>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </section>
   );
