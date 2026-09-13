@@ -103,16 +103,16 @@ export default function AdminDashboard() {
           Para realizar o CRUD avançado (com suporte a upload de certificados, ordenação e metadados) nas demais entidades do sistema, utilize o Master CMS (Django Admin).
         </p>
         <div className="flex flex-wrap gap-4">
-          <a href="http://localhost:8000/admin/engine/academicjourney/" target="_blank" rel="noreferrer" className="px-6 py-3 border border-gn-surface/50 hover:border-gn-accent bg-gn-surface/20 hover:bg-gn-surface/40 text-gn-highlight text-sm font-bold uppercase transition-all rounded-lg flex items-center gap-2">
+          <a href={`${import.meta.env.VITE_API_URL ? import.meta.env.VITE_API_URL.replace('/api/v1', '') : 'http://localhost:8000'}/admin/engine/academicjourney/`} target="_blank" rel="noreferrer" className="px-6 py-3 border border-gn-surface/50 hover:border-gn-accent bg-gn-surface/20 hover:bg-gn-surface/40 text-gn-highlight text-sm font-bold uppercase transition-all rounded-lg flex items-center gap-2">
             <LayoutGrid size={16}/> Jornada Acadêmica
           </a>
-          <a href="http://localhost:8000/admin/engine/certification/" target="_blank" rel="noreferrer" className="px-6 py-3 border border-gn-surface/50 hover:border-gn-accent bg-gn-surface/20 hover:bg-gn-surface/40 text-gn-highlight text-sm font-bold uppercase transition-all rounded-lg flex items-center gap-2">
+          <a href={`${import.meta.env.VITE_API_URL ? import.meta.env.VITE_API_URL.replace('/api/v1', '') : 'http://localhost:8000'}/admin/engine/certification/`} target="_blank" rel="noreferrer" className="px-6 py-3 border border-gn-surface/50 hover:border-gn-accent bg-gn-surface/20 hover:bg-gn-surface/40 text-gn-highlight text-sm font-bold uppercase transition-all rounded-lg flex items-center gap-2">
             <LayoutGrid size={16}/> Certificações
           </a>
-          <a href="http://localhost:8000/admin/engine/professionalexperience/" target="_blank" rel="noreferrer" className="px-6 py-3 border border-gn-surface/50 hover:border-gn-accent bg-gn-surface/20 hover:bg-gn-surface/40 text-gn-highlight text-sm font-bold uppercase transition-all rounded-lg flex items-center gap-2">
+          <a href={`${import.meta.env.VITE_API_URL ? import.meta.env.VITE_API_URL.replace('/api/v1', '') : 'http://localhost:8000'}/admin/engine/professionalexperience/`} target="_blank" rel="noreferrer" className="px-6 py-3 border border-gn-surface/50 hover:border-gn-accent bg-gn-surface/20 hover:bg-gn-surface/40 text-gn-highlight text-sm font-bold uppercase transition-all rounded-lg flex items-center gap-2">
             <LayoutGrid size={16}/> Experiências
           </a>
-          <a href="http://localhost:8000/admin/engine/skill/" target="_blank" rel="noreferrer" className="px-6 py-3 border border-gn-surface/50 hover:border-gn-accent bg-gn-surface/20 hover:bg-gn-surface/40 text-gn-highlight text-sm font-bold uppercase transition-all rounded-lg flex items-center gap-2">
+          <a href={`${import.meta.env.VITE_API_URL ? import.meta.env.VITE_API_URL.replace('/api/v1', '') : 'http://localhost:8000'}/admin/engine/skill/`} target="_blank" rel="noreferrer" className="px-6 py-3 border border-gn-surface/50 hover:border-gn-accent bg-gn-surface/20 hover:bg-gn-surface/40 text-gn-highlight text-sm font-bold uppercase transition-all rounded-lg flex items-center gap-2">
             <LayoutGrid size={16}/> Habilidades
           </a>
         </div>

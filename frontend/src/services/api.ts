@@ -4,9 +4,11 @@ import axios from 'axios';
  * CORE_ENGINE_API_SERVICE
  * Centraliza a comunicação com o Backend Django Ninja (v1)
  */
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000/api/v1';
+
 const api = axios.create({
   // Bate exatamente no path("api/v1/", api.urls) do seu urls.py
-  baseURL: 'http://localhost:8000/api/v1',
+  baseURL: API_URL,
   headers: {
     'Content-Type': 'application/json',
   },

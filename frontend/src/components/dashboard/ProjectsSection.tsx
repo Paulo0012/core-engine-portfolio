@@ -33,7 +33,10 @@ export default function ProjectsSection({ projects }: ProjectsSectionProps) {
 
   const getMediaUrl = (path?: string) => {
     if (!path) return '';
-    return path.startsWith('http') ? path : `http://localhost:8000${path}`;
+    const baseUrl = import.meta.env.VITE_API_URL 
+      ? import.meta.env.VITE_API_URL.replace('/api/v1', '') 
+      : 'http://localhost:8000';
+    return path.startsWith('http') ? path : `${baseUrl}${path}`;
   };
 
   return (
