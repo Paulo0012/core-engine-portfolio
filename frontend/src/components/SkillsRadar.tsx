@@ -11,60 +11,76 @@ import {
   Database 
 } from 'lucide-react';
 
-const skillsData = [
-  {
-    category: 'Edge AI',
-    items: [
-      { name: 'YOLOv11', icon: Eye },
-      { name: 'OpenCV', icon: Activity },
-      { name: 'MediaPipe', icon: Brain },
-    ]
-  },
-  {
-    category: 'Embarcados',
-    items: [
-      { name: 'FreeRTOS', icon: Cpu },
-      { name: 'C/C++', icon: Code },
-      { name: 'MQTT', icon: Network },
-    ]
-  },
-  {
-    category: 'Backend',
-    items: [
-      { name: 'Python', icon: Terminal },
-      { name: 'Django', icon: Server },
-      { name: 'PostgreSQL', icon: Database },
-    ]
-  }
+const icons = [
+  { icon: <Eye size={22} strokeWidth={2.5} />, name: 'YOLOv11' },
+  { icon: <Activity size={22} strokeWidth={2.5} />, name: 'OpenCV' },
+  { icon: <Brain size={22} strokeWidth={2.5} />, name: 'MediaPipe' },
+  { icon: <Cpu size={22} strokeWidth={2.5} />, name: 'FreeRTOS' },
+  { icon: <Code size={22} strokeWidth={2.5} />, name: 'C/C++' },
+  { icon: <Network size={22} strokeWidth={2.5} />, name: 'MQTT' },
+  { icon: <Terminal size={22} strokeWidth={2.5} />, name: 'Python' },
+  { icon: <Server size={22} strokeWidth={2.5} />, name: 'Django' },
+  { icon: <Database size={22} strokeWidth={2.5} />, name: 'PostgreSQL' }
 ];
 
+const calculateItemStyle = ({ index, radius, totalItems }: { radius: number, index: number, totalItems: number }) => {
+  const angle = (index / totalItems) * 360;
+  const radians = (angle * Math.PI) / 180;
+  const x = radius * Math.cos(radians);
+  const y = radius * Math.sin(radians);
+  return { 
+    left: `${50 + x}%`, 
+    top: `${50 + y}%`, 
+    transform: "translate(-50%, -50%)" 
+  };
+};
+
 export const SkillsRadar: React.FC = () => {
+  const radius = 50; 
+  
   return (
-    <div className="w-full bg-white/40 backdrop-blur-md border border-white/60 shadow-[0_8px_32px_0_rgba(31,38,135,0.07)] rounded-2xl p-6 md:p-8 transition-all hover:shadow-[0_8px_32px_0_rgba(31,38,135,0.1)]">
-      <div className="flex flex-col md:flex-row justify-between gap-8 md:gap-6">
-        {skillsData.map((section, idx) => (
-          <div key={idx} className="flex-1 flex flex-col">
-            <h3 className="text-xs font-bold tracking-widest text-slate-400 uppercase mb-5 border-b border-slate-200/50 pb-2">
-              {section.category}
-            </h3>
-            <ul className="flex flex-col space-y-4">
-              {section.items.map((skill, skillIdx) => {
-                const Icon = skill.icon;
-                return (
-                  <li key={skillIdx} className="flex items-center gap-3 text-slate-700 font-medium group cursor-default">
-                    <div className="p-2 bg-white/50 rounded-xl shadow-sm border border-white/80 text-indigo-500 transition-all duration-300 group-hover:bg-indigo-50 group-hover:text-indigo-600 group-hover:scale-105">
-                      <Icon size={18} strokeWidth={2.5} />
-                    </div>
-                    <span className="text-sm md:text-base tracking-tight transition-colors duration-300 group-hover:text-indigo-900">
-                      {skill.name}
-                    </span>
-                  </li>
-                );
-              })}
-            </ul>
-          </div>
-        ))}
+    <div className="w-full bg-gn-bg border border-gn-surface/30 rounded-3xl p-6 lg:p-10 flex items-center justify-center min-h-[450px] overflow-hidden hover:bg-gn-surface/5 transition-colors group cursor-default hover:border-gn-surface/60 hover:shadow-xl hover:shadow-gn-surface/5">
+      
+      {/* Container do Efeito de Órbita */}
+      <div className="relative flex h-64 w-64 md:h-80 md:w-80 items-center justify-center group/orbit">
+        
+        {/* Linhas de Órbita (Design Alinhado) */}
+        <div className="absolute h-full w-full rounded-full border border-gn-surface/40 bg-gn-surface/5" />
+        <div className="absolute h-[50%] w-[50%] rounded-full border border-gn-surface/20 bg-gn-surface/5" />
+        
+        {/* Centro do Radar */}
+        <div className="absolute z-10 flex h-16 w-16 items-center justify-center rounded-full bg-gn-bg border border-gn-surface/40 shadow-sm text-gn-highlight transition-transform duration-500 hover:scale-110">
+          <Cpu size={28} strokeWidth={2.5} />
+        </div>
+
+        {/* Wrapper que realiza a rotação contínua */}
+        <div className="absolute inset-0 animate-rotate-full group-hover/orbit:[animation-play-state:paused]">
+          
+          {icons.map((item, index) => {
+            const style = calculateItemStyle({ index, radius, totalItems: icons.length });
+            
+            return (
+              <div 
+                key={index} 
+                className="absolute flex flex-col items-center justify-center"
+                style={style}
+              >
+                {/* Elemento que faz a rotação reversa para manter os ícones em pé */}
+                <div className="group/item relative flex h-12 w-12 md:h-14 md:w-14 items-center justify-center rounded-full bg-gn-bg border border-gn-surface/40 shadow-sm text-gn-accent hover:text-gn-highlight hover:bg-gn-surface/10 hover:border-gn-surface hover:scale-110 transition-all duration-300 animate-rotate-full [animation-direction:reverse] group-hover/orbit:[animation-play-state:paused] cursor-pointer">
+                  {item.icon}
+                  
+                  {/* Tooltip com o nome da Habilidade */}
+                  <span className="absolute -bottom-8 opacity-0 group-hover/item:opacity-100 transition-opacity duration-300 text-[11px] font-bold tracking-widest uppercase text-gn-highlight bg-gn-bg border border-gn-surface/30 px-3 py-1.5 rounded-lg shadow-sm whitespace-nowrap pointer-events-none z-20">
+                    {item.name}
+                  </span>
+                </div>
+              </div>
+            );
+          })}
+
+        </div>
       </div>
+      
     </div>
   );
 };

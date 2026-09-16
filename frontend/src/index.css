@@ -7,6 +7,13 @@
   --color-gn-text: #000000;
   --color-gn-highlight: #000000;
   --font-mono: "JetBrains Mono", monospace;
+  
+  --animate-rotate-full: rotate-full 20s linear infinite;
+  
+  @keyframes rotate-full {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
 }
 
 @layer base {
