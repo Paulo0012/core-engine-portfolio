@@ -1,6 +1,7 @@
 import { FaPython, FaReact, FaPhp, FaDatabase } from 'react-icons/fa';
 import { SiDjango, SiTypescript, SiCplusplus, SiOpencv } from 'react-icons/si';
-import { Code2 } from 'lucide-react';
+import { Code2, Cpu } from 'lucide-react';
+import { SkillsRadar } from '../SkillsRadar';
 
 export default function TechStackSection() {
   const technologies = [
@@ -34,34 +35,47 @@ export default function TechStackSection() {
   );
 
   return (
-    <section id="linguagens" className="scroll-mt-32 pt-16 overflow-hidden">
-      <div className="flex items-center gap-4 mb-12">
-        <h2 className="text-2xl font-medium text-gn-highlight tracking-tight flex items-center gap-3">
-          <Code2 className="text-gn-highlight" size={28} />
-          Stack & Tecnologias
-        </h2>
-        
-      </div>
-      
-      {/* Container com máscara de gradiente e track animada */}
-      <div className="ticker-wrapper relative w-full overflow-hidden py-4 flex flex-col gap-6">
-        
-        {/* Linha 1 - Move para a Esquerda */}
-        <div className="ticker-track flex w-max">
-          {/* Multiplicado 8 vezes para cobrir telas ultra-wide (50% do total = 4 sets) */}
-          {Array.from({ length: 8 }).map((_, i) => (
-            <TechSet key={`r1-${i}`} suffix={`r1-${i}`} items={row1Tech} />
-          ))}
+    <>
+      <section id="linguagens" className="scroll-mt-32 pt-16 overflow-hidden">
+        <div className="flex items-center gap-4 mb-12">
+          <h2 className="text-2xl font-medium text-gn-highlight tracking-tight flex items-center gap-3">
+            <Code2 className="text-gn-highlight" size={28} />
+            Stack & Tecnologias
+          </h2>
+          
         </div>
+        
+        {/* Container com máscara de gradiente e track animada */}
+        <div className="ticker-wrapper relative w-full overflow-hidden py-4 flex flex-col gap-6">
+          
+          {/* Linha 1 - Move para a Esquerda */}
+          <div className="ticker-track flex w-max">
+            {/* Multiplicado 8 vezes para cobrir telas ultra-wide (50% do total = 4 sets) */}
+            {Array.from({ length: 8 }).map((_, i) => (
+              <TechSet key={`r1-${i}`} suffix={`r1-${i}`} items={row1Tech} />
+            ))}
+          </div>
 
-        {/* Linha 2 - Move para a Direita (animation-direction: reverse) */}
-        <div className="ticker-track flex w-max" style={{ animationDirection: 'reverse' }}>
-          {Array.from({ length: 8 }).map((_, i) => (
-            <TechSet key={`r2-${i}`} suffix={`r2-${i}`} items={row2Tech} />
-          ))}
+          {/* Linha 2 - Move para a Direita (animation-direction: reverse) */}
+          <div className="ticker-track flex w-max" style={{ animationDirection: 'reverse' }}>
+            {Array.from({ length: 8 }).map((_, i) => (
+              <TechSet key={`r2-${i}`} suffix={`r2-${i}`} items={row2Tech} />
+            ))}
+          </div>
+
         </div>
+      </section>
 
-      </div>
-    </section>
+      <section id="habilidades" className="scroll-mt-32 pt-16">
+        <div className="flex items-center gap-4 mb-8">
+          <h2 className="text-2xl font-medium text-gn-highlight tracking-tight flex items-center gap-3">
+            <Cpu className="text-gn-highlight" size={28} />
+            Habilidades Específicas
+          </h2>
+        </div>
+        
+        <SkillsRadar />
+      </section>
+    </>
   );
 }

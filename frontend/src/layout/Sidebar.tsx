@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Server, Home, User, GraduationCap, Code, Briefcase, Globe } from 'lucide-react';
+import { Server, Home, User, GraduationCap, Code, Briefcase, Globe, Cpu } from 'lucide-react';
 
 export default function Navbar() {
   const navigate = useNavigate();
@@ -23,6 +23,7 @@ export default function Navbar() {
     { label: 'Sobre mim', id: 'sobre-detalhe', icon: User },
     { label: 'Formações', id: 'formacoes', icon: GraduationCap },
     { label: 'Linguagens', id: 'linguagens', icon: Code },
+    { label: 'Habilidades', id: 'habilidades', icon: Cpu },
     { label: 'Projetos', id: 'projetos', icon: Briefcase },
     { label: 'Contato', id: 'contato', icon: Globe },
   ];
