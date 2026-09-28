@@ -64,7 +64,7 @@ def create_project(
         if cover_image:
             project.cover_image = cover_image
         if demo_video:
-            project.demo_video = demo_video
+            project.video_demo = demo_video
         
         project.save()
 
@@ -99,6 +99,8 @@ def update_project(
     gallery_images: List[UploadedFile] = File(None) 
 ):
     
+    project = get_object_or_404(Project, id=project_id)
+    
     with transaction.atomic():
         project_data = {
             'title': title,
@@ -124,7 +126,7 @@ def update_project(
         if cover_image:
             project.cover_image = cover_image
         if demo_video:
-            project.demo_video = demo_video
+            project.video_demo = demo_video
             
         project.save()
 

@@ -103,7 +103,16 @@ export default function ProjectsSection({ projects }: ProjectsSectionProps) {
 
                 {/* Coluna Direita: Imagem & Prévia */}
                 <div className="lg:w-[45%] xl:w-[50%] shrink-0 relative rounded-2xl overflow-hidden border border-gn-surface/30 bg-[#050505] aspect-video lg:aspect-auto min-h-[240px]">
-                  {coverUrl ? (
+                  {p.video_demo ? (
+                    <video
+                      src={getMediaUrl(p.video_demo)}
+                      autoPlay
+                      muted
+                      loop
+                      playsInline
+                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                    />
+                  ) : coverUrl ? (
                     <img 
                       src={coverUrl} 
                       alt={p.title} 
