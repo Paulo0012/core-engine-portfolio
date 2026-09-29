@@ -59,7 +59,7 @@ export default function ProjectsSection({ projects }: ProjectsSectionProps) {
           const coverUrl = getMediaUrl(p.cover_image);
               
           return (
-            <FadeUp key={p.id} delay={index * 0.15}>
+            <FadeUp key={p.id} delay={index * 0.08}>
               <div className="flex gap-6 lg:gap-10 relative">
               {/* Timeline Lateral Esquerda */}
               <div className="hidden md:flex flex-col items-end w-[120px] shrink-0 pt-10 pr-2 relative">

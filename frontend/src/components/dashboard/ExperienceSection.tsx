@@ -35,7 +35,7 @@ export default function ExperienceSection() {
       
       <div className="space-y-6">
         {experiences.map((exp, i) => (
-          <FadeUp key={exp.id} delay={i * 0.1}>
+          <FadeUp key={exp.id} delay={i * 0.05}>
             <GlowCard className="rounded-2xl">
               <div className="flex flex-col md:flex-row gap-6 p-8 bg-gn-bg border border-gn-surface rounded-2xl hover:-translate-y-1 hover:shadow-lg hover:shadow-gn-surface/20 hover:bg-gn-surface/10 transition-all duration-300 group cursor-pointer">
                 <div className="md:w-1/4 shrink-0">

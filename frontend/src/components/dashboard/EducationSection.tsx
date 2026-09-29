@@ -51,7 +51,7 @@ export default function EducationSection() {
           <h3 className="text-lg font-mono text-gn-accent uppercase tracking-widest mb-6">Jornada Acadêmica</h3>
           <div className="space-y-4">
             {academics.map((acad, i) => (
-              <FadeUp key={acad.id} delay={i * 0.1}>
+              <FadeUp key={acad.id} delay={i * 0.05}>
                 <GlowCard className="rounded-xl">
                   <div className="group p-6 border border-gn-surface bg-gn-bg hover:bg-gn-surface/10 rounded-xl flex flex-col justify-between relative overflow-hidden h-44 hover:-translate-y-1 hover:shadow-lg hover:shadow-gn-surface/20 transition-all duration-300 cursor-pointer">
                     {acad.status === 'Cursando' && (
@@ -78,7 +78,7 @@ export default function EducationSection() {
           <h3 className="text-lg font-mono text-gn-accent uppercase tracking-widest mb-6">Certificações</h3>
           <div className="space-y-4">
             {certs.map((cert, i) => (
-              <FadeUp key={cert.id} delay={i * 0.1}>
+              <FadeUp key={cert.id} delay={i * 0.05}>
                 <GlowCard className="rounded-xl">
                   <div className="group p-6 border border-gn-surface bg-gn-bg hover:bg-gn-surface/10 rounded-xl flex flex-col justify-between h-44 hover:-translate-y-1 hover:shadow-lg hover:shadow-gn-surface/20 transition-all duration-300 cursor-pointer">
                     <div>

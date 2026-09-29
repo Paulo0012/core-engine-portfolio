@@ -24,7 +24,7 @@ export default function Dashboard() {
     <div className="relative min-h-screen font-sans">
       
       {/* VÍDEO DE FUNDO DA TELA INTEIRA */}
-      <div className="fixed inset-0 z-0 pointer-events-none">
+      <div className="fixed inset-0 z-0 pointer-events-none will-change-transform" style={{ transform: 'translateZ(0)' }}>
         <video
           src={videoSrc}
           autoPlay
@@ -44,11 +44,11 @@ export default function Dashboard() {
       <div className="relative z-10 space-y-20 pb-32 px-6 lg:px-20 max-w-6xl mx-auto text-gn-text">
         <HeroSection />
         <FadeUp><AboutSection /></FadeUp>
-        <FadeUp delay={0.05}><EducationSection /></FadeUp>
-        <FadeUp delay={0.05}><ExperienceSection /></FadeUp>
-        <FadeUp delay={0.05}><TechStackSection /></FadeUp>
-        <FadeUp delay={0.05}><ProjectsSection projects={projects} /></FadeUp>
-        <FadeUp delay={0.1}><ContactSection /></FadeUp>
+        <FadeUp><EducationSection /></FadeUp>
+        <FadeUp><ExperienceSection /></FadeUp>
+        <FadeUp><TechStackSection /></FadeUp>
+        <FadeUp><ProjectsSection projects={projects} /></FadeUp>
+        <FadeUp><ContactSection /></FadeUp>
       </div>
     </div>
   );
