@@ -1,4 +1,4 @@
-import { User } from 'lucide-react';
+import { User, GraduationCap, Code2, MapPin } from 'lucide-react';
 import { motion } from 'framer-motion';
 import GlowCard from '../ui/GlowCard';
 import hobbyMusic from '../../assets/hobby_music.jpg';
@@ -38,18 +38,33 @@ export default function AboutSection() {
         </GlowCard>
 
         {/* Informações rápidas */}
-        <div className="md:col-span-4 bg-gn-bg border border-gn-surface rounded-2xl p-6 divide-y divide-gn-surface/50">
-          <div className="pb-4">
-            <span className="text-[10px] font-black uppercase text-gn-surface tracking-widest block mb-1">Trajetória</span>
-            <span className="text-gn-highlight font-medium text-sm">Graduando em Engenharia da Computação</span>
+        <div className="md:col-span-4 bg-gn-bg border border-gn-surface/50 rounded-2xl p-6 divide-y divide-gn-surface/50 flex flex-col justify-center shadow-sm">
+          <div className="pb-5 flex gap-4 items-center">
+            <div className="p-3 bg-gn-surface/10 rounded-xl shrink-0">
+              <GraduationCap className="text-gn-highlight" size={20} />
+            </div>
+            <div>
+              <span className="text-[10px] font-black uppercase text-gn-surface tracking-widest block mb-1">Trajetória</span>
+              <span className="text-gn-highlight font-medium text-sm">Graduando em Engenharia da Computação</span>
+            </div>
           </div>
-          <div className="py-4">
-            <span className="text-[10px] font-black uppercase text-gn-surface tracking-widest block mb-1">Especialidade</span>
-            <span className="text-gn-highlight font-medium text-sm">Fullstack & IoT</span>
+          <div className="py-5 flex gap-4 items-center">
+            <div className="p-3 bg-gn-surface/10 rounded-xl shrink-0">
+              <Code2 className="text-gn-highlight" size={20} />
+            </div>
+            <div>
+              <span className="text-[10px] font-black uppercase text-gn-surface tracking-widest block mb-1">Especialidade</span>
+              <span className="text-gn-highlight font-medium text-sm">Fullstack & IoT</span>
+            </div>
           </div>
-          <div className="pt-4">
-            <span className="text-[10px] font-black uppercase text-gn-surface tracking-widest block mb-1">Localização</span>
-            <span className="text-gn-highlight font-medium text-sm">São Luís, MA</span>
+          <div className="pt-5 flex gap-4 items-center">
+            <div className="p-3 bg-gn-surface/10 rounded-xl shrink-0">
+              <MapPin className="text-gn-highlight" size={20} />
+            </div>
+            <div>
+              <span className="text-[10px] font-black uppercase text-gn-surface tracking-widest block mb-1">Localização</span>
+              <span className="text-gn-highlight font-medium text-sm">São Luís, MA</span>
+            </div>
           </div>
         </div>
       </div>
