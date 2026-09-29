@@ -1,6 +1,7 @@
 import { User, GraduationCap, Code2, MapPin } from 'lucide-react';
 import { motion } from 'framer-motion';
 import GlowCard from '../ui/GlowCard';
+import TypewriterBio from '../ui/TypewriterBio';
 import hobbyMusic from '../../assets/hobby_music.jpg';
 import hobbyGym from '../../assets/hobby_gym.jpg';
 import hobbyFaith from '../../assets/hobby_faith.jpg';
@@ -26,14 +27,7 @@ export default function AboutSection() {
         {/* Lado Esquerdo - Biografia em Card */}
         <GlowCard className="md:col-span-8 rounded-3xl">
           <div className="p-8 bg-white/30 backdrop-blur-md border border-white/40 rounded-3xl shadow-lg shadow-black/5 hover:shadow-xl hover:bg-white/40 transition-all duration-300 h-full">
-          <div className="space-y-6 text-lg text-gn-text font-light leading-relaxed">
-            <p>
-              Vindo do interior e de origem humilde, mudei-me para São Luís movido pelo sonho de me tornar engenheiro. Minha jornada na tecnologia começou com o Bacharelado em Ciências e Tecnologia e, hoje, estou no último período de Engenharia da Computação.
-            </p>
-            <p>
-              Mais do que criar infraestruturas escaláveis e escrever bons códigos, meu grande objetivo de vida é usar meu conhecimento para inspirar, incentivar e ensinar jovens da minha cidade natal. Quero provar que, com dedicação, é possível transformar a própria realidade e criar oportunidades mesmo onde as chances parecem escassas.
-            </p>
-          </div>
+            <TypewriterBio />
           </div>
         </GlowCard>
 
