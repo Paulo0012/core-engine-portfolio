@@ -63,8 +63,8 @@ export default function AboutSection() {
             <div className="bg-gn-bg border border-gn-surface/50 rounded-2xl p-5 hover:bg-gn-surface/10 transition-colors h-full group/hobby">
               {/* Guitarra balançando como quem toca */}
               <motion.div
-                className="mb-3 w-16 h-16 rounded-xl overflow-hidden border border-gn-surface/30 shadow-sm"
-                animate={{ rotate: [0, -12, 12, -8, 0] }}
+                className="mb-4 w-full h-32 rounded-xl overflow-hidden shadow-sm"
+                animate={{ rotate: [0, -3, 3, -2, 0] }}
                 transition={{ duration: 2.5, repeat: Infinity, repeatDelay: 3, ease: 'easeInOut' }}
               >
                 <img src={hobbyMusic} alt="Música" className="w-full h-full object-cover" />
@@ -78,8 +78,8 @@ export default function AboutSection() {
             <div className="bg-gn-bg border border-gn-surface/50 rounded-2xl p-5 hover:bg-gn-surface/10 transition-colors h-full group/hobby">
               {/* Dumbbell subindo e descendo — levantamento de peso */}
               <motion.div
-                className="mb-3 w-16 h-16 rounded-xl overflow-hidden border border-gn-surface/30 shadow-sm"
-                animate={{ y: [0, -6, 0, -6, 0], rotate: [0, 0, 0, 0, 0] }}
+                className="mb-4 w-full h-32 rounded-xl overflow-hidden shadow-sm"
+                animate={{ y: [0, -4, 0, -4, 0], rotate: [0, 0, 0, 0, 0] }}
                 transition={{ duration: 1.6, repeat: Infinity, repeatDelay: 2.5, ease: [0.4, 0, 0.2, 1] }}
               >
                 <img src={hobbyGym} alt="Musculação" className="w-full h-full object-cover" />
@@ -93,8 +93,8 @@ export default function AboutSection() {
             <div className="bg-gn-bg border border-gn-surface/50 rounded-2xl p-5 hover:bg-gn-surface/10 transition-colors h-full group/hobby">
               {/* Coração pulsando — batida cardíaca */}
               <motion.div
-                className="mb-3 w-16 h-16 rounded-xl overflow-hidden border border-gn-surface/30 shadow-sm"
-                animate={{ scale: [1, 1.1, 1, 1.05, 1] }}
+                className="mb-4 w-full h-32 rounded-xl overflow-hidden shadow-sm"
+                animate={{ scale: [1, 1.03, 1, 1.02, 1] }}
                 transition={{ duration: 1.2, repeat: Infinity, repeatDelay: 2, ease: 'easeInOut' }}
               >
                 <img src={hobbyFaith} alt="Fé Cristã" className="w-full h-full object-cover" />
@@ -108,8 +108,8 @@ export default function AboutSection() {
             <div className="bg-gn-bg border border-gn-surface/50 rounded-2xl p-5 hover:bg-gn-surface/10 transition-colors h-full group/hobby">
               {/* Livro abrindo e fechando */}
               <motion.div
-                className="mb-3 w-16 h-16 rounded-xl overflow-hidden border border-gn-surface/30 shadow-sm"
-                animate={{ rotateY: [0, 15, 0, -15, 0] }}
+                className="mb-4 w-full h-32 rounded-xl overflow-hidden shadow-sm"
+                animate={{ rotateY: [0, 5, 0, -5, 0] }}
                 transition={{ duration: 3, repeat: Infinity, repeatDelay: 2.5, ease: 'easeInOut' }}
               >
                 <img src={hobbyTeaching} alt="Ensinar" className="w-full h-full object-cover" />
