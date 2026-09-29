@@ -10,15 +10,15 @@ export default function TypewriterBio() {
   const [isTyping1, setIsTyping1] = useState(false);
   const [isTyping2, setIsTyping2] = useState(false);
   const [finished, setFinished] = useState(false);
-  const [started, setStarted] = useState(false);
+  const hasStarted = useRef(false);
   
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
 
   useEffect(() => {
-    if (!isInView || started) return;
+    if (!isInView || hasStarted.current) return;
     
-    setStarted(true);
+    hasStarted.current = true;
     setIsTyping1(true);
     let i = 0;
     const speed = 15; // Velocidade de digitação (rápida)
@@ -47,7 +47,7 @@ export default function TypewriterBio() {
     return () => {
       clearInterval(interval1);
     };
-  }, [isInView, started]);
+  }, [isInView]);
 
   return (
     <div ref={ref} className="text-lg text-gn-text font-light leading-relaxed relative">
