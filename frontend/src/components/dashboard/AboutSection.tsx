@@ -1,4 +1,5 @@
 import { BookOpen, Dumbbell, Guitar, Heart, User } from 'lucide-react';
+import GlowCard from '../ui/GlowCard';
 
 export default function AboutSection() {
   return (
@@ -18,7 +19,8 @@ export default function AboutSection() {
 
       <div className="grid grid-cols-1 md:grid-cols-12 gap-12 items-start">
         {/* Lado Esquerdo - Biografia em Card */}
-        <div className="md:col-span-8 p-8 bg-white/30 backdrop-blur-md border border-white/40 rounded-3xl shadow-lg shadow-black/5 hover:shadow-xl hover:bg-white/40 transition-all duration-300">
+        <GlowCard className="md:col-span-8 rounded-3xl">
+          <div className="p-8 bg-white/30 backdrop-blur-md border border-white/40 rounded-3xl shadow-lg shadow-black/5 hover:shadow-xl hover:bg-white/40 transition-all duration-300 h-full">
           <div className="space-y-6 text-lg text-gn-text font-light leading-relaxed">
             <p>
               Vindo do interior e de origem humilde, mudei-me para São Luís movido pelo sonho de me tornar engenheiro. Minha jornada na tecnologia começou com o Bacharelado em Ciências e Tecnologia e, hoje, estou no último período de Engenharia da Computação.
@@ -27,7 +29,8 @@ export default function AboutSection() {
               Mais do que criar infraestruturas escaláveis e escrever bons códigos, meu grande objetivo de vida é usar meu conhecimento para inspirar, incentivar e ensinar jovens da minha cidade natal. Quero provar que, com dedicação, é possível transformar a própria realidade e criar oportunidades mesmo onde as chances parecem escassas.
             </p>
           </div>
-        </div>
+          </div>
+        </GlowCard>
 
         {/* Informações rápidas */}
         <div className="md:col-span-4 bg-gn-bg border border-gn-surface rounded-2xl p-6 divide-y divide-gn-surface/50">
@@ -51,29 +54,37 @@ export default function AboutSection() {
         <h4 className="text-[10px] font-black uppercase text-gn-surface tracking-widest mb-6">Quando não estou programando</h4>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          <div className="bg-gn-bg border border-gn-surface/50 rounded-2xl p-5 hover:bg-gn-surface/10 transition-colors">
-            <Guitar size={24} className="text-gn-highlight mb-3" />
-            <h5 className="text-gn-highlight font-bold text-sm mb-1">Música</h5>
-            <p className="text-gn-text text-xs font-light">Tocar contrabaixo e violão é meu jeito favorito de desacelerar e criar.</p>
-          </div>
+          <GlowCard className="rounded-2xl">
+            <div className="bg-gn-bg border border-gn-surface/50 rounded-2xl p-5 hover:bg-gn-surface/10 transition-colors h-full">
+              <Guitar size={24} className="text-gn-highlight mb-3" />
+              <h5 className="text-gn-highlight font-bold text-sm mb-1">Música</h5>
+              <p className="text-gn-text text-xs font-light">Tocar contrabaixo e violão é meu jeito favorito de desacelerar e criar.</p>
+            </div>
+          </GlowCard>
 
-          <div className="bg-gn-bg border border-gn-surface/50 rounded-2xl p-5 hover:bg-gn-surface/10 transition-colors">
-            <Dumbbell size={24} className="text-gn-highlight mb-3" />
-            <h5 className="text-gn-highlight font-bold text-sm mb-1">Musculação</h5>
-            <p className="text-gn-text text-xs font-light">Treino diário para manter o corpo ativo e a mente focada.</p>
-          </div>
+          <GlowCard className="rounded-2xl">
+            <div className="bg-gn-bg border border-gn-surface/50 rounded-2xl p-5 hover:bg-gn-surface/10 transition-colors h-full">
+              <Dumbbell size={24} className="text-gn-highlight mb-3" />
+              <h5 className="text-gn-highlight font-bold text-sm mb-1">Musculação</h5>
+              <p className="text-gn-text text-xs font-light">Treino diário para manter o corpo ativo e a mente focada.</p>
+            </div>
+          </GlowCard>
 
-          <div className="bg-gn-bg border border-gn-surface/50 rounded-2xl p-5 hover:bg-gn-surface/10 transition-colors">
-            <Heart size={24} className="text-gn-highlight mb-3" />
-            <h5 className="text-gn-highlight font-bold text-sm mb-1">Fé Cristã</h5>
-            <p className="text-gn-text text-xs font-light">Base dos meus valores, propósitos e da forma como busco ajudar o próximo.</p>
-          </div>
+          <GlowCard className="rounded-2xl">
+            <div className="bg-gn-bg border border-gn-surface/50 rounded-2xl p-5 hover:bg-gn-surface/10 transition-colors h-full">
+              <Heart size={24} className="text-gn-highlight mb-3" />
+              <h5 className="text-gn-highlight font-bold text-sm mb-1">Fé Cristã</h5>
+              <p className="text-gn-text text-xs font-light">Base dos meus valores, propósitos e da forma como busco ajudar o próximo.</p>
+            </div>
+          </GlowCard>
 
-          <div className="bg-gn-bg border border-gn-surface/50 rounded-2xl p-5 hover:bg-gn-surface/10 transition-colors">
-            <BookOpen size={24} className="text-gn-highlight mb-3" />
-            <h5 className="text-gn-highlight font-bold text-sm mb-1">Ensinar</h5>
-            <p className="text-gn-text text-xs font-light">Incentivar e compartilhar conhecimento com jovens da minha comunidade.</p>
-          </div>
+          <GlowCard className="rounded-2xl">
+            <div className="bg-gn-bg border border-gn-surface/50 rounded-2xl p-5 hover:bg-gn-surface/10 transition-colors h-full">
+              <BookOpen size={24} className="text-gn-highlight mb-3" />
+              <h5 className="text-gn-highlight font-bold text-sm mb-1">Ensinar</h5>
+              <p className="text-gn-text text-xs font-light">Incentivar e compartilhar conhecimento com jovens da minha comunidade.</p>
+            </div>
+          </GlowCard>
         </div>
       </div>
     </section>

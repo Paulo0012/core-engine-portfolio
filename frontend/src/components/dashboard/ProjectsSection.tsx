@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { createPortal } from 'react-dom';
 import { ExternalLink, X, Code2, PlayCircle, CheckCircle2, Circle, AlertCircle, FolderGit2 } from 'lucide-react';
+import GlowCard from '../ui/GlowCard';
+import FadeUp from '../ui/FadeUp';
 
 interface ProjectGallery {
   id: number;
@@ -57,7 +59,8 @@ export default function ProjectsSection({ projects }: ProjectsSectionProps) {
           const coverUrl = getMediaUrl(p.cover_image);
               
           return (
-            <div key={p.id} className="flex gap-6 lg:gap-10 relative">
+            <FadeUp key={p.id} delay={index * 0.15}>
+              <div className="flex gap-6 lg:gap-10 relative">
               {/* Timeline Lateral Esquerda */}
               <div className="hidden md:flex flex-col items-end w-[120px] shrink-0 pt-10 pr-2 relative">
                 <span className="text-[10px] font-black uppercase text-gn-surface tracking-widest text-right">
@@ -67,10 +70,11 @@ export default function ProjectsSection({ projects }: ProjectsSectionProps) {
               </div>
 
               {/* Card Principal */}
-              <div 
-                onClick={() => setSelectedProject(p)} 
-                className="flex-1 min-w-0 bg-gn-bg border border-gn-surface/30 rounded-3xl p-6 lg:p-8 flex flex-col lg:flex-row gap-8 hover:bg-gn-surface/5 transition-colors group cursor-pointer hover:border-gn-surface/60 hover:shadow-xl hover:shadow-gn-surface/5"
-              >
+              <GlowCard className="flex-1 min-w-0 rounded-3xl">
+                <div 
+                  onClick={() => setSelectedProject(p)} 
+                  className="bg-gn-bg border border-gn-surface/30 rounded-3xl p-6 lg:p-8 flex flex-col lg:flex-row gap-8 hover:bg-gn-surface/5 transition-colors group cursor-pointer hover:border-gn-surface/60 hover:shadow-xl hover:shadow-gn-surface/5 h-full"
+                >
                 {/* Coluna Esquerda: Info */}
                 <div className="flex-1 min-w-0 flex flex-col justify-center space-y-5">
                   <span className="text-[10px] font-black uppercase text-gn-highlight tracking-widest">
@@ -135,8 +139,10 @@ export default function ProjectsSection({ projects }: ProjectsSectionProps) {
                     Prévia da Home
                   </div>
                 </div>
+                </div>
+              </GlowCard>
               </div>
-            </div>
+            </FadeUp>
           );
         })}
       </div>

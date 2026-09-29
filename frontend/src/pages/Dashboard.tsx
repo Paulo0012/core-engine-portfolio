@@ -7,6 +7,7 @@ import TechStackSection from '../components/dashboard/TechStackSection';
 import ProjectsSection from '../components/dashboard/ProjectsSection';
 import AboutSection from '../components/dashboard/AboutSection';
 import ContactSection from '../components/dashboard/ContactSection';
+import FadeUp from '../components/ui/FadeUp';
 import videoSrc from '../assets/transicao.mp4';
 
 export default function Dashboard() {
@@ -42,12 +43,12 @@ export default function Dashboard() {
       {/* CONTEÚDO PRINCIPAL (z-index maior para ficar acima do vídeo) */}
       <div className="relative z-10 space-y-20 pb-32 px-6 lg:px-20 max-w-6xl mx-auto text-gn-text">
         <HeroSection />
-        <AboutSection />
-        <EducationSection />
-        <ExperienceSection />
-        <TechStackSection />
-        <ProjectsSection projects={projects} />
-        <ContactSection />
+        <FadeUp><AboutSection /></FadeUp>
+        <FadeUp delay={0.05}><EducationSection /></FadeUp>
+        <FadeUp delay={0.05}><ExperienceSection /></FadeUp>
+        <FadeUp delay={0.05}><TechStackSection /></FadeUp>
+        <FadeUp delay={0.05}><ProjectsSection projects={projects} /></FadeUp>
+        <FadeUp delay={0.1}><ContactSection /></FadeUp>
       </div>
     </div>
   );

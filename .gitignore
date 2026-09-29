@@ -8,3 +8,4 @@ db.sqlite3
 media/
 backend/media/
 *.zip
+*.mp4

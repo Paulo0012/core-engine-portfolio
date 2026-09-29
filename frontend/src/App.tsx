@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 
 // Componentes de Estrutura
 import Navbar from './layout/Sidebar'; // Seu novo menu superior
+import CustomCursor from './components/ui/CustomCursor';
 
 // Páginas do Ecossistema
 import Dashboard from './pages/Dashboard'; // Agora sua Landing Page Única
@@ -29,7 +30,7 @@ function App() {
           O fundo usa a variável Gothic Noir (gn-bg).
       */}
       <div className="min-h-screen bg-gn-bg flex flex-col overflow-x-hidden">
-        
+        <CustomCursor />
         <Navbar />
 
         {/* Container Principal com padding-top (pt-20) 
