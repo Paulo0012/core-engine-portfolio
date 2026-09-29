@@ -5,6 +5,7 @@ import { Server, Home, User, GraduationCap, Code, Briefcase, Globe, Cpu } from '
 export default function Navbar() {
   const navigate = useNavigate();
   const [scrollProgress, setScrollProgress] = useState(0);
+  const [isScrolled, setIsScrolled] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -13,6 +14,7 @@ export default function Navbar() {
       if (windowHeight <= 0) return;
       const scroll = `${totalScroll / windowHeight}`;
       setScrollProgress(Number(scroll) * 100);
+      setIsScrolled(totalScroll > 50);
     }
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
@@ -48,11 +50,17 @@ export default function Navbar() {
   };
 
   return (
-    <nav className="fixed top-0 left-0 right-0 h-20 bg-white/40 backdrop-blur-xl border-b border-white/20 z-50 px-6 lg:px-20 flex items-center justify-between shadow-sm">
+    <nav className={`fixed top-0 left-0 right-0 h-20 z-50 px-6 lg:px-20 flex items-center justify-between transition-all duration-500 ${
+      isScrolled 
+        ? 'bg-white/40 backdrop-blur-xl border-b border-white/20 shadow-sm' 
+        : 'bg-transparent border-b border-transparent shadow-none'
+    }`}>
       
       {/* Progress Bar Topo */}
       <div 
-        className="absolute top-0 left-0 h-1 bg-gn-highlight z-50 transition-all duration-150" 
+        className={`absolute top-0 left-0 h-1 bg-gn-highlight z-50 transition-all duration-150 ${
+          isScrolled ? 'opacity-100' : 'opacity-0'
+        }`}
         style={{ width: `${scrollProgress}%` }}
       ></div>
 
@@ -61,7 +69,11 @@ export default function Navbar() {
         className="flex items-center gap-3 cursor-pointer group"
         onClick={() => handleNavigation('inicio')}
       >
-        <div className="p-2 bg-gn-highlight/5 rounded-lg group-hover:bg-gn-highlight/10 transition-colors shadow-sm bg-white/60">
+        <div className={`p-2 rounded-lg transition-all duration-500 ${
+          isScrolled 
+            ? 'bg-gn-highlight/5 group-hover:bg-gn-highlight/10 shadow-sm bg-white/60' 
+            : 'bg-gn-highlight/10 group-hover:bg-gn-highlight/20'
+        }`}>
           <Server size={20} className="text-gn-highlight" />
         </div>
         <h1 className="text-xl font-black text-gn-highlight tracking-tighter uppercase italic drop-shadow-sm hidden sm:block">
