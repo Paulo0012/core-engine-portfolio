@@ -63,11 +63,11 @@ export default function AboutSection() {
             <div className="bg-gn-bg border border-gn-surface/50 rounded-2xl p-5 hover:bg-gn-surface/10 transition-colors h-full group/hobby">
               {/* Guitarra balançando como quem toca */}
               <motion.div
-                className="mb-4 w-full h-32 rounded-xl overflow-hidden shadow-sm"
-                animate={{ rotate: [0, -3, 3, -2, 0] }}
-                transition={{ duration: 2.5, repeat: Infinity, repeatDelay: 3, ease: 'easeInOut' }}
+                className="mb-6 w-full h-40 flex items-center justify-center mix-blend-multiply pointer-events-none"
+                animate={{ y: [-8, 8, -8], rotate: [-2, 2, -2] }}
+                transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
               >
-                <img src={hobbyMusic} alt="Música" className="w-full h-full object-cover" />
+                <img src={hobbyMusic} alt="Música" className="w-full h-full object-contain drop-shadow-2xl group-hover/hobby:scale-110 transition-transform duration-500" />
               </motion.div>
               <h5 className="text-gn-highlight font-bold text-sm mb-1">Música</h5>
               <p className="text-gn-text text-xs font-light">Tocar contrabaixo e violão é meu jeito favorito de desacelerar e criar.</p>
@@ -78,11 +78,11 @@ export default function AboutSection() {
             <div className="bg-gn-bg border border-gn-surface/50 rounded-2xl p-5 hover:bg-gn-surface/10 transition-colors h-full group/hobby">
               {/* Dumbbell subindo e descendo — levantamento de peso */}
               <motion.div
-                className="mb-4 w-full h-32 rounded-xl overflow-hidden shadow-sm"
-                animate={{ y: [0, -4, 0, -4, 0], rotate: [0, 0, 0, 0, 0] }}
-                transition={{ duration: 1.6, repeat: Infinity, repeatDelay: 2.5, ease: [0.4, 0, 0.2, 1] }}
+                className="mb-6 w-full h-40 flex items-center justify-center mix-blend-multiply pointer-events-none"
+                animate={{ y: [8, -8, 8], rotate: [2, -2, 2] }}
+                transition={{ duration: 4.5, repeat: Infinity, ease: 'easeInOut' }}
               >
-                <img src={hobbyGym} alt="Musculação" className="w-full h-full object-cover" />
+                <img src={hobbyGym} alt="Musculação" className="w-full h-full object-contain drop-shadow-2xl group-hover/hobby:scale-110 transition-transform duration-500" />
               </motion.div>
               <h5 className="text-gn-highlight font-bold text-sm mb-1">Musculação</h5>
               <p className="text-gn-text text-xs font-light">Treino diário para manter o corpo ativo e a mente focada.</p>
@@ -93,11 +93,11 @@ export default function AboutSection() {
             <div className="bg-gn-bg border border-gn-surface/50 rounded-2xl p-5 hover:bg-gn-surface/10 transition-colors h-full group/hobby">
               {/* Coração pulsando — batida cardíaca */}
               <motion.div
-                className="mb-4 w-full h-32 rounded-xl overflow-hidden shadow-sm"
-                animate={{ scale: [1, 1.03, 1, 1.02, 1] }}
-                transition={{ duration: 1.2, repeat: Infinity, repeatDelay: 2, ease: 'easeInOut' }}
+                className="mb-6 w-full h-40 flex items-center justify-center mix-blend-multiply pointer-events-none"
+                animate={{ y: [-5, 5, -5], scale: [1, 1.05, 1] }}
+                transition={{ duration: 3.5, repeat: Infinity, ease: 'easeInOut' }}
               >
-                <img src={hobbyFaith} alt="Fé Cristã" className="w-full h-full object-cover" />
+                <img src={hobbyFaith} alt="Fé Cristã" className="w-full h-full object-contain drop-shadow-2xl group-hover/hobby:scale-110 transition-transform duration-500" />
               </motion.div>
               <h5 className="text-gn-highlight font-bold text-sm mb-1">Fé Cristã</h5>
               <p className="text-gn-text text-xs font-light">Base dos meus valores, propósitos e da forma como busco ajudar o próximo.</p>
@@ -108,11 +108,11 @@ export default function AboutSection() {
             <div className="bg-gn-bg border border-gn-surface/50 rounded-2xl p-5 hover:bg-gn-surface/10 transition-colors h-full group/hobby">
               {/* Livro abrindo e fechando */}
               <motion.div
-                className="mb-4 w-full h-32 rounded-xl overflow-hidden shadow-sm"
-                animate={{ rotateY: [0, 5, 0, -5, 0] }}
-                transition={{ duration: 3, repeat: Infinity, repeatDelay: 2.5, ease: 'easeInOut' }}
+                className="mb-6 w-full h-40 flex items-center justify-center mix-blend-multiply pointer-events-none"
+                animate={{ y: [6, -6, 6], rotateY: [-10, 10, -10] }}
+                transition={{ duration: 5, repeat: Infinity, ease: 'easeInOut' }}
               >
-                <img src={hobbyTeaching} alt="Ensinar" className="w-full h-full object-cover" />
+                <img src={hobbyTeaching} alt="Ensinar" className="w-full h-full object-contain drop-shadow-2xl group-hover/hobby:scale-110 transition-transform duration-500" />
               </motion.div>
               <h5 className="text-gn-highlight font-bold text-sm mb-1">Ensinar</h5>
               <p className="text-gn-text text-xs font-light">Incentivar e compartilhar conhecimento com jovens da minha comunidade.</p>
