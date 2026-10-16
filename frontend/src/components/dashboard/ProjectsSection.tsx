@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { createPortal } from 'react-dom';
 import { 
   ExternalLink, X, Code2, PlayCircle, 
-  FolderGit2, Cpu, Sparkles, ArrowUpRight 
+  FolderGit2, Cpu, Sparkles, ArrowUpRight, Activity 
 } from 'lucide-react';
 import GlowCard from '../ui/GlowCard';
 import FadeUp from '../ui/FadeUp';
@@ -39,9 +39,11 @@ interface ColumnDef {
   title: string;
   tagline: string;
   icon: React.ReactNode;
-  accentBorder: string;
-  accentBg: string;
-  accentText: string;
+  headerBorder: string;
+  headerBg: string;
+  iconContainer: string;
+  titleColor: string;
+  badgeClass: string;
 }
 
 const COLUMNS: ColumnDef[] = [
@@ -50,27 +52,33 @@ const COLUMNS: ColumnDef[] = [
     title: 'Fullstack',
     tagline: 'Sistemas distribuídos, APIs escaláveis e interfaces modernas',
     icon: <Code2 size={20} className="text-sky-600 dark:text-sky-400" />,
-    accentBorder: 'border-sky-500/30',
-    accentBg: 'bg-sky-500/10',
-    accentText: 'text-sky-600 dark:text-sky-400',
+    headerBorder: 'border-sky-500/35 hover:border-sky-500/60',
+    headerBg: 'bg-gradient-to-b from-sky-500/10 via-sky-500/5 to-transparent',
+    iconContainer: 'bg-sky-500/15 border-sky-500/30 text-sky-600 dark:text-sky-400',
+    titleColor: 'text-zinc-900',
+    badgeClass: 'bg-sky-500/15 text-sky-700 border-sky-500/30',
   },
   {
     key: 'MACHINE_LEARNING',
     title: 'Machine Learning',
     tagline: 'Visão computacional, redes neurais e inteligência aplicada',
     icon: <Sparkles size={20} className="text-emerald-600 dark:text-emerald-400" />,
-    accentBorder: 'border-emerald-500/30',
-    accentBg: 'bg-emerald-500/10',
-    accentText: 'text-emerald-600 dark:text-emerald-400',
+    headerBorder: 'border-emerald-500/35 hover:border-emerald-500/60',
+    headerBg: 'bg-gradient-to-b from-emerald-500/10 via-emerald-500/5 to-transparent',
+    iconContainer: 'bg-emerald-500/15 border-emerald-500/30 text-emerald-600 dark:text-emerald-400',
+    titleColor: 'text-zinc-900',
+    badgeClass: 'bg-emerald-500/15 text-emerald-700 border-emerald-500/30',
   },
   {
     key: 'HARDWARE',
     title: 'Hardware',
     tagline: 'IoT, sistemas embarcados, sensores e telemetria',
     icon: <Cpu size={20} className="text-amber-600 dark:text-amber-400" />,
-    accentBorder: 'border-amber-500/30',
-    accentBg: 'bg-amber-500/10',
-    accentText: 'text-amber-600 dark:text-amber-400',
+    headerBorder: 'border-amber-500/35 hover:border-amber-500/60',
+    headerBg: 'bg-gradient-to-b from-amber-500/10 via-amber-500/5 to-transparent',
+    iconContainer: 'bg-amber-500/15 border-amber-500/30 text-amber-600 dark:text-amber-400',
+    titleColor: 'text-zinc-900',
+    badgeClass: 'bg-amber-500/15 text-amber-700 border-amber-500/30',
   },
 ];
 
@@ -81,6 +89,23 @@ const normalizeCat = (cat?: string): string => {
   if (upper === 'CV') return 'MACHINE_LEARNING';
   if (upper === 'IOT') return 'HARDWARE';
   return upper;
+};
+
+const formatTechTag = (tag: string): string => {
+  let clean = tag;
+  if (clean.includes(':')) {
+    clean = clean.split(':')[1].trim();
+  }
+  if (clean.includes('(')) {
+    clean = clean.split('(')[0].trim();
+  }
+  if (clean.includes('.')) {
+    clean = clean.split('.')[0].trim();
+  }
+  if (clean.length > 18) {
+    clean = clean.substring(0, 16) + '…';
+  }
+  return clean || tag;
 };
 
 export default function ProjectsSection({ projects }: ProjectsSectionProps) {
@@ -96,18 +121,15 @@ export default function ProjectsSection({ projects }: ProjectsSectionProps) {
 
   return (
     <section id="projetos" className="scroll-mt-32 pt-16">
-      {/* CABEÇALHO DA SEÇÃO */}
-      <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-12">
-        <div>
-          <span className="text-xs font-mono uppercase tracking-[0.3em] text-gn-accent block mb-2">
-            Engenharia Aplicada & Cases
-          </span>
-          <h2 className="text-3xl font-medium text-gn-highlight tracking-tight flex items-center gap-3">
-            <FolderGit2 className="text-gn-highlight" size={30} />
-            Estudos de Caso
-          </h2>
+      {/* CABEÇALHO CENTRALIZADO DA SEÇÃO */}
+      <div className="text-center max-w-2xl mx-auto mb-16 space-y-3">
+        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-gn-surface/20 border border-gn-surface/40 text-[11px] font-mono uppercase tracking-[0.25em] text-zinc-800 shadow-xs">
+          <FolderGit2 size={14} className="text-zinc-800" /> Engenharia Aplicada & Cases
         </div>
-        <p className="text-xs text-gn-text max-w-md font-light leading-relaxed">
+        <h2 className="text-3xl lg:text-4xl font-bold text-zinc-900 tracking-tight">
+          Estudos de Caso
+        </h2>
+        <p className="text-xs lg:text-sm text-zinc-700 font-light leading-relaxed max-w-lg mx-auto">
           Projetos autorais categorizados em 3 pilares técnicos de especialidade, com prévias interativas e dossiês de arquitetura.
         </p>
       </div>
@@ -121,24 +143,22 @@ export default function ProjectsSection({ projects }: ProjectsSectionProps) {
 
           return (
             <div key={col.key} className="flex flex-col gap-6">
-              {/* CABEÇALHO FIXO TEMÁTICO DA COLUNA */}
-              <div className={`p-5 rounded-2xl border ${col.accentBorder} bg-gn-surface/10 backdrop-blur-sm relative overflow-hidden transition-all hover:bg-gn-surface/15`}>
-                <div className="flex items-center justify-between mb-2">
+              {/* CABEÇALHO FIXO TEMÁTICO DA COLUNA COM ALTURA PADRONIZADA */}
+              <div className={`p-5 rounded-2xl border ${col.headerBorder} ${col.headerBg} backdrop-blur-md flex flex-col justify-between min-h-[135px] shadow-xs transition-all`}>
+                <div className="flex items-center justify-between w-full mb-3">
                   <div className="flex items-center gap-3">
-                    <div className={`p-2 rounded-xl ${col.accentBg} ${col.accentBorder} border`}>
+                    <div className={`p-2 rounded-xl border ${col.iconContainer}`}>
                       {col.icon}
                     </div>
-                    <div>
-                      <h3 className="text-lg font-bold text-gn-highlight tracking-tight">
-                        {col.title}
-                      </h3>
-                    </div>
+                    <h3 className={`text-lg font-bold tracking-tight ${col.titleColor}`}>
+                      {col.title}
+                    </h3>
                   </div>
-                  <span className={`text-[11px] font-mono font-bold px-2.5 py-1 rounded-full ${col.accentBg} ${col.accentText} border ${col.accentBorder}`}>
+                  <span className={`text-[11px] font-mono font-bold px-3 py-1 rounded-full border ${col.badgeClass}`}>
                     {colProjects.length} {colProjects.length === 1 ? 'case' : 'cases'}
                   </span>
                 </div>
-                <p className="text-xs text-gn-text font-light leading-relaxed">
+                <p className="text-xs text-zinc-600 font-light leading-relaxed">
                   {col.tagline}
                 </p>
               </div>
@@ -157,13 +177,13 @@ export default function ProjectsSection({ projects }: ProjectsSectionProps) {
 
                     return (
                       <FadeUp key={p.id} delay={colIndex * 0.1 + pIndex * 0.05}>
-                        <GlowCard className="rounded-3xl h-full">
+                        <GlowCard className="rounded-3xl h-full flex flex-col">
                           <div 
                             onClick={() => setSelectedProject(p)}
-                            className="bg-gn-bg border border-gn-surface/30 rounded-3xl p-5 flex flex-col gap-5 hover:bg-gn-surface/5 transition-all group cursor-pointer hover:border-gn-surface/60 hover:shadow-xl hover:shadow-gn-surface/5 h-full"
+                            className="bg-gn-bg border border-gn-surface/30 rounded-3xl p-5 flex flex-col justify-between h-full hover:bg-gn-surface/5 transition-all group cursor-pointer hover:border-gn-surface/60 hover:shadow-xl hover:shadow-gn-surface/5"
                           >
                             {/* Mídia / Prévia no Topo */}
-                            <div className="relative rounded-2xl overflow-hidden border border-gn-surface/30 bg-[#050505] aspect-video w-full">
+                            <div className="relative rounded-2xl overflow-hidden border border-gn-surface/30 bg-[#050505] aspect-video w-full shrink-0">
                               {p.video_demo ? (
                                 <video
                                   src={getMediaUrl(p.video_demo)}
@@ -203,42 +223,52 @@ export default function ProjectsSection({ projects }: ProjectsSectionProps) {
                               </div>
                             </div>
 
-                            {/* Informações do Projeto */}
-                            <div className="flex flex-col flex-1 justify-between gap-4">
-                              <div className="space-y-2.5">
-                                <h4 className="text-xl font-medium text-gn-highlight tracking-tight group-hover:text-gn-accent transition-colors break-words">
+                            {/* Informações Alinhadas do Card */}
+                            <div className="flex flex-col flex-1 justify-between pt-4 gap-3.5">
+                              <div className="space-y-2">
+                                {/* Título com altura padronizada de 2 linhas */}
+                                <h4 className="text-base lg:text-[17px] font-bold text-zinc-900 group-hover:text-gn-accent transition-colors tracking-tight line-clamp-2 h-12 flex items-center">
                                   {p.title}
                                 </h4>
 
-                                <p className="text-xs text-gn-text leading-relaxed font-light line-clamp-3">
+                                {/* Descrição com altura padronizada */}
+                                <p className="text-xs text-zinc-700 font-light leading-relaxed line-clamp-2 h-10">
                                   {p.description || p.problem_statement}
                                 </p>
                               </div>
 
-                              {/* Métrica de Impacto */}
-                              {p.impact_metrics && (
-                                <div className="border-l-2 border-gn-surface/40 pl-3 py-1 bg-gn-surface/5 rounded-r">
-                                  <span className="text-[11px] text-gn-highlight font-mono block truncate">
-                                    {p.impact_metrics}
-                                  </span>
-                                </div>
-                              )}
+                              {/* Métrica de Impacto com altura e estilo padronizados */}
+                              <div className="h-8 px-3 rounded-lg bg-zinc-800/5 border border-zinc-800/10 flex items-center gap-2 overflow-hidden">
+                                <Activity size={12} className="text-gn-accent shrink-0" />
+                                <span className="text-[11px] font-mono text-zinc-800 truncate font-medium">
+                                  {p.impact_metrics || 'Métricas no Dossiê'}
+                                </span>
+                              </div>
 
-                              {/* Tecnologias */}
-                              <div className="flex flex-wrap gap-1.5 pt-1 mt-auto">
-                                {p.technologies?.slice(0, 4).map((t: string) => (
+                              {/* Tecnologias em linha única sem quebrar o grid */}
+                              <div className="h-7 flex items-center gap-1.5 overflow-hidden">
+                                {p.technologies?.slice(0, 3).map((t: string) => (
                                   <span 
                                     key={t} 
-                                    className="text-[9px] px-2.5 py-1 bg-gn-surface/10 border border-gn-surface/20 rounded-md text-gn-highlight font-bold tracking-wider uppercase"
+                                    title={t}
+                                    className="text-[9px] px-2.5 py-1 bg-gn-surface/10 border border-gn-surface/25 rounded-md text-zinc-800 font-bold tracking-wider uppercase truncate max-w-[120px]"
                                   >
-                                    {t}
+                                    {formatTechTag(t)}
                                   </span>
                                 ))}
-                                {p.technologies && p.technologies.length > 4 && (
-                                  <span className="text-[9px] px-2 py-1 text-gn-surface font-mono">
-                                    +{p.technologies.length - 4}
+                                {p.technologies && p.technologies.length > 3 && (
+                                  <span className="text-[9px] px-2 py-1 text-zinc-600 font-mono font-medium">
+                                    +{p.technologies.length - 3}
                                   </span>
                                 )}
+                              </div>
+
+                              {/* Rodapé de Ação */}
+                              <div className="pt-3 border-t border-gn-surface/20 flex items-center justify-between text-[11px] font-mono text-zinc-600 group-hover:text-zinc-900 transition-colors">
+                                <span className="uppercase tracking-wider text-[10px]">Dossiê Técnico</span>
+                                <span className="flex items-center gap-1 font-bold group-hover:translate-x-0.5 transition-transform text-zinc-800">
+                                  Explorar <ArrowUpRight size={13} />
+                                </span>
                               </div>
                             </div>
                           </div>
@@ -263,10 +293,10 @@ export default function ProjectsSection({ projects }: ProjectsSectionProps) {
             {/* Modal Header */}
             <div className="sticky top-0 bg-gn-bg/95 backdrop-blur z-20 flex justify-between items-start p-6 border-b border-gn-surface">
               <div>
-                <h3 className="text-2xl font-medium text-gn-highlight">{selectedProject.title}</h3>
+                <h3 className="text-2xl font-bold text-zinc-900">{selectedProject.title}</h3>
                 <div className="flex flex-wrap gap-2 mt-3">
                   {selectedProject.technologies?.map(t => (
-                    <span key={t} className="text-xs px-2 py-1 bg-gn-surface border border-gn-surface/50 rounded text-gn-accent font-mono uppercase">
+                    <span key={t} className="text-xs px-2.5 py-1 bg-gn-surface/20 border border-gn-surface/40 rounded text-zinc-800 font-mono uppercase">
                       {t}
                     </span>
                   ))}
@@ -274,7 +304,7 @@ export default function ProjectsSection({ projects }: ProjectsSectionProps) {
               </div>
               <button 
                 onClick={() => setSelectedProject(null)}
-                className="p-2 hover:bg-gn-surface rounded-full text-gn-text hover:text-gn-highlight transition-colors"
+                className="p-2 hover:bg-gn-surface rounded-full text-gn-text hover:text-zinc-900 transition-colors"
               >
                 <X size={24} />
               </button>
@@ -298,14 +328,14 @@ export default function ProjectsSection({ projects }: ProjectsSectionProps) {
                 <div className="space-y-6">
                   {selectedProject.problem_statement && (
                     <div>
-                      <h4 className="text-sm font-mono text-gn-accent tracking-widest uppercase mb-2">Desafio / Problema</h4>
-                      <p className="text-gn-text text-sm leading-relaxed">{selectedProject.problem_statement}</p>
+                      <h4 className="text-xs font-mono text-zinc-700 tracking-widest uppercase mb-2 font-bold">Desafio / Problema</h4>
+                      <p className="text-zinc-800 text-sm leading-relaxed">{selectedProject.problem_statement}</p>
                     </div>
                   )}
                   {selectedProject.solution_architecture && (
                     <div>
-                      <h4 className="text-sm font-mono text-gn-accent tracking-widest uppercase mb-2">Arquitetura da Solução</h4>
-                      <p className="text-gn-text text-sm leading-relaxed whitespace-pre-line">{selectedProject.solution_architecture}</p>
+                      <h4 className="text-xs font-mono text-zinc-700 tracking-widest uppercase mb-2 font-bold">Arquitetura da Solução</h4>
+                      <p className="text-zinc-800 text-sm leading-relaxed whitespace-pre-line">{selectedProject.solution_architecture}</p>
                     </div>
                   )}
                 </div>
@@ -313,9 +343,9 @@ export default function ProjectsSection({ projects }: ProjectsSectionProps) {
                 <div className="space-y-6">
                   {selectedProject.impact_metrics && (
                     <div>
-                      <h4 className="text-sm font-mono text-gn-accent tracking-widest uppercase mb-2">Impacto / Métricas</h4>
+                      <h4 className="text-xs font-mono text-zinc-700 tracking-widest uppercase mb-2 font-bold">Impacto / Métricas</h4>
                       <div className="p-4 bg-gn-surface/10 border border-gn-surface rounded-lg">
-                        <p className="text-gn-highlight text-sm leading-relaxed font-light">{selectedProject.impact_metrics}</p>
+                        <p className="text-zinc-900 text-sm leading-relaxed font-medium">{selectedProject.impact_metrics}</p>
                       </div>
                     </div>
                   )}
@@ -323,14 +353,14 @@ export default function ProjectsSection({ projects }: ProjectsSectionProps) {
                   {/* Links */}
                   {(selectedProject.github_link || selectedProject.live_demo) && (
                     <div>
-                      <h4 className="text-sm font-mono text-gn-accent tracking-widest uppercase mb-3">Links Externos</h4>
+                      <h4 className="text-xs font-mono text-zinc-700 tracking-widest uppercase mb-3 font-bold">Links Externos</h4>
                       <div className="flex gap-4">
                         {selectedProject.github_link && (
                           <a 
                             href={selectedProject.github_link} 
                             target="_blank" 
                             rel="noreferrer"
-                            className="flex items-center gap-2 px-4 py-2 bg-gn-surface/30 hover:bg-gn-surface rounded-lg text-sm text-gn-highlight transition-colors border border-gn-surface"
+                            className="flex items-center gap-2 px-4 py-2 bg-gn-surface/30 hover:bg-gn-surface rounded-lg text-sm text-zinc-900 font-medium transition-colors border border-gn-surface"
                           >
                             <Code2 size={16} /> Repositório
                           </a>
@@ -340,7 +370,7 @@ export default function ProjectsSection({ projects }: ProjectsSectionProps) {
                             href={selectedProject.live_demo} 
                             target="_blank" 
                             rel="noreferrer"
-                            className="flex items-center gap-2 px-4 py-2 bg-gn-accent hover:bg-gn-highlight text-gn-bg font-medium rounded-lg text-sm transition-colors"
+                            className="flex items-center gap-2 px-4 py-2 bg-zinc-900 hover:bg-zinc-800 text-white font-medium rounded-lg text-sm transition-colors shadow-sm"
                           >
                             <ExternalLink size={16} /> Demo Ao Vivo
                           </a>
@@ -354,7 +384,7 @@ export default function ProjectsSection({ projects }: ProjectsSectionProps) {
               {/* Galeria */}
               {selectedProject.gallery && selectedProject.gallery.length > 0 && (
                 <div>
-                  <h4 className="text-sm font-mono text-gn-accent tracking-widest uppercase mb-4 border-b border-gn-surface pb-2">Galeria Técnica</h4>
+                  <h4 className="text-xs font-mono text-zinc-700 tracking-widest uppercase mb-4 border-b border-gn-surface pb-2 font-bold">Galeria Técnica</h4>
                   <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
                     {selectedProject.gallery.map(img => (
                       <div key={img.id} className="rounded-lg overflow-hidden border border-gn-surface group">
@@ -364,7 +394,7 @@ export default function ProjectsSection({ projects }: ProjectsSectionProps) {
                           className="w-full aspect-video object-cover group-hover:scale-105 transition-transform duration-500"
                         />
                         {img.caption && (
-                          <p className="p-2 text-xs text-gn-text bg-gn-bg text-center">{img.caption}</p>
+                          <p className="p-2 text-xs text-zinc-700 bg-gn-bg text-center">{img.caption}</p>
                         )}
                       </div>
                     ))}
