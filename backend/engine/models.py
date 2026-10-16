@@ -4,12 +4,12 @@ from django.core.validators import FileExtensionValidator
 import uuid
 
 class Project(models.Model):
-    CATEGORIES = [
-        ('IOT', 'Internet of Things'),
-        ('BE', 'Backend & Scalability'),
-        ('CV', 'Computer Vision'),
-        ('AT', 'Automation & Data'),
+    CATEGORY_CHOICES = [
+        ('FULLSTACK', 'Fullstack'),
+        ('MACHINE_LEARNING', 'Machine Learning'),
+        ('HARDWARE', 'Hardware'),
     ]
+    CATEGORIES = CATEGORY_CHOICES
 
     STATUS_CHOICES = [
         ('Em construção', 'Em construção'),
@@ -19,7 +19,7 @@ class Project(models.Model):
     # --- IDENTIFICADORES E METADADOS ---
     title = models.CharField(max_length=200)
     slug = models.SlugField(unique=True, blank=True, max_length=255)
-    category = models.CharField(max_length=3, choices=CATEGORIES)
+    category = models.CharField(max_length=30, choices=CATEGORY_CHOICES)
     status = models.CharField(max_length=50, choices=STATUS_CHOICES, default='Em construção')
     technologies = models.JSONField(default=list) # Ex: ["YOLOv11", "Python", "MQTT"]
     

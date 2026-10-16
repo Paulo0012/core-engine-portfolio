@@ -1,6 +1,12 @@
 from ninja import Schema
-from typing import List, Optional
+from typing import List, Optional, Literal
 from datetime import datetime
+
+CATEGORY_CHOICES = [
+    ('FULLSTACK', 'Fullstack'),
+    ('MACHINE_LEARNING', 'Machine Learning'),
+    ('HARDWARE', 'Hardware'),
+]
 
 class ProjectGalleryOut(Schema):
     """Estrutura de cada foto na galeria."""

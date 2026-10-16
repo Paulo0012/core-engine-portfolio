@@ -1,6 +1,9 @@
 import { useState } from 'react';
 import { createPortal } from 'react-dom';
-import { ExternalLink, X, Code2, PlayCircle, CheckCircle2, Circle, AlertCircle, FolderGit2 } from 'lucide-react';
+import { 
+  ExternalLink, X, Code2, PlayCircle, 
+  FolderGit2, Cpu, Sparkles, ArrowUpRight 
+} from 'lucide-react';
 import GlowCard from '../ui/GlowCard';
 import FadeUp from '../ui/FadeUp';
 
@@ -11,8 +14,9 @@ interface ProjectGallery {
 }
 
 interface Project {
-  id: string;
+  id: string | number;
   title: string;
+  category?: string;
   status?: string;
   description?: string;
   problem_statement?: string;
@@ -30,6 +34,55 @@ interface ProjectsSectionProps {
   projects: Project[];
 }
 
+interface ColumnDef {
+  key: 'FULLSTACK' | 'MACHINE_LEARNING' | 'HARDWARE';
+  title: string;
+  tagline: string;
+  icon: React.ReactNode;
+  accentBorder: string;
+  accentBg: string;
+  accentText: string;
+}
+
+const COLUMNS: ColumnDef[] = [
+  {
+    key: 'FULLSTACK',
+    title: 'Fullstack',
+    tagline: 'Sistemas distribuídos, APIs escaláveis e interfaces modernas',
+    icon: <Code2 size={20} className="text-sky-600 dark:text-sky-400" />,
+    accentBorder: 'border-sky-500/30',
+    accentBg: 'bg-sky-500/10',
+    accentText: 'text-sky-600 dark:text-sky-400',
+  },
+  {
+    key: 'MACHINE_LEARNING',
+    title: 'Machine Learning',
+    tagline: 'Visão computacional, redes neurais e inteligência aplicada',
+    icon: <Sparkles size={20} className="text-emerald-600 dark:text-emerald-400" />,
+    accentBorder: 'border-emerald-500/30',
+    accentBg: 'bg-emerald-500/10',
+    accentText: 'text-emerald-600 dark:text-emerald-400',
+  },
+  {
+    key: 'HARDWARE',
+    title: 'Hardware',
+    tagline: 'IoT, sistemas embarcados, sensores e telemetria',
+    icon: <Cpu size={20} className="text-amber-600 dark:text-amber-400" />,
+    accentBorder: 'border-amber-500/30',
+    accentBg: 'bg-amber-500/10',
+    accentText: 'text-amber-600 dark:text-amber-400',
+  },
+];
+
+const normalizeCat = (cat?: string): string => {
+  if (!cat) return '';
+  const upper = cat.trim().toUpperCase();
+  if (upper === 'BE' || upper === 'AT') return 'FULLSTACK';
+  if (upper === 'CV') return 'MACHINE_LEARNING';
+  if (upper === 'IOT') return 'HARDWARE';
+  return upper;
+};
+
 export default function ProjectsSection({ projects }: ProjectsSectionProps) {
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
 
@@ -42,112 +95,165 @@ export default function ProjectsSection({ projects }: ProjectsSectionProps) {
   };
 
   return (
-    <section id="projetos" className="scroll-mt-32 pt-16 ">
-      <div className="flex items-center gap-4 mb-12">
-        <h2 className="text-2xl font-medium text-gn-highlight tracking-tight flex items-center gap-3">
-          <FolderGit2 className="text-gn-highlight" size={28} />
-          Estudos de Caso
-        </h2>
-        
+    <section id="projetos" className="scroll-mt-32 pt-16">
+      {/* CABEÇALHO DA SEÇÃO */}
+      <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-12">
+        <div>
+          <span className="text-xs font-mono uppercase tracking-[0.3em] text-gn-accent block mb-2">
+            Engenharia Aplicada & Cases
+          </span>
+          <h2 className="text-3xl font-medium text-gn-highlight tracking-tight flex items-center gap-3">
+            <FolderGit2 className="text-gn-highlight" size={30} />
+            Estudos de Caso
+          </h2>
+        </div>
+        <p className="text-xs text-gn-text max-w-md font-light leading-relaxed">
+          Projetos autorais categorizados em 3 pilares técnicos de especialidade, com prévias interativas e dossiês de arquitetura.
+        </p>
       </div>
       
-      <div className="flex flex-col gap-12 relative">
-        {/* Linha vertical da timeline (desktop) */}
-        <div className="hidden md:block absolute left-[140px] top-8 bottom-8 w-px bg-gn-surface/30"></div>
+      {/* GRID DE 3 COLUNAS */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
+        {COLUMNS.map((col, colIndex) => {
+          const colProjects = projects.filter(
+            (p) => normalizeCat(p.category) === col.key
+          );
 
-        {projects.map((p, index) => {
-          const coverUrl = getMediaUrl(p.cover_image);
-              
           return (
-            <FadeUp key={p.id} delay={index * 0.08}>
-              <div className="flex gap-6 lg:gap-10 relative">
-              {/* Timeline Lateral Esquerda */}
-              <div className="hidden md:flex flex-col items-end w-[120px] shrink-0 pt-10 pr-2 relative">
-                <span className="text-[10px] font-black uppercase text-gn-surface tracking-widest text-right">
-                  {p.status || 'Em construção'}
-                </span>
-                <div className="absolute right-[-25px] lg:right-[-29px] top-11 w-2.5 h-2.5 rounded-full bg-gn-surface ring-4 ring-gn-bg z-10"></div>
+            <div key={col.key} className="flex flex-col gap-6">
+              {/* CABEÇALHO FIXO TEMÁTICO DA COLUNA */}
+              <div className={`p-5 rounded-2xl border ${col.accentBorder} bg-gn-surface/10 backdrop-blur-sm relative overflow-hidden transition-all hover:bg-gn-surface/15`}>
+                <div className="flex items-center justify-between mb-2">
+                  <div className="flex items-center gap-3">
+                    <div className={`p-2 rounded-xl ${col.accentBg} ${col.accentBorder} border`}>
+                      {col.icon}
+                    </div>
+                    <div>
+                      <h3 className="text-lg font-bold text-gn-highlight tracking-tight">
+                        {col.title}
+                      </h3>
+                    </div>
+                  </div>
+                  <span className={`text-[11px] font-mono font-bold px-2.5 py-1 rounded-full ${col.accentBg} ${col.accentText} border ${col.accentBorder}`}>
+                    {colProjects.length} {colProjects.length === 1 ? 'case' : 'cases'}
+                  </span>
+                </div>
+                <p className="text-xs text-gn-text font-light leading-relaxed">
+                  {col.tagline}
+                </p>
               </div>
 
-              {/* Card Principal */}
-              <GlowCard className="flex-1 min-w-0 rounded-3xl">
-                <div 
-                  onClick={() => setSelectedProject(p)} 
-                  className="bg-gn-bg border border-gn-surface/30 rounded-3xl p-6 lg:p-8 flex flex-col lg:flex-row gap-8 hover:bg-gn-surface/5 transition-colors group cursor-pointer hover:border-gn-surface/60 hover:shadow-xl hover:shadow-gn-surface/5 h-full"
-                >
-                {/* Coluna Esquerda: Info */}
-                <div className="flex-1 min-w-0 flex flex-col justify-center space-y-5">
-                  <span className="text-[10px] font-black uppercase text-gn-highlight tracking-widest">
-                    Projetos
-                  </span>
-                  <h3 className="text-2xl lg:text-3xl font-medium text-gn-highlight tracking-tight group-hover:text-gn-accent transition-colors break-words">
-                    {p.title}
-                  </h3>
-                  <p className="text-sm text-gn-text leading-relaxed font-light line-clamp-4">
-                    {p.description || p.problem_statement}
-                  </p>
-                  
-                  <div className="border-l-2 border-gn-surface/30 pl-4 py-1 my-2">
-                    <span className="text-xs text-gn-surface font-light">
-                      Concepção e desenvolvimento autoral
+              {/* LISTA DE CARDS DA COLUNA */}
+              <div className="flex flex-col gap-6">
+                {colProjects.length === 0 ? (
+                  <div className="p-8 rounded-2xl border border-dashed border-gn-surface/30 bg-gn-surface/5 text-center flex flex-col items-center justify-center gap-2">
+                    <span className="text-xs text-gn-text font-mono">
+                      Nenhum projeto cadastrado nesta coluna ainda.
                     </span>
                   </div>
+                ) : (
+                  colProjects.map((p, pIndex) => {
+                    const coverUrl = getMediaUrl(p.cover_image);
 
-                  <div className="flex flex-wrap gap-2 pt-2 mt-auto">
-                    {p.technologies?.map((t: string) => (
-                      <span 
-                        key={t} 
-                        className="text-[10px] px-3 py-1.5 bg-gn-surface/10 border border-gn-surface/20 rounded-lg text-gn-highlight font-bold tracking-wider uppercase max-w-full break-words"
-                      >
-                        {t}
-                      </span>
-                    ))}
-                  </div>
-                </div>
+                    return (
+                      <FadeUp key={p.id} delay={colIndex * 0.1 + pIndex * 0.05}>
+                        <GlowCard className="rounded-3xl h-full">
+                          <div 
+                            onClick={() => setSelectedProject(p)}
+                            className="bg-gn-bg border border-gn-surface/30 rounded-3xl p-5 flex flex-col gap-5 hover:bg-gn-surface/5 transition-all group cursor-pointer hover:border-gn-surface/60 hover:shadow-xl hover:shadow-gn-surface/5 h-full"
+                          >
+                            {/* Mídia / Prévia no Topo */}
+                            <div className="relative rounded-2xl overflow-hidden border border-gn-surface/30 bg-[#050505] aspect-video w-full">
+                              {p.video_demo ? (
+                                <video
+                                  src={getMediaUrl(p.video_demo)}
+                                  autoPlay
+                                  muted
+                                  loop
+                                  playsInline
+                                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                                />
+                              ) : coverUrl ? (
+                                <img 
+                                  src={coverUrl} 
+                                  alt={p.title} 
+                                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" 
+                                />
+                              ) : (
+                                <div className="w-full h-full flex items-center justify-center text-gn-accent font-mono text-xs">
+                                  sem_midia.jpg
+                                </div>
+                              )}
 
-                {/* Coluna Direita: Imagem & Prévia */}
-                <div className="lg:w-[45%] xl:w-[50%] shrink-0 relative rounded-2xl overflow-hidden border border-gn-surface/30 bg-[#050505] aspect-video lg:aspect-auto min-h-[240px]">
-                  {p.video_demo ? (
-                    <video
-                      src={getMediaUrl(p.video_demo)}
-                      autoPlay
-                      muted
-                      loop
-                      playsInline
-                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                    />
-                  ) : coverUrl ? (
-                    <img 
-                      src={coverUrl} 
-                      alt={p.title} 
-                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" 
-                    />
-                  ) : (
-                    <div className="w-full h-full flex items-center justify-center text-gn-accent font-mono text-xs">
-                      no_image.jpg
-                    </div>
-                  )}
-                  
-                  {p.video_demo && (
-                    <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity z-10 bg-black/20">
-                      <PlayCircle size={48} className="text-white drop-shadow-lg" />
-                    </div>
-                  )}
+                              {p.video_demo && (
+                                <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity z-10 bg-black/20">
+                                  <PlayCircle size={40} className="text-white drop-shadow-lg" />
+                                </div>
+                              )}
 
-                  {/* Botão de Prévia estilo flutuante */}
-                  <div className="absolute bottom-4 right-4 bg-white/95 backdrop-blur text-gn-text text-[10px] font-black uppercase px-4 py-2.5 rounded-lg shadow-lg hover:bg-gn-highlight hover:text-gn-bg transition-colors z-20">
-                    Prévia da Home
-                  </div>
-                </div>
-                </div>
-              </GlowCard>
+                              {/* Badge de Status no topo */}
+                              <div className="absolute top-3 left-3 bg-black/60 backdrop-blur-md border border-white/10 text-[9px] font-bold uppercase tracking-wider text-white px-2.5 py-1 rounded-md z-20">
+                                {p.status || 'Em construção'}
+                              </div>
+
+                              {/* Badge de Prévia flutuante */}
+                              <div className="absolute bottom-3 right-3 bg-white/95 backdrop-blur text-gn-text text-[9px] font-black uppercase px-3 py-1.5 rounded-lg shadow-lg group-hover:bg-gn-highlight group-hover:text-gn-bg transition-colors z-20 flex items-center gap-1.5">
+                                <span>Ver Case</span>
+                                <ArrowUpRight size={12} />
+                              </div>
+                            </div>
+
+                            {/* Informações do Projeto */}
+                            <div className="flex flex-col flex-1 justify-between gap-4">
+                              <div className="space-y-2.5">
+                                <h4 className="text-xl font-medium text-gn-highlight tracking-tight group-hover:text-gn-accent transition-colors break-words">
+                                  {p.title}
+                                </h4>
+
+                                <p className="text-xs text-gn-text leading-relaxed font-light line-clamp-3">
+                                  {p.description || p.problem_statement}
+                                </p>
+                              </div>
+
+                              {/* Métrica de Impacto */}
+                              {p.impact_metrics && (
+                                <div className="border-l-2 border-gn-surface/40 pl-3 py-1 bg-gn-surface/5 rounded-r">
+                                  <span className="text-[11px] text-gn-highlight font-mono block truncate">
+                                    {p.impact_metrics}
+                                  </span>
+                                </div>
+                              )}
+
+                              {/* Tecnologias */}
+                              <div className="flex flex-wrap gap-1.5 pt-1 mt-auto">
+                                {p.technologies?.slice(0, 4).map((t: string) => (
+                                  <span 
+                                    key={t} 
+                                    className="text-[9px] px-2.5 py-1 bg-gn-surface/10 border border-gn-surface/20 rounded-md text-gn-highlight font-bold tracking-wider uppercase"
+                                  >
+                                    {t}
+                                  </span>
+                                ))}
+                                {p.technologies && p.technologies.length > 4 && (
+                                  <span className="text-[9px] px-2 py-1 text-gn-surface font-mono">
+                                    +{p.technologies.length - 4}
+                                  </span>
+                                )}
+                              </div>
+                            </div>
+                          </div>
+                        </GlowCard>
+                      </FadeUp>
+                    );
+                  })
+                )}
               </div>
-            </FadeUp>
+            </div>
           );
         })}
       </div>
 
-      {/* MODAL DO PROJETO */}
+      {/* MODAL DO PROJETO COM DETALHES COMPLETOS */}
       {selectedProject && createPortal(
         <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 sm:p-6 bg-black/80 backdrop-blur-sm" onClick={() => setSelectedProject(null)}>
           <div 

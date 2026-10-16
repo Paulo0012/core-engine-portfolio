@@ -2,8 +2,8 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { 
   Plus, Edit, Trash2, RefreshCw, 
-  Database, ShieldCheck, AlertTriangle,
-  LayoutGrid, Activity
+  Database, ShieldCheck,
+  LayoutGrid
 } from 'lucide-react';
 import api from '../services/api';
 
@@ -14,12 +14,35 @@ interface Project {
   impact_metrics: string;
 }
 
+const CATEGORY_META: Record<string, { label: string; badgeClass: string }> = {
+  FULLSTACK: {
+    label: 'Fullstack',
+    badgeClass: 'bg-blue-500/10 border-blue-500/30 text-blue-600 dark:text-blue-400',
+  },
+  MACHINE_LEARNING: {
+    label: 'Machine Learning',
+    badgeClass: 'bg-emerald-500/10 border-emerald-500/30 text-emerald-600 dark:text-emerald-400',
+  },
+  HARDWARE: {
+    label: 'Hardware',
+    badgeClass: 'bg-amber-500/10 border-amber-500/30 text-amber-600 dark:text-amber-400',
+  },
+};
+
+const getCategoryBadge = (category: string) => {
+  return CATEGORY_META[category] || {
+    label: category,
+    badgeClass: 'bg-gn-surface/20 border-gn-surface/30 text-gn-accent',
+  };
+};
+
 /**
  * ADMIN_COMMAND_CENTER
  * Painel de controle de 16px para gestão de ativos técnicos.
  */
 export default function AdminDashboard() {
   const [projects, setProjects] = useState<Project[]>([]);
+  const [selectedCategory, setSelectedCategory] = useState<string>('ALL');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const navigate = useNavigate();
@@ -49,7 +72,7 @@ export default function AdminDashboard() {
       try {
         await api.delete(`/cases/${id}/`);
         loadProjects(); 
-      } catch (err) {
+      } catch {
         alert("ERRO: O sistema impediu a exclusão. Verifique o token JWT.");
       }
     }
@@ -118,6 +141,44 @@ export default function AdminDashboard() {
         </div>
       </div>
 
+      {/* FILTRO DE CATEGORIAS */}
+      <div className="flex flex-wrap items-center justify-between gap-4">
+        <div className="flex flex-wrap items-center gap-2">
+          <button
+            onClick={() => setSelectedCategory('ALL')}
+            className={`px-4 py-2 text-xs font-bold uppercase rounded-lg border transition-all ${
+              selectedCategory === 'ALL'
+                ? 'bg-gn-highlight text-gn-bg border-gn-highlight shadow-sm'
+                : 'bg-gn-surface/10 text-gn-text border-gn-surface/30 hover:border-gn-surface hover:text-gn-highlight'
+            }`}
+          >
+            Todos ({projects.length})
+          </button>
+          {(['FULLSTACK', 'MACHINE_LEARNING', 'HARDWARE'] as const).map((cat) => {
+            const count = projects.filter((p) => p.category === cat).length;
+            const meta = CATEGORY_META[cat];
+            const isSelected = selectedCategory === cat;
+            return (
+              <button
+                key={cat}
+                onClick={() => setSelectedCategory(cat)}
+                className={`px-4 py-2 text-xs font-bold uppercase rounded-lg border transition-all ${
+                  isSelected
+                    ? 'bg-gn-highlight text-gn-bg border-gn-highlight shadow-sm'
+                    : 'bg-gn-surface/10 text-gn-text border-gn-surface/30 hover:border-gn-surface hover:text-gn-highlight'
+                }`}
+              >
+                {meta.label} ({count})
+              </button>
+            );
+          })}
+        </div>
+
+        <span className="text-xs text-gn-text font-mono">
+          Exibindo {projects.filter(p => selectedCategory === 'ALL' || p.category === selectedCategory).length} de {projects.length} nós
+        </span>
+      </div>
+
       {/* TABELA DE ATIVOS */}
       <div className="border border-gn-surface/50 bg-white/50 rounded-xl overflow-hidden shadow-sm">
         <div className="overflow-x-auto">
@@ -131,40 +192,53 @@ export default function AdminDashboard() {
               </tr>
             </thead>
             <tbody className="divide-y divide-gn-surface/30">
-              {projects.map((p) => (
-                <tr key={p.id} className="hover:bg-gn-surface/10 transition-colors group">
-                  <td className="p-6 text-gn-text italic font-bold">#{p.id}</td>
-                  <td className="p-6">
-                    <div className="flex flex-col">
-                      <span className="text-gn-highlight font-bold group-hover:text-gn-accent transition-colors">{p.title}</span>
-                      <span className="text-[10px] text-gn-text lowercase tracking-normal">{p.impact_metrics}</span>
-                    </div>
-                  </td>
-                  <td className="p-6 text-center">
-                    <span className="px-3 py-1 bg-gn-surface/20 border border-gn-surface/30 rounded-full text-xs text-gn-accent font-bold">
-                      {p.category}
-                    </span>
-                  </td>
-                  <td className="p-6 text-right">
-                    <div className="flex justify-end gap-8">
-                      <button 
-                        onClick={() => navigate(`/admin/edit/${p.id}`)}
-                        className="text-gn-text hover:text-gn-accent transition-all transform hover:scale-125"
-                        title="EDIT_NODE"
-                      >
-                        <Edit size={20}/>
-                      </button>
-                      <button 
-                        onClick={() => handleDelete(p.id, p.title)} 
-                        className="text-gn-text hover:text-red-500 transition-all transform hover:scale-125"
-                        title="TERMINATE_NODE"
-                      >
-                        <Trash2 size={20}/>
-                      </button>
-                    </div>
+              {projects.filter(p => selectedCategory === 'ALL' || p.category === selectedCategory).length === 0 ? (
+                <tr>
+                  <td colSpan={4} className="p-12 text-center text-gn-text text-sm lowercase font-mono">
+                    nenhum projeto encontrado nesta categoria.
                   </td>
                 </tr>
-              ))}
+              ) : (
+                projects
+                  .filter(p => selectedCategory === 'ALL' || p.category === selectedCategory)
+                  .map((p) => {
+                    const badge = getCategoryBadge(p.category);
+                    return (
+                      <tr key={p.id} className="hover:bg-gn-surface/10 transition-colors group">
+                        <td className="p-6 text-gn-text italic font-bold">#{p.id}</td>
+                        <td className="p-6">
+                          <div className="flex flex-col">
+                            <span className="text-gn-highlight font-bold group-hover:text-gn-accent transition-colors">{p.title}</span>
+                            <span className="text-[10px] text-gn-text lowercase tracking-normal">{p.impact_metrics}</span>
+                          </div>
+                        </td>
+                        <td className="p-6 text-center">
+                          <span className={`px-3 py-1 border rounded-full text-xs font-bold ${badge.badgeClass}`}>
+                            {badge.label}
+                          </span>
+                        </td>
+                        <td className="p-6 text-right">
+                          <div className="flex justify-end gap-8">
+                            <button 
+                              onClick={() => navigate(`/admin/edit/${p.id}`)}
+                              className="text-gn-text hover:text-gn-accent transition-all transform hover:scale-125"
+                              title="EDIT_NODE"
+                            >
+                              <Edit size={20}/>
+                            </button>
+                            <button 
+                              onClick={() => handleDelete(p.id, p.title)} 
+                              className="text-gn-text hover:text-red-500 transition-all transform hover:scale-125"
+                              title="TERMINATE_NODE"
+                            >
+                              <Trash2 size={20}/>
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    );
+                  })
+              )}
             </tbody>
           </table>
         </div>

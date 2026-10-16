@@ -41,9 +41,20 @@ def create_project(
     gallery_images: List[UploadedFile] = File(None) 
 ):
     with transaction.atomic():
+        category_map = {
+            'FULLSTACK': 'FULLSTACK',
+            'MACHINE_LEARNING': 'MACHINE_LEARNING',
+            'HARDWARE': 'HARDWARE',
+            'BE': 'FULLSTACK',
+            'AT': 'FULLSTACK',
+            'CV': 'MACHINE_LEARNING',
+            'IOT': 'HARDWARE',
+        }
+        normalized_category = category_map.get(category.strip().upper(), category.strip())
+
         project_data = {
             'title': title,
-            'category': category,
+            'category': normalized_category,
             'status': status,
             'problem_statement': problem_statement,
             'solution_architecture': solution_architecture,
@@ -102,9 +113,20 @@ def update_project(
     project = get_object_or_404(Project, id=project_id)
     
     with transaction.atomic():
+        category_map = {
+            'FULLSTACK': 'FULLSTACK',
+            'MACHINE_LEARNING': 'MACHINE_LEARNING',
+            'HARDWARE': 'HARDWARE',
+            'BE': 'FULLSTACK',
+            'AT': 'FULLSTACK',
+            'CV': 'MACHINE_LEARNING',
+            'IOT': 'HARDWARE',
+        }
+        normalized_category = category_map.get(category.strip().upper(), category.strip())
+
         project_data = {
             'title': title,
-            'category': category,
+            'category': normalized_category,
             'status': status,
             'problem_statement': problem_statement,
             'solution_architecture': solution_architecture,

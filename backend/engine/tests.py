@@ -22,7 +22,8 @@ class ProjectIntegrationTest(TestCase):
         
         data = {
             'title': 'Sistema Integrado de Automação',
-            'category': 'IOT',
+            'category': 'HARDWARE',
+            'status': 'Em construção',
             'technologies': technologies_json,
             'problem_statement': 'Falta de monitoramento em tempo real nos equipamentos.',
             'solution_architecture': 'Sensores IoT via MQTT integrados a um backend Django.',
@@ -39,7 +40,7 @@ class ProjectIntegrationTest(TestCase):
         # Validar payload de resposta
         project_data = response.json()
         self.assertEqual(project_data['title'], data['title'])
-        self.assertEqual(project_data['category'], data['category'])
+        self.assertEqual(project_data['category'], 'HARDWARE')
         self.assertEqual(project_data['problem_statement'], data['problem_statement'])
         self.assertEqual(project_data['solution_architecture'], data['solution_architecture'])
         self.assertEqual(project_data['github_link'], data['github_link'])

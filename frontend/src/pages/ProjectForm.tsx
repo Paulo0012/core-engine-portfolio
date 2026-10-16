@@ -1,7 +1,7 @@
 import { useEffect, useState, useRef } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { 
-  Save, ArrowLeft, Upload, Film, 
+  ArrowLeft, Film, 
   Image as ImageIcon, RefreshCw, CheckCircle2, X, Plus, Terminal, AlertTriangle
 } from 'lucide-react';
 import api from '../services/api';
@@ -20,7 +20,7 @@ export default function ProjectForm() {
 
   const [formData, setFormData] = useState({
     title: '',
-    category: 'IOT',
+    category: 'FULLSTACK',
     status: 'Em construção',
     problem_statement: '',
     solution_architecture: '',
@@ -44,9 +44,20 @@ export default function ProjectForm() {
     if (id) {
       api.get(`/cases/${id}`).then((res) => {
         const p = res.data;
+        const categoryMap: Record<string, string> = {
+          'BE': 'FULLSTACK',
+          'AT': 'FULLSTACK',
+          'CV': 'MACHINE_LEARNING',
+          'IOT': 'HARDWARE',
+          'FULLSTACK': 'FULLSTACK',
+          'MACHINE_LEARNING': 'MACHINE_LEARNING',
+          'HARDWARE': 'HARDWARE',
+        };
+        const resolvedCategory = categoryMap[p.category] || p.category || 'FULLSTACK';
+
         setFormData({
           title: p.title,
-          category: p.category || 'IOT',
+          category: resolvedCategory,
           status: p.status || 'Em construção',
           problem_statement: p.problem_statement || '',
           solution_architecture: p.solution_architecture || '',
@@ -130,10 +141,9 @@ export default function ProjectForm() {
               value={formData.category}
               onChange={e => setFormData({...formData, category: e.target.value})}
             >
-              <option value="IOT">Internet of Things (IOT)</option>
-              <option value="BE">Backend & Scalability (BE)</option>
-              <option value="CV">Computer Vision (CV)</option>
-              <option value="AT">Automation & Data (AT)</option>
+              <option value="FULLSTACK">Fullstack</option>
+              <option value="MACHINE_LEARNING">Machine Learning</option>
+              <option value="HARDWARE">Hardware</option>
             </select>
           </div>
 
