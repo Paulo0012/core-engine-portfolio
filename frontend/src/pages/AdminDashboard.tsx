@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { 
   Plus, Edit, Trash2, RefreshCw, 
   Database, ShieldCheck,
-  LayoutGrid
+  LayoutGrid, Activity
 } from 'lucide-react';
 import api from '../services/api';
 
