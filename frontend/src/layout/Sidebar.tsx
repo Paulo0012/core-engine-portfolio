@@ -110,22 +110,13 @@ export default function Navbar() {
         ))}
       </div>
 
-      {/* Botão de Ação / Admin */}
-      <div className="hidden md:flex items-center gap-4">
+      {/* Botão de Ação */}
+      <div className="hidden md:flex items-center">
         <button 
           onClick={() => handleNavigation('contato')}
           className="px-6 py-2 bg-gn-highlight text-gn-bg text-[10px] font-black uppercase rounded-full hover:bg-gn-surface transition-all hover:shadow-lg hover:shadow-gn-highlight/20"
         >
           Trabalhe Comigo
-        </button>
-        
-        {/* Atalho para o Admin (Discreto) */}
-        <button 
-          onClick={() => navigate('/login')}
-          className="p-2 text-gn-surface hover:text-gn-highlight transition-colors"
-          title="Acesso Restrito"
-        >
-          <div className="w-1.5 h-1.5 bg-current rounded-full"></div>
         </button>
       </div>
     </nav>

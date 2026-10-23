@@ -67,3 +67,7 @@ Este arquivo documenta as principais implementações, ajustes e decisões tomad
 - **Harmonização com o Design System**: Unificação completa com os tokens nativos do tema (`--color-gn-*`): superfícies translúcidas em `bg-gn-surface/15` a `bg-gn-surface/25`, bordas em `border-gn-surface/40`, e tipografia em `text-gn-highlight` e `text-gn-accent`.
 - **Eliminação de Fundos Claros Rígidos**: Removidos elementos com `bg-white` em favor de `bg-gn-bg/95` e `bg-gn-highlight`.
 - **Atualização das Diretrizes**: Registrado no `contexto.md` o compromisso estrito com a sobriedade Gothic Noir para os pilares técnicos.
+
+### 9. Ocultação do Ponto de Acesso Admin e Atalho Global `Ctrl + Alt + A`
+- **Remoção do Ponto de Entrada Visual**: Removido o botão discreto (ponto circular) localizado ao lado de "Trabalhe Comigo" na barra de navegação superior (`Sidebar.tsx`).
+- **Implementação de Atalho Secreto**: Adicionado o componente `AdminShortcutListener` em `App.tsx` que captura `Ctrl + Alt + A` (ou `Cmd + Alt + A` no macOS) em qualquer lugar da aplicação para redirecionar instantaneamente para `/login`.

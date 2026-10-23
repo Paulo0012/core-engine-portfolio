@@ -44,6 +44,9 @@ Este documento serve como um guia rápido para que novos agentes de inteligênci
   - Formulário de cadastro e edição de projetos com as 3 opções de categoria, upload de mídias, tecnologias e métricas.
 - **TypewriterBio (`src/components/TypewriterBio.tsx`)**:
   - Efeito de digitação com texto fantasma (`opacity-0`) para prevenir layout shift.
+- **Acesso Administrativo (Stealth Shortcut)**:
+  - O ponto de entrada visual para o painel de admin foi completamente removido da Navbar pública.
+  - O redirecionamento para `/login` agora é acionado pelo atalho global de teclado: `Ctrl + Alt + A` (ou `Cmd + Alt + A` no macOS).
 - **Hobby Cards (AboutSection)**:
   - Avatares 3D customizados com animação de levitação contínua e mesclagem `mix-blend-multiply`.
 

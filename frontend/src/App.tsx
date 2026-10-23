@@ -1,4 +1,5 @@
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { useEffect } from 'react';
+import { BrowserRouter as Router, Routes, Route, Navigate, useNavigate } from 'react-router-dom';
 
 // Componentes de Estrutura
 import Navbar from './layout/Sidebar'; // Seu novo menu superior
@@ -19,12 +20,36 @@ const PrivateRoute = ({ children }: { children: JSX.Element }) => {
 };
 
 /**
+ * ATALHO GLOBAL PARA ACESSO RESTRITO
+ * Captura Ctrl + Alt + A (ou Cmd + Alt + A no Mac) para redirecionamento ao Login
+ */
+function AdminShortcutListener() {
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      const isModifier = e.ctrlKey || e.metaKey;
+      if (isModifier && e.altKey && (e.key.toLowerCase() === 'a' || e.code === 'KeyA')) {
+        e.preventDefault();
+        navigate('/login');
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [navigate]);
+
+  return null;
+}
+
+/**
  * CORE_ENGINE_APPLICATION
  * Gerencia o roteamento centralizado com Navbar fixa no topo.
  */
 function App() {
   return (
     <Router>
+      <AdminShortcutListener />
       {/* O Navbar fica fora das Routes para aparecer em todas as páginas.
           O fundo usa a variável Gothic Noir (gn-bg).
       */}
