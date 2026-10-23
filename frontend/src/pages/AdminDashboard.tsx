@@ -17,15 +17,15 @@ interface Project {
 const CATEGORY_META: Record<string, { label: string; badgeClass: string }> = {
   FULLSTACK: {
     label: 'Fullstack',
-    badgeClass: 'bg-blue-500/10 border-blue-500/30 text-blue-600 dark:text-blue-400',
+    badgeClass: 'bg-gn-surface/20 border-gn-surface/40 text-gn-highlight font-mono',
   },
   MACHINE_LEARNING: {
     label: 'Machine Learning',
-    badgeClass: 'bg-emerald-500/10 border-emerald-500/30 text-emerald-600 dark:text-emerald-400',
+    badgeClass: 'bg-gn-surface/20 border-gn-surface/40 text-gn-highlight font-mono',
   },
   HARDWARE: {
     label: 'Hardware',
-    badgeClass: 'bg-amber-500/10 border-amber-500/30 text-amber-600 dark:text-amber-400',
+    badgeClass: 'bg-gn-surface/20 border-gn-surface/40 text-gn-highlight font-mono',
   },
 };
 

@@ -1,38 +1,60 @@
 # Contexto do Projeto (core-engine-portfolio)
 
-Este documento serve como um guia rápido para que novos agentes de inteligência artificial ou desenvolvedores compreendam o ecossistema, preferências e estado atual do projeto.
+Este documento serve como um guia rápido para que novos agentes de inteligência artificial ou desenvolvedores compreendam o ecossistema, preferências, arquitetura e estado atual do projeto.
 
 ## 1. Visão Geral
 - **Nome do Projeto**: core-engine-portfolio
-- **Propósito**: Portfólio pessoal e interativo para um desenvolvedor de software/engenheiro focado em Fullstack & IoT.
-- **Estilo Visual**: Design "Premium" e moderno, focado em causar um grande impacto visual ("WOW factor").
+- **Propósito**: Portfólio pessoal e interativo para um engenheiro/desenvolvedor de software estruturado em 3 pilares de especialidade: **Fullstack**, **Machine Learning** e **Hardware**.
+- **Estilo Visual**: Design "Premium", minimalista e técnico ("Gothic Noir"), focado em causar forte impacto visual ("WOW factor") sem poluição visual.
 
-## 2. Tech Stack e Ferramentas
+## 2. Tech Stack e Infraestrutura
 - **Frontend**: 
-  - React (com Vite/Next.js conforme configurado).
-  - Tailwind CSS v4 para estilização rápida.
-  - Framer Motion para animações dinâmicas de transição, entrada e scroll.
+  - React com Vite e TypeScript.
+  - Tailwind CSS v4 para estilização com tokens temáticos no `index.css`.
+  - Framer Motion para animações de levitação contínua, entrada e revelação de seções (`FadeUp`).
   - Lucide React para iconografia.
+  - Hospedagem: **Vercel** (deploy contínuo automático a cada push na branch `main`).
 - **Backend**:
-  - Django Ninja (Python).
+  - Django Ninja (Python) com API REST documentada.
+  - Banco de Dados: SQLite (`db.sqlite3`).
+  - Hospedagem: **PythonAnywhere** (`paulogabriel00.pythonanywhere.com`).
+  - Ambiente Virtual: Virtualenv `venv` localizada em `~/.virtualenvs/venv/`.
 
 ## 3. Diretrizes de Design e UX
-- **Glassmorphism**: Forte uso de fundos translúcidos (`backdrop-blur`), bordas sutis e sombras expansivas.
-- **Sistema de Cores**: Definido no `index.css` usando variáveis (ex: `--color-gn-bg`, `--color-gn-surface`, `--color-gn-highlight`). O fundo tende a ser em tons beges/neutros suaves com alto contraste nos destaques.
-- **Micro-interações**: Botões e cards (*GlowCard*) reagem à posição do mouse, com efeitos de hover que envolvem escalonamento (`scale`), brilho e sombras interativas.
-- **Animações (Framer Motion)**:
-  - Componentes como `FadeUp` são utilizados massivamente para revelar seções conforme o *scroll* do usuário.
-  - Elementos estáticos são evitados ao máximo. O portfólio prioriza elementos contínuos, como partículas ou avatares levitando constantemente.
-- **Evitar**: Designs genéricos (botões azuis/vermelhos padrão), "MVP look" ou layouts rígidos sem micro-interações.
+- **Glassmorphism**: Fundos translúcidos (`backdrop-blur`), bordas sutis e sombras expansivas.
+- **Sistema de Cores**: Definido no `index.css` usando variáveis (`--color-gn-bg: #D1D0D0`, `--color-gn-surface: #988686`, `--color-gn-accent: #5C4E4E`, `--color-gn-highlight: #000000`).
+- **Pilares Técnicos (Identidade Visual)**:
+  - **Sobriedade Gothic Noir**: Totalmente integrados de forma monocromática e técnica aos tokens do tema (`--color-gn-*`).
+  - Cores saturadas (como azul, verde e âmbar puros) são **estritamente evitadas** nas colunas e cabeçalhos para manter a coerência estética e o minimalismo técnico do portfólio.
+  - Cabeçalhos, ícones e badges utilizam acabamento translúcido (`bg-gn-surface/15` a `bg-gn-surface/25`), bordas em `border-gn-surface/40` e tipografia técnica em `text-gn-highlight` e `text-gn-accent`.
+- **Alinhamento & Simetria**:
+  - Grids balanceados com alturas padronizadas para títulos (`h-12`), descrições (`h-10`) e métricas (`h-8`).
+  - Sanitização de tags longas (`formatTechTag`) para garantir que os cards mantenham a mesma linha horizontal.
+- **Micro-interações**: Cards (`GlowCard`) reagem ao cursor do mouse, com micro-zoom (`scale-105`) e efeitos de hover refinados.
 
 ## 4. Componentes Principais (Frontend)
-- **Sidebar**: Navegação lateral que muda dinamicamente de translúcida para sólida baseado no evento de scroll da página (`isScrolled`).
-- **GlowCard**: Um componente de card base reutilizável que intercepta os movimentos do mouse para criar um halo/brilho no cursor sobre o card.
-- **FadeUp**: Um wrapper de animação que gerencia o estado `whileInView` para carregar componentes de forma assíncrona enquanto o usuário rola a tela.
-- **TypewriterBio**: Efeito customizado que "digita" os parágrafos de apresentação com um cursor piscante, projetado para prever o tamanho do contêiner e evitar layout shifts (pulos na interface).
-- **Hobby Cards (AboutSection)**: Utiliza avatares 3D estilizados e personalizados (com o rosto do usuário), que flutuam contínuamente e cujo fundo se mistura (blend-mode) perfeitamente com a interface do cartão.
+- **ProjectsSection (`src/components/dashboard/ProjectsSection.tsx`)**:
+  - Seção de estudos de caso organizada em **grid de 3 colunas dedicadas lado a lado** no desktop (`grid-cols-1 lg:grid-cols-3 gap-8`).
+  - Cada coluna possui cabeçalho temático padronizado com ícone, título, tagline e contador de cases.
+  - Cards reativos com suporte a vídeo em loop (`video_demo`), imagem de capa (`cover_image`), tags de tecnologias e modal detalhado de dossiê técnico renderizado via `createPortal`.
+- **AdminDashboard (`src/pages/AdminDashboard.tsx`)**:
+  - Painel de administração para gestão de nós técnicos.
+  - Barra de abas de filtro rápido por categoria (`Todos`, `Fullstack`, `Machine Learning`, `Hardware`) com contadores e badges estilizadas.
+- **ProjectForm (`src/pages/ProjectForm.tsx`)**:
+  - Formulário de cadastro e edição de projetos com as 3 opções de categoria, upload de mídias, tecnologias e métricas.
+- **TypewriterBio (`src/components/TypewriterBio.tsx`)**:
+  - Efeito de digitação com texto fantasma (`opacity-0`) para prevenir layout shift.
+- **Hobby Cards (AboutSection)**:
+  - Avatares 3D customizados com animação de levitação contínua e mesclagem `mix-blend-multiply`.
 
-## 5. Convenções do Repositório
-- Uso de `.gitignore` mantido e atualizado rigidamente para evitar o push de arquivos grandes de mídia local (`.mp4`, `.mov`, etc).
-- As animações 3D customizadas devem residir na pasta `src/assets/`.
-- Uso padrão da instrução `Faça o push` ou `/deploy` para sincronizar automaticamente com a branch principal no GitHub via interface de terminal local.
+## 5. Convenções do Repositório & Produção
+- **Categorias Oficiais da Engine**:
+  - `FULLSTACK` ("Fullstack")
+  - `MACHINE_LEARNING` ("Machine Learning")
+  - `HARDWARE` ("Hardware")
+- **Procedimento de Atualização no PythonAnywhere**:
+  1. No console Bash: `cd ~/backend && git stash && git pull origin main`
+  2. Ativar venv: `source ~/.virtualenvs/venv/bin/activate`
+  3. Ir para a pasta do Django: `cd backend`
+  4. Aplicar migrações: `python manage.py migrate`
+  5. Na aba **Web** do PythonAnywhere: clicar no botão verde **Reload**.
